@@ -11,3 +11,6 @@ Main purpose
 
 Feel free to fork this repo and adjust the implementation to suit your own CRM application.
 
+![Fork me on GitHub](https://raw.githubusercontent.com/Cantara/Whydah/master/images/forkme_right_red_aa0000.png)
+
+
