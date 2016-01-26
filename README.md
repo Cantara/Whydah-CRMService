@@ -1,8 +1,9 @@
 # Whydah-CustomerService
-A Whydah CRM API with simple standalone implementation
+A Whydah CRM API with simple standalone implementation 
+## - because user != customer
 
 
-Main purpose
+## Main purpose
 - CRUD API on Customer(s)
  - including the Customer Auth Activities
 - Search-API for CustomerSearches
