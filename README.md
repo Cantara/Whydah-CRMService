@@ -1,6 +1,7 @@
 # Whydah-CustomerService
 A Whydah CRM API with simple standalone implementation 
-## - because user != customer
+
+### - because user != customer
 
 
 ## Main purpose
