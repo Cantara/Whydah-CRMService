@@ -6,14 +6,14 @@ A Whydah CRM API with simple standalone implementation
 <table>
     <tr>
         <td>
-## Main purpose
+<b>Main purpose</b>
 - CRUD API on Customer(s)
  - including the Customer Auth Activities
 - Search-API for CustomerSearches
 - simple standalone implementation to get you going
         </td>
         <td>
-![Fork me on GitHub](https://raw.githubusercontent.com/Cantara/Whydah/master/images/forkme_right_red_aa0000.png)
+<img src="https://raw.githubusercontent.com/Cantara/Whydah/master/images/forkme_right_red_aa0000.png">
         </td>
     </tr>
 </table>
