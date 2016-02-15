@@ -1,5 +1,6 @@
-# Whydah-CustomerService
-A Whydah CRM API with simple standalone implementation 
+# Whydah-CRMService
+
+A Whydah CRM API with simple standalone persistent customer implementation 
 
 ### - because user != customer
 
