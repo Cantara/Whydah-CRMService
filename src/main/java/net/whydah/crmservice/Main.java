@@ -2,6 +2,7 @@ package net.whydah.crmservice;
 
 import com.codahale.metrics.MetricRegistry;
 import com.google.inject.Injector;
+import net.whydah.crmservice.postgresql.PostgresModule;
 import net.whydah.crmservice.user.*;
 import no.cantara.ratpack.config.RatpackConfigs;
 import no.cantara.ratpack.config.RatpackGuiceConfigModule;
@@ -47,6 +48,7 @@ public class Main {
     private Function<Registry, Registry> registry() {
         return Guice.registry(bindings -> bindings
                 .module(new RatpackGuiceConfigModule(bindings.getServerConfig()))
+                .module(PostgresModule.class)
                 .module(UserModule.class)
                 .moduleConfig(DropwizardMetricsModule.class, new DropwizardMetricsConfig()
                                 .jmx(jmxConfig -> jmxConfig.enable(true))
