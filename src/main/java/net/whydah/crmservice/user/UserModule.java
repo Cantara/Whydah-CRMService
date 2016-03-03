@@ -12,7 +12,10 @@ public class UserModule extends AbstractModule {
 
     @Override
     protected void configure() {
+        bind(CreateUserHandler.class);
         bind(GetUserHandler.class);
+        bind(UpdateUserHandler.class);
+        bind(DeleteUserHandler.class);
         bind(UserHealthCheck.class);
     }
 }

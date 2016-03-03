@@ -26,11 +26,10 @@ public class CreateUserHandler implements Handler {
 
         ctx.parse(fromJson(User.class)).then(user -> {
             Blocking.op(() -> {
-                userRepository.createUser(user);
+                userRepository.createUser(userId, user);
             }).then(() -> {
-                        ctx.getResponse().status(201).send();
-                    }
-            );
+                ctx.getResponse().status(201).send(); //Created
+            });
         });
     }
 }

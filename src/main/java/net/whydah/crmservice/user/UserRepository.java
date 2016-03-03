@@ -18,7 +18,31 @@ public class UserRepository {
         this.dataSource = dataSource;
     }
 
-    public void createUser(User user) {
+    public void createUser(String userId, User user) {
+        try (Connection connection = dataSource.getConnection()) {
+            connection.prepareCall("SELECT 1").execute(); // TODO write create user
+            connection.commit();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void updateUser(String userId, User user) {
+        try (Connection connection = dataSource.getConnection()) {
+            connection.prepareCall("SELECT 1").execute(); // TODO write user
+            connection.commit();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void getUser(String userId) {
+        try (Connection connection = dataSource.getConnection()) {
+            connection.prepareCall("SELECT 1").execute(); // TODO write user
+            connection.commit();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void deleteUser(String userId) {
         try (Connection connection = dataSource.getConnection()) {
             connection.prepareCall("SELECT 1").execute(); // TODO write user
             connection.commit();
