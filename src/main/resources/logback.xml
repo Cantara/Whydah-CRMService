@@ -2,7 +2,7 @@
 <configuration scan="true" scanPeriod="60 seconds">
   <property name="LOG_DIR" value="logs/"/>
   <property name="env" value="noEnvSet"/>
-  <property name="appName" value="ratpack-echo-websockets"/>
+  <property name="appName" value="Whydah-CRMService"/>
 
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
@@ -11,9 +11,9 @@
   </appender>
 
   <appender name="logfile" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>${LOG_DIR}/echows.log</file>
+    <file>${LOG_DIR}/crmservice.log</file>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <fileNamePattern>${LOG_DIR}/echows-%d{yyyy-MM-dd}.log</fileNamePattern>
+      <fileNamePattern>${LOG_DIR}/crmservice-%d{yyyy-MM-dd}.log</fileNamePattern>
       <maxHistory>30</maxHistory>
       <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
         <maxFileSize>50MB</maxFileSize>
@@ -24,7 +24,7 @@
     </encoder>
   </appender>
 
-  <logger name="no.cantara" level="TRACE"/>
+  <logger name="net.whydah" level="TRACE"/>
 
   <root level="info">
     <appender-ref ref="logfile"/>
