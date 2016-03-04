@@ -31,7 +31,7 @@ public class CreateUserHandler implements Handler {
                 try {
                     userRepository.createUser(userId, user);
                 } catch (SQLIntegrityConstraintViolationException e) {
-                    ctx.redirect(400, userId); //Bad request
+                    ctx.clientError(400); //Bad request
                 }
             }).then(() -> {
                 ctx.redirect(201, userId); //Created

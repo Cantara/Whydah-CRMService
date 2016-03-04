@@ -30,9 +30,9 @@ public class DeleteUserHandler implements Handler {
 
         Blocking.get(() -> userRepository.deleteUser(userId)).then(affectedRows -> {
             if (affectedRows == 1) {
-                ctx.redirect(204, ""); //No content
+                ctx.redirect(204, userId); //No content
             } else {
-                ctx.redirect(404, ""); //Not found
+                ctx.clientError(404); //Not found
             }
         });
     }

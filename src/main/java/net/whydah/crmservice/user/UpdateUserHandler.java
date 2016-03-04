@@ -31,7 +31,7 @@ public class UpdateUserHandler implements Handler {
                 if (affectedRows == 1) {
                     ctx.redirect(202, userId); //Accepted
                 } else {
-                    ctx.redirect(404, userId); //Not found
+                    ctx.clientError(404); //Not found
                 }
             });
         });

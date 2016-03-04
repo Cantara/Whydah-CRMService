@@ -29,7 +29,7 @@ public class GetUserHandler implements Handler {
             if (user != null) {
                 ctx.render(json(user));
             } else {
-                ctx.redirect(404, ""); //Not found
+                ctx.clientError(404); //Not found
             }
         });
     }
