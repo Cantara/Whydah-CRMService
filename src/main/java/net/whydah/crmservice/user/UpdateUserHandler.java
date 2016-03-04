@@ -30,7 +30,7 @@ public class UpdateUserHandler implements Handler {
             Blocking.op(() -> {
                 userRepository.updateUser(userId, user);
             }).then(() -> {
-                ctx.getResponse().status(201).send(); //Created
+                ctx.getResponse().status(202).send(); //Accepted
             });
         });
     }

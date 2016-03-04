@@ -8,8 +8,6 @@ import java.util.Map;
 
 public class UserModule extends AbstractModule {
 
-    public static Map<String, User> userMap = new HashMap<>();
-
     @Override
     protected void configure() {
         bind(CreateUserHandler.class);

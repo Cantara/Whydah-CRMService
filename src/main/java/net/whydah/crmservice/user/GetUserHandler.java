@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.whydah.crmservice.user.model.User;
 import ratpack.exec.Blocking;
+import ratpack.exec.Promise;
 import ratpack.handling.Context;
 import ratpack.handling.Handler;
 
@@ -24,13 +25,8 @@ public class GetUserHandler implements Handler {
 
         String userId = ctx.getPathTokens().get("id");
 
-        ctx.parse(fromJson(User.class)).then(user -> {
-            Blocking.op(() -> {
-                userRepository.getUser(userId);
-            }).then(() -> {
-                    ctx.render(json(user));
-                }
-            );
+        Blocking.get(() -> userRepository.getUser(userId)).then(user -> {
+            ctx.render(json(user));
         });
     }
 }

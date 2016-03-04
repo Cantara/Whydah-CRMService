@@ -3,9 +3,7 @@ package net.whydah.crmservice;
 import com.codahale.metrics.MetricRegistry;
 import com.google.inject.Injector;
 import net.whydah.crmservice.postgresql.PostgresModule;
-import io.netty.handler.codec.http.HttpResponseStatus;
 import net.whydah.crmservice.user.*;
-import net.whydah.crmservice.user.model.User;
 import no.cantara.ratpack.config.RatpackConfigs;
 import no.cantara.ratpack.config.RatpackGuiceConfigModule;
 import org.slf4j.Logger;
@@ -15,7 +13,6 @@ import ratpack.dropwizard.metrics.DropwizardMetricsModule;
 import ratpack.dropwizard.metrics.MetricsWebsocketBroadcastHandler;
 import ratpack.error.ClientErrorHandler;
 import ratpack.error.internal.DefaultDevelopmentErrorHandler;
-import ratpack.exec.Promise;
 import ratpack.func.Action;
 import ratpack.func.Function;
 import ratpack.guice.Guice;
@@ -26,9 +23,6 @@ import ratpack.registry.Registry;
 import ratpack.server.RatpackServer;
 
 import java.nio.file.Paths;
-
-import static ratpack.jackson.Jackson.fromJson;
-import static ratpack.jackson.Jackson.json;
 
 public class Main {
     private static final Logger log = LoggerFactory.getLogger(Main.class);
