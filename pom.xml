@@ -72,6 +72,16 @@
             <organization>Altran Norge AS</organization>
             <organizationUrl>http://www.altran.no/</organizationUrl>
         </developer>
+        <developer>
+            <id>lty</id>
+            <name>Lasse Tyrihjell</name>
+            <email>lassetyr@gmail.com</email>
+            <roles>
+                <role>Developer</role>
+            </roles>
+            <organization>Capra Consulting AS</organization>
+            <organizationUrl>http://www.capraconsulting.no/</organizationUrl>
+        </developer>
     </developers>
 
 

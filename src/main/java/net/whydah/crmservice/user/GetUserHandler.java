@@ -26,7 +26,11 @@ public class GetUserHandler implements Handler {
         String userId = ctx.getPathTokens().get("id");
 
         Blocking.get(() -> userRepository.getUser(userId)).then(user -> {
-            ctx.render(json(user));
+            if (user != null) {
+                ctx.render(json(user));
+            } else {
+                ctx.redirect(404, ""); //Not found
+            }
         });
     }
 }

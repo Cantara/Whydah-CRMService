@@ -28,10 +28,12 @@ public class DeleteUserHandler implements Handler {
 
         String userId = ctx.getPathTokens().get("id");
 
-        Blocking.op(() -> {
-            userRepository.deleteUser(userId);
-        }).then(() -> {
-            ctx.getResponse().status(202).send(); //Accepted
+        Blocking.get(() -> userRepository.deleteUser(userId)).then(affectedRows -> {
+            if (affectedRows == 1) {
+                ctx.redirect(204, ""); //No content
+            } else {
+                ctx.redirect(404, ""); //Not found
+            }
         });
     }
 }

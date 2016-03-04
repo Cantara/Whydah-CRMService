@@ -7,6 +7,8 @@ import ratpack.exec.Blocking;
 import ratpack.handling.Context;
 import ratpack.handling.Handler;
 
+import java.sql.SQLIntegrityConstraintViolationException;
+
 import static ratpack.jackson.Jackson.fromJson;
 
 @Singleton
@@ -26,9 +28,13 @@ public class CreateUserHandler implements Handler {
 
         ctx.parse(fromJson(User.class)).then(user -> {
             Blocking.op(() -> {
-                userRepository.createUser(userId, user);
+                try {
+                    userRepository.createUser(userId, user);
+                } catch (SQLIntegrityConstraintViolationException e) {
+                    ctx.redirect(400, userId); //Bad request
+                }
             }).then(() -> {
-                ctx.getResponse().status(201).send(); //Created
+                ctx.redirect(201, userId); //Created
             });
         });
     }

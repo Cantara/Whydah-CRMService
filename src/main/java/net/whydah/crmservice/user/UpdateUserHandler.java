@@ -27,10 +27,12 @@ public class UpdateUserHandler implements Handler {
         String userId = ctx.getPathTokens().get("id");
 
         ctx.parse(fromJson(User.class)).then(user -> {
-            Blocking.op(() -> {
-                userRepository.updateUser(userId, user);
-            }).then(() -> {
-                ctx.getResponse().status(202).send(); //Accepted
+            Blocking.get(() -> userRepository.updateUser(userId, user)).then(affectedRows -> {
+                if (affectedRows == 1) {
+                    ctx.redirect(202, userId); //Accepted
+                } else {
+                    ctx.redirect(404, userId); //Not found
+                }
             });
         });
     }
