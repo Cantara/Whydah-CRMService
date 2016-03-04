@@ -6,6 +6,7 @@ import net.whydah.crmservice.user.model.Address;
 import net.whydah.crmservice.user.model.User;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import ratpack.func.Action;
 import ratpack.http.MediaType;
@@ -39,6 +40,8 @@ public class IntegrationTest {
     public void before() {
         client = TestHttpClient.testHttpClient(crmservice);
     }
+
+    @Ignore
     @Test
    public void testCRUDUser() throws Exception {
         User user = createDummyUser(userId);
