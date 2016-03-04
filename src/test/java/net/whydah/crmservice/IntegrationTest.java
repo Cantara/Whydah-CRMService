@@ -43,7 +43,7 @@ public class IntegrationTest {
    public void testCRUDUser() throws Exception {
         User user = createDummyUser(userId);
 
-        String path = "crmservice/user/"+user.getId();
+        String path = Main.CONTEXT_ROOT + "/user/"+user.getId();
 
         String originalFirstname = user.getFirstname();
         String originalLastname = user.getLastname();
