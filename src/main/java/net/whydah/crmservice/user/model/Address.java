@@ -1,33 +1,26 @@
 package net.whydah.crmservice.user.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/**
- * Created by Lasse on 02/03/16.
- */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Address {
-    private String id;
     private String address1;
     private String address2;
-    private boolean isDefault;
+    private String postalcode;
+    private String postalcity;
 
-    public Address(@JsonProperty("id") String id,
-                   @JsonProperty("address1") String address1,
+    public Address(@JsonProperty("address1") String address1,
                    @JsonProperty("address2") String address2,
-                   @JsonProperty("isDefault") boolean isDefault) {
-        this.id = id;
+                   @JsonProperty("postalcode") String postalcode,
+                   @JsonProperty("postalcity") String postalcity) {
         this.address1 = address1;
         this.address2 = address2;
-        this.isDefault = isDefault;
+        this.postalcode = postalcode;
+        this.postalcity = postalcity;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
+    public Address() {}
 
     public String getAddress1() {
         return address1;
@@ -45,11 +38,19 @@ public class Address {
         this.address2 = address2;
     }
 
-    public boolean isDefault() {
-        return isDefault;
+    public String getPostalcode() {
+        return postalcode;
     }
 
-    public void setIsDefault(boolean isDefault) {
-        this.isDefault = isDefault;
+    public void setPostalcode(String postalcode) {
+        this.postalcode = postalcode;
+    }
+
+    public String getPostalcity() {
+        return postalcity;
+    }
+
+    public void setPostalcity(String postalcity) {
+        this.postalcity = postalcity;
     }
 }

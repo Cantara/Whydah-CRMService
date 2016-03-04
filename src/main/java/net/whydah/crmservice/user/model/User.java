@@ -1,23 +1,33 @@
 package net.whydah.crmservice.user.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Map;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
     private String id;
-    private String name;
+    private String firstname;
+    private String lastname;
     private String email;
     private String phonenumber;
-    private Address[] addresses;
+    private String defaultAddressLabel;
+    private Map<String, Address> addresses;
 
     public User(@JsonProperty("id") String id,
-                @JsonProperty("name") String name,
+                @JsonProperty("firstname") String firstname,
+                @JsonProperty("lastname") String lastname,
                 @JsonProperty("email") String email,
                 @JsonProperty("phonenumber") String phonenumber,
-                @JsonProperty("addresses") Address[] addresses) {
+                @JsonProperty("defaultAddressLabel") String defaultAddressLabel,
+                @JsonProperty("addresses") Map<String, Address> addresses) {
         this.id = id;
-        this.name = name;
+        this.firstname = firstname;
+        this.lastname = lastname;
         this.email = email;
         this.phonenumber = phonenumber;
+        this.defaultAddressLabel = defaultAddressLabel;
         this.addresses = addresses;
     }
 
@@ -33,12 +43,20 @@ public class User {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
     public String getEmail() {
@@ -57,11 +75,19 @@ public class User {
         this.phonenumber = phonenumber;
     }
 
-    public Address[] getAddresses() {
+    public Map<String, Address> getAddresses() {
         return addresses;
     }
 
-    public void setAddresses(Address[] addresses) {
+    public void setAddresses(Map<String, Address> addresses) {
         this.addresses = addresses;
+    }
+
+    public String getDefaultAddressLabel() {
+        return defaultAddressLabel;
+    }
+
+    public void setDefaultAddressLabel(String defaultAddressLabel) {
+        this.defaultAddressLabel = defaultAddressLabel;
     }
 }
