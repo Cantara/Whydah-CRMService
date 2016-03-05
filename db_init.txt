@@ -1,3 +1,4 @@
+### User, schema and table definitions
 
 CREATE ROLE crmadmin LOGIN PASSWORD 'secret' NOINHERIT CREATEDB;
 
@@ -7,3 +8,13 @@ CREATE TABLE customers (
    customer_id    CHAR(256) PRIMARY KEY      NOT NULL,
    data           CHAR(5000) NOT NULL
 );
+
+
+
+### Amazon linux postgress installation - quickstart
+
+# sudo yum install postgresql postgresql-server postgresql-devel postgresql-contrib postgresql-docs
+# sudo service postgresql initdb
+# /etc/init.d/postgresql start
+# su - postgres
+# psql
