@@ -25,7 +25,7 @@ public class UpdateCustomerHandler implements Handler {
         String userId = ctx.getPathTokens().get("id");
 
         ctx.parse(fromJson(Customer.class)).then(user -> {
-            Blocking.get(() -> userRepository.updateUser(userId, user)).then(affectedRows -> {
+            Blocking.get(() -> userRepository.updateCustomer(userId, user)).then(affectedRows -> {
                 if (affectedRows == 1) {
                     ctx.redirect(202, userId); //Accepted
                 } else {

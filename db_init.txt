@@ -1,0 +1,9 @@
+
+CREATE ROLE crmadmin LOGIN PASSWORD 'secret' NOINHERIT CREATEDB;
+
+CREATE SCHEMA crmservice AUTHORIZATION crmadmin;
+
+CREATE TABLE customers (
+   customer_id    CHAR(256) PRIMARY KEY      NOT NULL,
+   data           CHAR(5000) NOT NULL
+);

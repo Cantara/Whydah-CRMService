@@ -23,7 +23,7 @@ public class GetCustomerHandler implements Handler {
 
         String userId = ctx.getPathTokens().get("id");
 
-        Blocking.get(() -> userRepository.getUser(userId)).then(user -> {
+        Blocking.get(() -> userRepository.getCustomer(userId)).then(user -> {
             if (user != null) {
                 ctx.render(json(user));
             } else {

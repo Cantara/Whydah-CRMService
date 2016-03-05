@@ -80,7 +80,7 @@ public class Main {
                     chain.get("metrics", new MetricsWebsocketBroadcastHandler());
                     chain.get("health/:name?", new HealthCheckHandler());
                 })
-                .path("user/:id", ctx -> {
+                .path("customer/:customerRef", ctx -> {
                     ctx.byMethod(m -> m.
                             get(() -> ctx.get(Injector.class).getInstance(GetCustomerHandler.class).handle(ctx)).
                             post(() -> ctx.get(Injector.class).getInstance(CreateCustomerHandler.class).handle(ctx)).

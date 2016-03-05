@@ -25,7 +25,7 @@ public class DeleteCustomerHandler implements Handler {
 
         String userId = ctx.getPathTokens().get("id");
 
-        Blocking.get(() -> userRepository.deleteUser(userId)).then(affectedRows -> {
+        Blocking.get(() -> userRepository.deleteCustomer(userId)).then(affectedRows -> {
             if (affectedRows == 1) {
                 ctx.redirect(204, userId); //No content
             } else {

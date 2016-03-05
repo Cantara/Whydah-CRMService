@@ -14,22 +14,22 @@ import static ratpack.jackson.Jackson.fromJson;
 @Singleton
 public class CreateCustomerHandler implements Handler {
 
-    private final CustomerRepository userRepository;
+    private final CustomerRepository customerRepository;
 
     @Inject
-    public CreateCustomerHandler(CustomerRepository userRepository) {
-        this.userRepository = userRepository;
+    public CreateCustomerHandler(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
     }
 
     @Override
     public void handle(Context ctx) throws Exception {
 
-        String userId = ctx.getPathTokens().get("id");
+        String userId = ctx.getPathTokens().get("customerRef");
 
-        ctx.parse(fromJson(Customer.class)).then(user -> {
+        ctx.parse(fromJson(Customer.class)).then(customer -> {
             Blocking.op(() -> {
                 try {
-                    userRepository.createUser(userId, user);
+                    customerRepository.createCustomer(userId, customer);
                 } catch (SQLIntegrityConstraintViolationException e) {
                     ctx.clientError(400); //Bad request
                 }

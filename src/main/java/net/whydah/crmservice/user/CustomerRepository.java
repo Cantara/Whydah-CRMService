@@ -23,23 +23,23 @@ public class CustomerRepository {
         jsonMapper = new ObjectMapper();
     }
 
-    private static final String SQL_CREATE_USER = "INSERT INTO customers (user_id, data) values(?, ?)";
-    private static final String SQL_RETRIEVE_USER = "SELECT data from customers WHERE customers_id = ?";
-    private static final String SQL_UPDATE_USER = "UPDATE customers SET data = ? WHERE customers_id = ?";
-    private static final String SQL_DELETE_USER = "DELETE FROM customers WHERE customers_id = ?";
+    private static final String SQL_CREATE_USER = "INSERT INTO customers (customer_id, data) values(?, ?)";
+    private static final String SQL_RETRIEVE_USER = "SELECT data from customers WHERE customer_id = ?";
+    private static final String SQL_UPDATE_USER = "UPDATE customers SET data = ? WHERE customer_id = ?";
+    private static final String SQL_DELETE_USER = "DELETE FROM customers WHERE customer_id = ?";
 
-    public boolean createUser(String userId, Customer user) throws SQLIntegrityConstraintViolationException {
+    public boolean createCustomer(String customerRef, Customer customer) throws SQLIntegrityConstraintViolationException {
 
         try (Connection connection = getConnection(false)) {
 
-            user.setId(userId);
+            customer.setId(customerRef);
 
             PGobject jsonObject = new PGobject();
             jsonObject.setType("jsonb");
-            jsonObject.setValue(jsonMapper.writeValueAsString(user));
+            jsonObject.setValue(jsonMapper.writeValueAsString(customer));
 
             PreparedStatement statement = connection.prepareCall(SQL_CREATE_USER);
-            statement.setString(1, userId);
+            statement.setString(1, customerRef);
             statement.setObject(2, jsonObject);
 
             boolean result = statement.execute();
@@ -55,17 +55,17 @@ public class CustomerRepository {
         }
     }
 
-    public int updateUser(String userId, Customer user) {
+    public int updateCustomer(String customerRef, Customer customer) {
         try (Connection connection = getConnection(false)) {
-            user.setId(userId);
+            customer.setId(customerRef);
 
             PGobject jsonObject = new PGobject();
             jsonObject.setType("jsonb");
-            jsonObject.setValue(jsonMapper.writeValueAsString(user));
+            jsonObject.setValue(jsonMapper.writeValueAsString(customer));
 
             PreparedStatement statement = connection.prepareCall(SQL_UPDATE_USER);
             statement.setObject(1, jsonObject);
-            statement.setString(2, userId);
+            statement.setString(2, customerRef);
 
             int affectedRows = statement.executeUpdate();
             connection.commit();
@@ -83,11 +83,11 @@ public class CustomerRepository {
         return connection;
     }
 
-    public Customer getUser(String userId) {
+    public Customer getCustomer(String customerRef) {
         try (Connection connection = getConnection(true)) {
 
             PreparedStatement statement = connection.prepareCall(SQL_RETRIEVE_USER);
-            statement.setString(1, userId);
+            statement.setString(1, customerRef);
 
             ResultSet resultSet = statement.executeQuery();
 
@@ -102,10 +102,11 @@ public class CustomerRepository {
             throw new RuntimeException(e);
         }
     }
-    public int deleteUser(String userId) {
+
+    public int deleteCustomer(String customerRef) {
         try (Connection connection = getConnection(false)) {
             PreparedStatement statement = connection.prepareCall(SQL_DELETE_USER);
-            statement.setString(1, userId);
+            statement.setString(1, customerRef);
 
             int affectedRows = statement.executeUpdate();
             connection.commit();
