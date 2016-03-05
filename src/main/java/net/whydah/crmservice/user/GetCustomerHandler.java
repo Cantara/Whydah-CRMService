@@ -2,9 +2,7 @@ package net.whydah.crmservice.user;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import net.whydah.crmservice.user.model.User;
 import ratpack.exec.Blocking;
-import ratpack.exec.Promise;
 import ratpack.handling.Context;
 import ratpack.handling.Handler;
 
@@ -12,12 +10,12 @@ import static ratpack.jackson.Jackson.fromJson;
 import static ratpack.jackson.Jackson.json;
 
 @Singleton
-public class GetUserHandler implements Handler {
+public class GetCustomerHandler implements Handler {
 
-    private final UserRepository userRepository;
+    private final CustomerRepository userRepository;
 
     @Inject
-    public GetUserHandler(UserRepository userRepository) {
+    public GetCustomerHandler(CustomerRepository userRepository) {
         this.userRepository = userRepository;
     }
     @Override

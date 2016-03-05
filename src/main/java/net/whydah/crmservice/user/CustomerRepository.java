@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import net.whydah.crmservice.user.model.User;
+import net.whydah.crmservice.user.model.Customer;
 import org.postgresql.util.PGobject;
 
 import javax.sql.DataSource;
@@ -12,23 +12,23 @@ import java.sql.*;
 
 
 @Singleton
-public class UserRepository {
+public class CustomerRepository {
 
     private final DataSource dataSource;
     private final ObjectMapper jsonMapper;
 
     @Inject
-    public UserRepository(DataSource dataSource) {
+    public CustomerRepository(DataSource dataSource) {
         this.dataSource = dataSource;
         jsonMapper = new ObjectMapper();
     }
 
-    private static final String SQL_CREATE_USER = "INSERT INTO users (user_id, data) values(?, ?)";
-    private static final String SQL_RETRIEVE_USER = "SELECT data from users WHERE user_id = ?";
-    private static final String SQL_UPDATE_USER = "UPDATE users SET data = ? WHERE user_id = ?";
-    private static final String SQL_DELETE_USER = "DELETE FROM users WHERE user_id = ?";
+    private static final String SQL_CREATE_USER = "INSERT INTO customers (user_id, data) values(?, ?)";
+    private static final String SQL_RETRIEVE_USER = "SELECT data from customers WHERE customers_id = ?";
+    private static final String SQL_UPDATE_USER = "UPDATE customers SET data = ? WHERE customers_id = ?";
+    private static final String SQL_DELETE_USER = "DELETE FROM customers WHERE customers_id = ?";
 
-    public boolean createUser(String userId, User user) throws SQLIntegrityConstraintViolationException {
+    public boolean createUser(String userId, Customer user) throws SQLIntegrityConstraintViolationException {
 
         try (Connection connection = getConnection(false)) {
 
@@ -55,7 +55,7 @@ public class UserRepository {
         }
     }
 
-    public int updateUser(String userId, User user) {
+    public int updateUser(String userId, Customer user) {
         try (Connection connection = getConnection(false)) {
             user.setId(userId);
 
@@ -83,7 +83,7 @@ public class UserRepository {
         return connection;
     }
 
-    public User getUser(String userId) {
+    public Customer getUser(String userId) {
         try (Connection connection = getConnection(true)) {
 
             PreparedStatement statement = connection.prepareCall(SQL_RETRIEVE_USER);
@@ -93,7 +93,7 @@ public class UserRepository {
 
             if (resultSet.next()) {
                 PGobject object = resultSet.getObject(1, PGobject.class);
-                return jsonMapper.readValue(object.getValue(), User.class);
+                return jsonMapper.readValue(object.getValue(), Customer.class);
             } else {
                 return null;
             }

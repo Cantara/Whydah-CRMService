@@ -2,7 +2,7 @@ package net.whydah.crmservice.user;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import net.whydah.crmservice.user.model.User;
+import net.whydah.crmservice.user.model.Customer;
 import ratpack.exec.Blocking;
 import ratpack.handling.Context;
 import ratpack.handling.Handler;
@@ -12,12 +12,12 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import static ratpack.jackson.Jackson.fromJson;
 
 @Singleton
-public class CreateUserHandler implements Handler {
+public class CreateCustomerHandler implements Handler {
 
-    private final UserRepository userRepository;
+    private final CustomerRepository userRepository;
 
     @Inject
-    public CreateUserHandler(UserRepository userRepository) {
+    public CreateCustomerHandler(CustomerRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -26,7 +26,7 @@ public class CreateUserHandler implements Handler {
 
         String userId = ctx.getPathTokens().get("id");
 
-        ctx.parse(fromJson(User.class)).then(user -> {
+        ctx.parse(fromJson(Customer.class)).then(user -> {
             Blocking.op(() -> {
                 try {
                     userRepository.createUser(userId, user);

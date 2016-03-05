@@ -2,8 +2,8 @@ package net.whydah.crmservice;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.whydah.crmservice.user.model.Address;
-import net.whydah.crmservice.user.model.User;
+import net.whydah.crmservice.user.model.DeliveryAddress;
+import net.whydah.crmservice.user.model.Customer;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -44,7 +44,7 @@ public class IntegrationTest {
     @Ignore
     @Test
    public void testCRUDUser() throws Exception {
-        User user = createDummyUser(userId);
+        Customer user = createDummyUser(userId);
 
         String path = Main.CONTEXT_ROOT + "/user/"+user.getId();
 
@@ -68,13 +68,11 @@ public class IntegrationTest {
 
         //Read userdata
         response = client.get(path);
-        User user1 = parseJson(response.getBody().getText());
+        Customer user1 = parseJson(response.getBody().getText());
 
         assertEquals(user.getId(), user1.getId());
         assertEquals(user.getFirstname(), user1.getFirstname());
         assertEquals(user.getLastname(), user1.getLastname());
-        assertEquals(user.getEmail(), user1.getEmail());
-        assertEquals(user.getPhonenumber(), user1.getPhonenumber());
 
         //Verify updated values
         assertFalse(originalFirstname.equals(user.getFirstname()));
@@ -90,33 +88,32 @@ public class IntegrationTest {
 
     }
 
-    private User createDummyUser(String userId) {
-        User user = new User();
+    private Customer createDummyUser(String userId) {
+        Customer user = new Customer();
         user.setId(userId);
         user.setFirstname("First");
         user.setLastname("Lastname");
-        user.setEmail("test@test.com");
-        user.setPhonenumber("99887766");
 
-        Map<String, Address> addresses = new HashMap<>();
-            Address addr1 = new Address();
-            addr1.setAddress1("Karl Johansgate 6");
+        Map<String, DeliveryAddress> addresses = new HashMap<>();
+        DeliveryAddress addr1 = new DeliveryAddress();
+        addr1.setAddressLine1("Karl Johansgate 6");
             addr1.setPostalcode("0160");
             addr1.setPostalcity("Oslo");
         addresses.put("work", addr1);
 
-        user.setAddresses(addresses);
+        user.setDeliveryaddresses(addresses);
 
         return user;
     }
 
-    private Action<RequestSpec> jsonRequestBody(User user) throws JsonProcessingException {
+    private Action<RequestSpec> jsonRequestBody(Customer user) throws JsonProcessingException {
         return requestSpec -> requestSpec.getBody()
                 .type(MediaType.APPLICATION_JSON)
                 .text(mapper.writeValueAsString(user));
     }
-    private User parseJson(String userJson) throws IOException {
-        return mapper.readValue(userJson, User.class);
+
+    private Customer parseJson(String userJson) throws IOException {
+        return mapper.readValue(userJson, Customer.class);
     }
 
 }

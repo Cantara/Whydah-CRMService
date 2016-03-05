@@ -2,9 +2,6 @@ package net.whydah.crmservice.user;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import io.netty.handler.codec.http.HttpResponseStatus;
-import net.whydah.crmservice.user.model.Address;
-import net.whydah.crmservice.user.model.User;
 import ratpack.exec.Blocking;
 import ratpack.handling.Context;
 import ratpack.handling.Handler;
@@ -13,13 +10,13 @@ import static ratpack.jackson.Jackson.fromJson;
 import static ratpack.jackson.Jackson.json;
 
 @Singleton
-public class DeleteUserHandler implements Handler {
+public class DeleteCustomerHandler implements Handler {
 
 
-    private final UserRepository userRepository;
+    private final CustomerRepository userRepository;
 
     @Inject
-    public DeleteUserHandler(UserRepository userRepository) {
+    public DeleteCustomerHandler(CustomerRepository userRepository) {
         this.userRepository = userRepository;
     }
 

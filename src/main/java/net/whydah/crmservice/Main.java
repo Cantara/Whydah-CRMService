@@ -49,7 +49,7 @@ public class Main {
         return Guice.registry(bindings -> bindings
                 .module(new RatpackGuiceConfigModule(bindings.getServerConfig()))
                 .module(PostgresModule.class)
-                .module(UserModule.class)
+                .module(CustomerModule.class)
                 .moduleConfig(DropwizardMetricsModule.class, new DropwizardMetricsConfig()
                                 .jmx(jmxConfig -> jmxConfig.enable(true))
                                 .jvmMetrics(true)
@@ -82,10 +82,10 @@ public class Main {
                 })
                 .path("user/:id", ctx -> {
                     ctx.byMethod(m -> m.
-                                get(() -> ctx.get(Injector.class).getInstance(GetUserHandler.class).handle(ctx)).
-                                post(() -> ctx.get(Injector.class).getInstance(CreateUserHandler.class).handle(ctx)).
-                                put(() -> ctx.get(Injector.class).getInstance(UpdateUserHandler.class).handle(ctx)).
-                                delete(() -> ctx.get(Injector.class).getInstance(DeleteUserHandler.class).handle(ctx))
+                            get(() -> ctx.get(Injector.class).getInstance(GetCustomerHandler.class).handle(ctx)).
+                            post(() -> ctx.get(Injector.class).getInstance(CreateCustomerHandler.class).handle(ctx)).
+                            put(() -> ctx.get(Injector.class).getInstance(UpdateCustomerHandler.class).handle(ctx)).
+                            delete(() -> ctx.get(Injector.class).getInstance(DeleteCustomerHandler.class).handle(ctx))
                     );
                 })
                 .get("favicon.ico", sendFileHandler("assets/ico/3dlb-3d-Lock.ico"))

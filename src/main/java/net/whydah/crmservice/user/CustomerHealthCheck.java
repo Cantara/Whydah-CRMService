@@ -8,12 +8,12 @@ import ratpack.health.HealthCheck;
 import ratpack.registry.Registry;
 
 @Singleton
-public class UserHealthCheck implements HealthCheck {
+public class CustomerHealthCheck implements HealthCheck {
 
     private final String nameOfThisHealthcheck;
 
     @Inject
-    public UserHealthCheck(@Named("healthcheck.user.name") String nameOfThisHealthcheck) {
+    public CustomerHealthCheck(@Named("healthcheck.customer.id") String nameOfThisHealthcheck) {
         this.nameOfThisHealthcheck = nameOfThisHealthcheck;
     }
 
