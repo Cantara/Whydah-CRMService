@@ -28,7 +28,7 @@ public class IntegrationTest {
 
     private static final ObjectMapper mapper = new ObjectMapper();
     private static MainClassApplicationUnderTest crmservice;
-    private final String userId = "1234";
+    private final String customerRef = "1234";
     private TestHttpClient client;
 
     @BeforeClass
@@ -43,40 +43,40 @@ public class IntegrationTest {
 
     @Ignore
     @Test
-   public void testCRUDUser() throws Exception {
-        Customer user = createDummyUser(userId);
+    public void testCRUDCustomer() throws Exception {
+        Customer customer = createDummyCustomer(customerRef);
 
-        String path = Main.CONTEXT_ROOT + "/user/"+user.getId();
+        String path = Main.CONTEXT_ROOT + "/customer/" + customer.getId();
 
-        String originalFirstname = user.getFirstname();
-        String originalLastname = user.getLastname();
+        String originalFirstname = customer.getFirstname();
+        String originalLastname = customer.getLastname();
 
         //Create userdata
         ReceivedResponse response =
-                client.requestSpec(jsonRequestBody(user)).post(path);
+                client.requestSpec(jsonRequestBody(customer)).post(path);
         assertEquals(HttpURLConnection.HTTP_CREATED, response.getStatus().getCode());
         assertTrue(response.getHeaders().get("Location").endsWith(path));
 
 
         //Update userdata
-        user.setFirstname("Integration");
-        user.setLastname("Test");
+        customer.setFirstname("Integration");
+        customer.setLastname("Test");
 
-        response = client.requestSpec(jsonRequestBody(user)).put(path);
+        response = client.requestSpec(jsonRequestBody(customer)).put(path);
         assertEquals(HttpURLConnection.HTTP_ACCEPTED, response.getStatus().getCode());
         assertTrue(response.getHeaders().get("Location").endsWith(path));
 
         //Read userdata
         response = client.get(path);
-        Customer user1 = parseJson(response.getBody().getText());
+        Customer customer1 = parseJson(response.getBody().getText());
 
-        assertEquals(user.getId(), user1.getId());
-        assertEquals(user.getFirstname(), user1.getFirstname());
-        assertEquals(user.getLastname(), user1.getLastname());
+        assertEquals(customer.getId(), customer1.getId());
+        assertEquals(customer.getFirstname(), customer1.getFirstname());
+        assertEquals(customer.getLastname(), customer1.getLastname());
 
         //Verify updated values
-        assertFalse(originalFirstname.equals(user.getFirstname()));
-        assertFalse(originalLastname.equals(user.getLastname()));
+        assertFalse(originalFirstname.equals(customer.getFirstname()));
+        assertFalse(originalLastname.equals(customer.getLastname()));
 
         //Delete userdata
         response = client.delete(path);
@@ -88,11 +88,11 @@ public class IntegrationTest {
 
     }
 
-    private Customer createDummyUser(String userId) {
-        Customer user = new Customer();
-        user.setId(userId);
-        user.setFirstname("First");
-        user.setLastname("Lastname");
+    private Customer createDummyCustomer(String customerRef) {
+        Customer customer = new Customer();
+        customer.setId(customerRef);
+        customer.setFirstname("First");
+        customer.setLastname("Lastname");
 
         Map<String, DeliveryAddress> addresses = new HashMap<>();
         DeliveryAddress addr1 = new DeliveryAddress();
@@ -101,19 +101,19 @@ public class IntegrationTest {
             addr1.setPostalcity("Oslo");
         addresses.put("work", addr1);
 
-        user.setDeliveryaddresses(addresses);
+        customer.setDeliveryaddresses(addresses);
 
-        return user;
+        return customer;
     }
 
-    private Action<RequestSpec> jsonRequestBody(Customer user) throws JsonProcessingException {
+    private Action<RequestSpec> jsonRequestBody(Customer customer) throws JsonProcessingException {
         return requestSpec -> requestSpec.getBody()
                 .type(MediaType.APPLICATION_JSON)
-                .text(mapper.writeValueAsString(user));
+                .text(mapper.writeValueAsString(customer));
     }
 
-    private Customer parseJson(String userJson) throws IOException {
-        return mapper.readValue(userJson, Customer.class);
+    private Customer parseJson(String customerJson) throws IOException {
+        return mapper.readValue(customerJson, Customer.class);
     }
 
 }
