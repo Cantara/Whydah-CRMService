@@ -12,22 +12,22 @@ import static ratpack.jackson.Jackson.fromJson;
 @Singleton
 public class UpdateCustomerHandler implements Handler {
 
-    private final CustomerRepository userRepository;
+    private final CustomerRepository customerRepository;
 
     @Inject
-    public UpdateCustomerHandler(CustomerRepository userRepository) {
-        this.userRepository = userRepository;
+    public UpdateCustomerHandler(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
     }
 
     @Override
     public void handle(Context ctx) throws Exception {
 
-        String userId = ctx.getPathTokens().get("id");
+        String customerRef = ctx.getPathTokens().get("customerRef");
 
-        ctx.parse(fromJson(Customer.class)).then(user -> {
-            Blocking.get(() -> userRepository.updateCustomer(userId, user)).then(affectedRows -> {
+        ctx.parse(fromJson(Customer.class)).then(customer -> {
+            Blocking.get(() -> customerRepository.updateCustomer(customerRef, customer)).then(affectedRows -> {
                 if (affectedRows == 1) {
-                    ctx.redirect(202, userId); //Accepted
+                    ctx.redirect(202, customerRef); //Accepted
                 } else {
                     ctx.clientError(404); //Not found
                 }

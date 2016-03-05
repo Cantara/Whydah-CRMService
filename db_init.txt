@@ -1,8 +1,9 @@
 ### User, schema and table definitions
 
-CREATE ROLE crmadmin LOGIN PASSWORD 'secret' NOINHERIT CREATEDB;
+DROP ROLE crmadmin;
+CREATE ROLE crmadmin LOGIN PASSWORD 'secret'  NOINHERIT, CREATEDB;
 
-# DROP DATABASE crmservice;
+DROP DATABASE crmservice;
 \set role crmadmin
 CREATE DATABASE crmservice OWNER crmadmin;
 \connect crmservice

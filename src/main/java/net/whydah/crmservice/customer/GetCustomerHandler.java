@@ -12,20 +12,20 @@ import static ratpack.jackson.Jackson.json;
 @Singleton
 public class GetCustomerHandler implements Handler {
 
-    private final CustomerRepository userRepository;
+    private final CustomerRepository customerRepository;
 
     @Inject
-    public GetCustomerHandler(CustomerRepository userRepository) {
-        this.userRepository = userRepository;
+    public GetCustomerHandler(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
     }
     @Override
     public void handle(Context ctx) throws Exception {
 
-        String userId = ctx.getPathTokens().get("id");
+        String customerRef = ctx.getPathTokens().get("customerRef");
 
-        Blocking.get(() -> userRepository.getCustomer(userId)).then(user -> {
-            if (user != null) {
-                ctx.render(json(user));
+        Blocking.get(() -> customerRepository.getCustomer(customerRef)).then(customer -> {
+            if (customer != null) {
+                ctx.render(json(customer));
             } else {
                 ctx.clientError(404); //Not found
             }
