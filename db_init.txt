@@ -2,13 +2,17 @@
 
 CREATE ROLE crmadmin LOGIN PASSWORD 'secret' NOINHERIT CREATEDB;
 
-CREATE SCHEMA crmservice AUTHORIZATION crmadmin;
+# DROP DATABASE crmservice;
+\set role crmadmin
+CREATE DATABASE crmservice OWNER crmadmin;
+\connect crmservice
 
 CREATE TABLE customers (
    customer_id    CHAR(256) PRIMARY KEY      NOT NULL,
    data           CHAR(5000) NOT NULL
 );
 
+GRANT ALL ON customers TO crmadmin;
 
 
 ### Amazon linux postgress installation - quickstart
