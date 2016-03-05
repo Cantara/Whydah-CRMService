@@ -1,15 +1,10 @@
 package net.whydah.crmservice;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.whydah.crmservice.user.model.Customer;
-import net.whydah.crmservice.user.model.DeliveryAddress;
+import net.whydah.crmservice.customer.model.Customer;
+import net.whydah.crmservice.customer.model.DeliveryAddress;
 import org.junit.Test;
-import ratpack.func.Action;
-import ratpack.http.MediaType;
-import ratpack.http.client.RequestSpec;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 

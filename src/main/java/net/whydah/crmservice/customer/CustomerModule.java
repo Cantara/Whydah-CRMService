@@ -1,4 +1,4 @@
-package net.whydah.crmservice.user;
+package net.whydah.crmservice.customer;
 
 import com.google.inject.AbstractModule;
 

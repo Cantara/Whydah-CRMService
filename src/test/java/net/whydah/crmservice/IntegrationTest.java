@@ -2,11 +2,10 @@ package net.whydah.crmservice;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.whydah.crmservice.user.model.DeliveryAddress;
-import net.whydah.crmservice.user.model.Customer;
+import net.whydah.crmservice.customer.model.DeliveryAddress;
+import net.whydah.crmservice.customer.model.Customer;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import ratpack.func.Action;
 import ratpack.http.MediaType;
@@ -41,7 +40,6 @@ public class IntegrationTest {
         client = TestHttpClient.testHttpClient(crmservice);
     }
 
-    @Ignore
     @Test
     public void testCRUDCustomer() throws Exception {
         Customer customer = createDummyCustomer(customerRef);

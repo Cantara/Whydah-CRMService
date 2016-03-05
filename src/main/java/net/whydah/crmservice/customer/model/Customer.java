@@ -1,4 +1,4 @@
-package net.whydah.crmservice.user.model;
+package net.whydah.crmservice.customer.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -1,10 +1,10 @@
-package net.whydah.crmservice.user;
+package net.whydah.crmservice.customer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import net.whydah.crmservice.user.model.Customer;
+import net.whydah.crmservice.customer.model.Customer;
 import org.postgresql.util.PGobject;
 
 import javax.sql.DataSource;
