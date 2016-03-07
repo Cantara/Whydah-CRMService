@@ -24,17 +24,17 @@ public class CreateCustomerHandler implements Handler {
     @Override
     public void handle(Context ctx) throws Exception {
 
-        String userId = ctx.getPathTokens().get("customerRef");
+        String customerRef = ctx.getPathTokens().get("customerRef");
 
         ctx.parse(fromJson(Customer.class)).then(customer -> {
             Blocking.op(() -> {
                 try {
-                    customerRepository.createCustomer(userId, customer);
+                    customerRepository.createCustomer(customerRef, customer);
                 } catch (SQLIntegrityConstraintViolationException e) {
                     ctx.clientError(400); //Bad request
                 }
             }).then(() -> {
-                ctx.redirect(201, userId); //Created
+                ctx.redirect(201, customerRef); //Created
             });
         });
     }

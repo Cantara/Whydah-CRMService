@@ -23,10 +23,10 @@ public class CustomerRepository {
         jsonMapper = new ObjectMapper();
     }
 
-    private static final String SQL_CREATE_USER = "INSERT INTO customers (customer_id, data) values(?, ?)";
-    private static final String SQL_RETRIEVE_USER = "SELECT data from customers WHERE customer_id = ?";
-    private static final String SQL_UPDATE_USER = "UPDATE customers SET data = ? WHERE customer_id = ?";
-    private static final String SQL_DELETE_USER = "DELETE FROM customers WHERE customer_id = ?";
+    private static final String SQL_CREATE_CUSTOMER = "INSERT INTO customers (customer_id, data) values(?, ?)";
+    private static final String SQL_RETRIEVE_CUSTOMER = "SELECT data from customers WHERE customer_id = ?";
+    private static final String SQL_UPDATE_CUSTOMER = "UPDATE customers SET data = ? WHERE customer_id = ?";
+    private static final String SQL_DELETE_CUSTOMER = "DELETE FROM customers WHERE customer_id = ?";
 
     public boolean createCustomer(String customerRef, Customer customer) throws SQLIntegrityConstraintViolationException {
 
@@ -38,7 +38,7 @@ public class CustomerRepository {
             jsonObject.setType("jsonb");
             jsonObject.setValue(jsonMapper.writeValueAsString(customer));
 
-            PreparedStatement statement = connection.prepareCall(SQL_CREATE_USER);
+            PreparedStatement statement = connection.prepareCall(SQL_CREATE_CUSTOMER);
             statement.setString(1, customerRef);
             statement.setObject(2, jsonObject);
 
@@ -63,7 +63,7 @@ public class CustomerRepository {
             jsonObject.setType("jsonb");
             jsonObject.setValue(jsonMapper.writeValueAsString(customer));
 
-            PreparedStatement statement = connection.prepareCall(SQL_UPDATE_USER);
+            PreparedStatement statement = connection.prepareCall(SQL_UPDATE_CUSTOMER);
             statement.setObject(1, jsonObject);
             statement.setString(2, customerRef);
 
@@ -86,7 +86,7 @@ public class CustomerRepository {
     public Customer getCustomer(String customerRef) {
         try (Connection connection = getConnection(true)) {
 
-            PreparedStatement statement = connection.prepareCall(SQL_RETRIEVE_USER);
+            PreparedStatement statement = connection.prepareCall(SQL_RETRIEVE_CUSTOMER);
             statement.setString(1, customerRef);
 
             ResultSet resultSet = statement.executeQuery();
@@ -105,7 +105,7 @@ public class CustomerRepository {
 
     public int deleteCustomer(String customerRef) {
         try (Connection connection = getConnection(false)) {
-            PreparedStatement statement = connection.prepareCall(SQL_DELETE_USER);
+            PreparedStatement statement = connection.prepareCall(SQL_DELETE_CUSTOMER);
             statement.setString(1, customerRef);
 
             int affectedRows = statement.executeUpdate();

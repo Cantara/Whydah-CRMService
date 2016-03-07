@@ -51,14 +51,14 @@ public class IntegrationTest {
         String originalFirstname = customer.getFirstname();
         String originalLastname = customer.getLastname();
 
-        //Create userdata
+        //Create customerdata
         ReceivedResponse response =
                 client.requestSpec(jsonRequestBody(customer)).post(path);
         assertEquals(HttpURLConnection.HTTP_CREATED, response.getStatus().getCode());
         assertTrue(response.getHeaders().get("Location").endsWith(path));
 
 
-        //Update userdata
+        //Update customerdata
         customer.setFirstname("Integration");
         customer.setLastname("Test");
 
@@ -66,7 +66,7 @@ public class IntegrationTest {
         assertEquals(HttpURLConnection.HTTP_ACCEPTED, response.getStatus().getCode());
         assertTrue(response.getHeaders().get("Location").endsWith(path));
 
-        //Read userdata
+        //Read customerdata
         response = client.get(path);
         Customer customer1 = parseJson(response.getBody().getText());
 
@@ -78,7 +78,7 @@ public class IntegrationTest {
         assertFalse(originalFirstname.equals(customer.getFirstname()));
         assertFalse(originalLastname.equals(customer.getLastname()));
 
-        //Delete userdata
+        //Delete customerdata
         response = client.delete(path);
         assertEquals(HttpURLConnection.HTTP_NO_CONTENT, response.getStatus().getCode());
 
