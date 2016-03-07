@@ -28,9 +28,9 @@ public class CreateCustomerHandler implements Handler {
 
         ctx.parse(fromJson(Customer.class)).then(customer -> {
             Blocking.op(() -> {
-                try {
-                    customerRepository.createCustomer(customerRef, customer);
-                } catch (SQLIntegrityConstraintViolationException e) {
+                customerRepository.createCustomer(customerRef, customer);
+            }).onError(throwable -> {
+                if (throwable instanceof SQLIntegrityConstraintViolationException) {
                     ctx.clientError(400); //Bad request
                 }
             }).then(() -> {
