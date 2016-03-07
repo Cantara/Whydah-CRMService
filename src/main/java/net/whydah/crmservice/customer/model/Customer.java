@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Map;
 
+// TODO  align with requirement spefication
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Customer {
     private String id;
