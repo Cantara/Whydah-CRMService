@@ -34,13 +34,9 @@ public class CustomerRepository {
 
             customer.setId(customerRef);
 
-            PGobject jsonObject = new PGobject();
-            jsonObject.setType("json");
-            jsonObject.setValue(jsonMapper.writeValueAsString(customer));
-
             PreparedStatement statement = connection.prepareCall(SQL_CREATE_CUSTOMER);
             statement.setString(1, customerRef);
-            statement.setObject(2, jsonObject);
+            statement.setObject(2, jsonMapper.writeValueAsString(customer));
 
             boolean result = statement.execute();
             connection.commit();
@@ -59,12 +55,8 @@ public class CustomerRepository {
         try (Connection connection = getConnection(false)) {
             customer.setId(customerRef);
 
-            PGobject jsonObject = new PGobject();
-            jsonObject.setType("json");
-            jsonObject.setValue(jsonMapper.writeValueAsString(customer));
-
             PreparedStatement statement = connection.prepareCall(SQL_UPDATE_CUSTOMER);
-            statement.setObject(1, jsonObject);
+            statement.setObject(1, jsonMapper.writeValueAsString(customer));
             statement.setString(2, customerRef);
 
             int affectedRows = statement.executeUpdate();
