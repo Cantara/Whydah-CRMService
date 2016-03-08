@@ -8,6 +8,7 @@ import net.whydah.crmservice.customer.model.PhoneNumber;
 import org.junit.Test;
 
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,7 +23,11 @@ public class JsonSerializationTest {
         Customer customer = new Customer();
         customer.setId("12345");
         customer.setFirstname("First");
+        customer.setMiddlename("Middle");
         customer.setLastname("Lastname");
+
+        customer.setSex("M");
+        customer.setBirthdate(new Date());
 
         Map<String, DeliveryAddress> addresses = new HashMap<>();
         DeliveryAddress addr1 = new DeliveryAddress();
@@ -37,6 +42,7 @@ public class JsonSerializationTest {
         addr2.setPostalcity("Oslo");
         addresses.put("home", addr2);
         customer.setDeliveryaddresses(addresses);
+        customer.setDefaultAddressLabel("work");
 
         Map<String, EmailAddress> emailAddressMap = new HashMap<>();
         EmailAddress email1 = new EmailAddress("totto@tott.org", "hjemme, privat, OID");
@@ -48,6 +54,7 @@ public class JsonSerializationTest {
         EmailAddress email4 = new EmailAddress("thor.henning.hetland@nmd.no", "jobb, kunde, OID");
         emailAddressMap.put("kobb-kunde", email4);
         customer.setEmailaddresses(emailAddressMap);
+        customer.setDefaultEmailLabel("hjemme");
 
 
         Map<String, PhoneNumber> phoneNumberMap = new HashMap<>();
@@ -55,6 +62,7 @@ public class JsonSerializationTest {
         phoneNumberMap.put("tja", p1);
         PhoneNumber p2 = new PhoneNumber("privat", "96909999");
         phoneNumberMap.put("tja", p2);
+        customer.setDefaultPhoneLabel("jobb");
 
         customer.setPhonenumbers(phoneNumberMap);
 
