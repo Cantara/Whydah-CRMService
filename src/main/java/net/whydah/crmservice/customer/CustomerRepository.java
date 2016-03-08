@@ -35,7 +35,7 @@ public class CustomerRepository {
             customer.setId(customerRef);
 
             PGobject jsonObject = new PGobject();
-            jsonObject.setType("jsonb");
+            jsonObject.setType("json");
             jsonObject.setValue(jsonMapper.writeValueAsString(customer));
 
             PreparedStatement statement = connection.prepareCall(SQL_CREATE_CUSTOMER);
@@ -60,7 +60,7 @@ public class CustomerRepository {
             customer.setId(customerRef);
 
             PGobject jsonObject = new PGobject();
-            jsonObject.setType("jsonb");
+            jsonObject.setType("json");
             jsonObject.setValue(jsonMapper.writeValueAsString(customer));
 
             PreparedStatement statement = connection.prepareCall(SQL_UPDATE_CUSTOMER);
