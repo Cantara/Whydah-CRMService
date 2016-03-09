@@ -4,9 +4,10 @@ import com.codahale.metrics.MetricRegistry;
 import com.google.inject.Injector;
 import net.whydah.crmservice.postgresql.PostgresModule;
 import net.whydah.crmservice.customer.*;
-import net.whydah.crmservice.profilepicture.DeleteProfileimageHandler;
-import net.whydah.crmservice.profilepicture.GetProfileimageHandler;
-import net.whydah.crmservice.profilepicture.SetProfileimageHandler;
+import net.whydah.crmservice.profilepicture.CreateProfileImageHandler;
+import net.whydah.crmservice.profilepicture.DeleteProfileImageHandler;
+import net.whydah.crmservice.profilepicture.GetProfileImageHandler;
+import net.whydah.crmservice.profilepicture.UpdateProfileImageHandler;
 import no.cantara.ratpack.config.RatpackConfigs;
 import no.cantara.ratpack.config.RatpackGuiceConfigModule;
 import org.slf4j.Logger;
@@ -85,10 +86,10 @@ public class Main {
                 })
                 .path("customer/:customerRef/image", ctx -> {
                     ctx.byMethod(m -> m.
-                            get(() -> ctx.get(Injector.class).getInstance(GetProfileimageHandler.class).handle(ctx)).
-                            post(() -> ctx.get(Injector.class).getInstance(SetProfileimageHandler.class).handle(ctx)).
-                            put(() -> ctx.get(Injector.class).getInstance(SetProfileimageHandler.class).handle(ctx)).
-                            delete(() -> ctx.get(Injector.class).getInstance(DeleteProfileimageHandler.class).handle(ctx))
+                            get(() -> ctx.get(Injector.class).getInstance(GetProfileImageHandler.class).handle(ctx)).
+                            post(() -> ctx.get(Injector.class).getInstance(CreateProfileImageHandler.class).handle(ctx)).
+                            put(() -> ctx.get(Injector.class).getInstance(UpdateProfileImageHandler.class).handle(ctx)).
+                            delete(() -> ctx.get(Injector.class).getInstance(DeleteProfileImageHandler.class).handle(ctx))
                     );
                 })
                 .path("customer/:customerRef", ctx -> {

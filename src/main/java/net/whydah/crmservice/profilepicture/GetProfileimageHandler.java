@@ -7,12 +7,12 @@ import ratpack.handling.Context;
 import ratpack.handling.Handler;
 
 @Singleton
-public class GetProfileimageHandler implements Handler {
+public class GetProfileImageHandler implements Handler {
 
-    private final ProfilepictureRepository repository;
+    private final ProfileImageRepository repository;
 
     @Inject
-    public GetProfileimageHandler(ProfilepictureRepository repository) {
+    public GetProfileImageHandler(ProfileImageRepository repository) {
         this.repository = repository;
     }
     @Override
@@ -20,11 +20,11 @@ public class GetProfileimageHandler implements Handler {
 
         String customerRef = ctx.getPathTokens().get("customerRef");
 
-        Blocking.get(() -> repository.getProfileimage(customerRef)).then(profilePicture -> {
-            if (profilePicture != null && profilePicture.getImageData() != null) {
+        Blocking.get(() -> repository.getProfileImage(customerRef)).then(profilePicture -> {
+            if (profilePicture != null && profilePicture.getData() != null) {
                 ctx.getResponse().getHeaders().add("Content-Disposition", "inline");
                 ctx.getResponse().getHeaders().add("Content-Type", profilePicture.getContentType());
-                ctx.getResponse().send(profilePicture.getImageData());
+                ctx.getResponse().send(profilePicture.getData());
             } else {
                 ctx.clientError(404); //Not found
             }

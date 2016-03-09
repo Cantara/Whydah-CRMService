@@ -2,7 +2,7 @@ package net.whydah.crmservice.profilepicture;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import net.whydah.crmservice.profilepicture.model.ProfilePicture;
+import net.whydah.crmservice.profilepicture.model.ProfileImage;
 import ratpack.exec.Blocking;
 import ratpack.exec.Promise;
 import ratpack.handling.Context;
@@ -16,12 +16,12 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import static ratpack.jackson.Jackson.fromJson;
 
 @Singleton
-public class SetProfileimageHandler implements Handler {
+public class UpdateProfileImageHandler implements Handler {
 
-    private final ProfilepictureRepository repository;
+    private final ProfileImageRepository repository;
 
     @Inject
-    public SetProfileimageHandler(ProfilepictureRepository repository) {
+    public UpdateProfileImageHandler(ProfileImageRepository repository) {
         this.repository = repository;
     }
 
@@ -37,13 +37,13 @@ public class SetProfileimageHandler implements Handler {
 
         bodyPromise.then(data -> {
             Blocking.op(() -> {
-                repository.updateProfileimage(customerRef, new ProfilePicture(data.getBytes(), contentType.getType()));
+                repository.updateProfileImage(customerRef, new ProfileImage(data.getBytes(), contentType.getType()));
             }).onError(throwable -> {
                 if (throwable instanceof SQLIntegrityConstraintViolationException) {
                     ctx.clientError(400); //Bad request
                 }
             }).then(() -> {
-                ctx.redirect(201, customerRef); //Created
+                ctx.redirect(202,  "image"); //Accepted
             });
         });
     }

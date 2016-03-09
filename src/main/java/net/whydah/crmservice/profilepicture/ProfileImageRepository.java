@@ -3,19 +3,19 @@ package net.whydah.crmservice.profilepicture;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import net.whydah.crmservice.profilepicture.model.ProfilePicture;
+import net.whydah.crmservice.profilepicture.model.ProfileImage;
 
 import javax.sql.DataSource;
 import java.sql.*;
 
 @Singleton
-public class ProfilepictureRepository {
+public class ProfileImageRepository {
 
     private final DataSource dataSource;
     private final ObjectMapper jsonMapper;
 
     @Inject
-    public ProfilepictureRepository(DataSource dataSource) {
+    public ProfileImageRepository(DataSource dataSource) {
         this.dataSource = dataSource;
         jsonMapper = new ObjectMapper();
     }
@@ -30,24 +30,24 @@ public class ProfilepictureRepository {
     private static final String SQL_UPDATE_PROFILEIMAGE = "UPDATE customers SET profileimage = ?, contenttype = ? WHERE customer_id = ?";
 
 
-    public int deleteProfileimage(String customerRef) {
-        return updateProfileimage(customerRef, null);
+    public int deleteProfileImage(String customerRef) {
+        return updateProfileImage(customerRef, null);
     }
 
-    public int updateProfileimage(String customerRef, ProfilePicture profilePicture) {
+    public int updateProfileImage(String customerRef, ProfileImage profileImage) {
         try (Connection connection = getConnection(false)) {
 
             PreparedStatement statement = connection.prepareCall(SQL_UPDATE_PROFILEIMAGE);
 
-            byte[] imageData = null;
+            byte[] data = null;
             String contentType = null;
 
-            if (profilePicture != null) {
-                imageData = profilePicture.getImageData();
-                contentType = profilePicture.getContentType();
+            if (profileImage != null) {
+                data = profileImage.getData();
+                contentType = profileImage.getContentType();
             }
 
-            statement.setObject(1, imageData);
+            statement.setObject(1, data);
             statement.setObject(2, contentType);
             statement.setString(3, customerRef);
 
@@ -59,7 +59,7 @@ public class ProfilepictureRepository {
         }
     }
 
-    public ProfilePicture getProfileimage(String customerRef) {
+    public ProfileImage getProfileImage(String customerRef) {
         try (Connection connection = getConnection(true)) {
 
             PreparedStatement statement = connection.prepareCall(SQL_RETRIEVE_PROFILEIMAGE);
@@ -68,7 +68,7 @@ public class ProfilepictureRepository {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                return new ProfilePicture(resultSet.getBytes(1), resultSet.getString(2));
+                return new ProfileImage(resultSet.getBytes(1), resultSet.getString(2));
             } else {
                 return null;
             }
