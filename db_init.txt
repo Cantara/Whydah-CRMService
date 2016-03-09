@@ -10,7 +10,9 @@ CREATE DATABASE crmservice OWNER crmadmin;
 
 CREATE TABLE customers (
    customer_id    CHAR(256) PRIMARY KEY      NOT NULL,
-   data           CHAR(5000) NOT NULL
+   data           CHAR(5000) NOT NULL,
+   profilepicture BYTEA,
+   contenttype    CHAR(256)
 );
 
 GRANT ALL ON customers TO crmadmin;
