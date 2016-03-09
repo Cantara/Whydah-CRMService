@@ -8,12 +8,15 @@ public class EmailAddress {
 
     private String emailaddress;
     private String tags;
+    private boolean verified;
 
 
     public EmailAddress(@JsonProperty("emailaddress") String emailaddress,
-                        @JsonProperty("tags") String tags) {
+                        @JsonProperty("tags") String tags,
+                        @JsonProperty("verified") boolean verified) {
         this.emailaddress = emailaddress;
         this.tags = tags;
+        this.verified = verified;
     }
 
     public String getEmailaddress() {
@@ -32,4 +35,11 @@ public class EmailAddress {
         this.tags = tags;
     }
 
+    public boolean isVerified() {
+        return verified;
+    }
+
+    public void setVerified(boolean verified) {
+        this.verified = verified;
+    }
 }

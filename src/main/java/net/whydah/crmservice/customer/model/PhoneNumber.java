@@ -9,12 +9,15 @@ public class PhoneNumber {
 
     private String phonenumber;
     private String tags;
+    private boolean verified;
 
 
     public PhoneNumber(@JsonProperty("phonenumber") String phonenumber,
-                       @JsonProperty("tags") String tags) {
+                       @JsonProperty("tags") String tags,
+                       @JsonProperty("verified") boolean verified) {
         this.phonenumber = phonenumber;
         this.tags = tags;
+        this.verified = verified;
     }
 
 
@@ -32,5 +35,13 @@ public class PhoneNumber {
 
     public void setPhonenumber(String phonenumber) {
         this.phonenumber = phonenumber;
+    }
+
+    public boolean isVerified() {
+        return verified;
+    }
+
+    public void setVerified(boolean verified) {
+        this.verified = verified;
     }
 }

@@ -45,22 +45,22 @@ public class JsonSerializationTest {
         customer.setDefaultAddressLabel("work");
 
         Map<String, EmailAddress> emailAddressMap = new HashMap<>();
-        EmailAddress email1 = new EmailAddress("totto@tott.org", "hjemme, privat, OID");
+        EmailAddress email1 = new EmailAddress("totto@tott.org", "hjemme, privat, OID", true);
         emailAddressMap.put("hjemme", email1);
-        EmailAddress email2 = new EmailAddress("totto@cantara.no", "opensource, privat, OID");
+        EmailAddress email2 = new EmailAddress("totto@cantara.no", "opensource, privat, OID", true);
         emailAddressMap.put("community", email2);
-        EmailAddress email3 = new EmailAddress("totto@capraconsulting.no", "jobb, Capra, OID");
+        EmailAddress email3 = new EmailAddress("totto@capraconsulting.no", "jobb, Capra, OID", true);
         emailAddressMap.put("jobb", email3);
-        EmailAddress email4 = new EmailAddress("thor.henning.hetland@nmd.no", "jobb, kunde, OID");
+        EmailAddress email4 = new EmailAddress("thor.henning.hetland@nmd.no", "jobb, kunde, OID", true);
         emailAddressMap.put("kobb-kunde", email4);
         customer.setEmailaddresses(emailAddressMap);
         customer.setDefaultEmailLabel("hjemme");
 
 
         Map<String, PhoneNumber> phoneNumberMap = new HashMap<>();
-        PhoneNumber p1 = new PhoneNumber("jobb", "91905054");
+        PhoneNumber p1 = new PhoneNumber("jobb", "91905054", false);
         phoneNumberMap.put("tja", p1);
-        PhoneNumber p2 = new PhoneNumber("privat", "96909999");
+        PhoneNumber p2 = new PhoneNumber("privat", "96909999", true);
         phoneNumberMap.put("tja", p2);
         customer.setDefaultPhoneLabel("jobb");
 
