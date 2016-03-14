@@ -10,12 +10,17 @@ CREATE DATABASE crmservice OWNER crmadmin;
 
 CREATE TABLE customers (
    customer_id    CHAR(256) PRIMARY KEY      NOT NULL,
-   data           CHAR(5000) NOT NULL,
-   profilepicture BYTEA,
+   data           CHAR(5000) NOT NULL
+);
+
+CREATE TABLE profileimages (
+   customer_id    CHAR(256) PRIMARY KEY      NOT NULL,
+   image BYTEA,
    contenttype    CHAR(256)
 );
 
 GRANT ALL ON customers TO crmadmin;
+GRANT ALL ON profileimages TO crmadmin;
 
 
 ### Amazon linux postgress installation - quickstart

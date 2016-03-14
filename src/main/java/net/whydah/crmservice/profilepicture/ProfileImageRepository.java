@@ -26,12 +26,52 @@ public class ProfileImageRepository {
         return connection;
     }
 
-    private static final String SQL_RETRIEVE_PROFILEIMAGE = "SELECT profileimage, contenttype from customers WHERE customer_id = ?";
-    private static final String SQL_UPDATE_PROFILEIMAGE = "UPDATE customers SET profileimage = ?, contenttype = ? WHERE customer_id = ?";
+    private static final String SQL_RETRIEVE_PROFILEIMAGE = "SELECT image, contenttype from profileimages WHERE customer_id = ?";
+    private static final String SQL_UPDATE_PROFILEIMAGE = "UPDATE profileimages SET image = ?, contenttype = ? WHERE customer_id = ?";
 
+    private static final String SQL_CREATE_PROFILEIMAGE = "INSERT INTO profileimages (customer_id, image, contenttype) values(?, ?, ?)";
+
+    private static final String SQL_DELETE_PROFILEIMAGE = "DELETE FROM profileimages WHERE customer_id = ?";
 
     public int deleteProfileImage(String customerRef) {
-        return updateProfileImage(customerRef, null);
+        try (Connection connection = getConnection(false)) {
+            PreparedStatement statement = connection.prepareCall(SQL_DELETE_PROFILEIMAGE);
+            statement.setString(1, customerRef);
+
+            int affectedRows = statement.executeUpdate();
+            connection.commit();
+            return affectedRows;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public int createProfileImage(String customerRef, ProfileImage profileImage) throws SQLIntegrityConstraintViolationException {
+        try (Connection connection = getConnection(false)) {
+
+            PreparedStatement statement = connection.prepareCall(SQL_CREATE_PROFILEIMAGE);
+
+            byte[] data = null;
+            String contentType = null;
+
+            if (profileImage != null) {
+                data = profileImage.getData();
+                contentType = profileImage.getContentType();
+            }
+
+            statement.setObject(1, customerRef);
+            statement.setObject(2, data);
+            statement.setString(3, contentType);
+
+            int affectedRows = statement.executeUpdate();
+            connection.commit();
+            return affectedRows;
+        } catch (SQLException e) {
+            if ("23505".equals(e.getSQLState())) { //SQL State=23505 -> Primary key constraint violated
+                throw new SQLIntegrityConstraintViolationException(e);
+            }
+            throw new RuntimeException(e);
+        }
     }
 
     public int updateProfileImage(String customerRef, ProfileImage profileImage) {

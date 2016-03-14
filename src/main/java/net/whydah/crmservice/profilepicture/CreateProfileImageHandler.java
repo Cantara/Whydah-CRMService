@@ -35,7 +35,7 @@ public class CreateProfileImageHandler implements Handler {
 
         bodyPromise.then(data -> {
             Blocking.op(() -> {
-                repository.updateProfileImage(customerRef, new ProfileImage(data.getBytes(), contentType.getType()));
+                repository.createProfileImage(customerRef, new ProfileImage(data.getBytes(), contentType.getType()));
             }).onError(throwable -> {
                 if (throwable instanceof SQLIntegrityConstraintViolationException) {
                     ctx.clientError(400); //Bad request

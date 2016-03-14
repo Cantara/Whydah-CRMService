@@ -36,14 +36,12 @@ public class UpdateProfileImageHandler implements Handler {
         Promise<TypedData> bodyPromise = request.getBody();
 
         bodyPromise.then(data -> {
-            Blocking.op(() -> {
-                repository.updateProfileImage(customerRef, new ProfileImage(data.getBytes(), contentType.getType()));
-            }).onError(throwable -> {
-                if (throwable instanceof SQLIntegrityConstraintViolationException) {
-                    ctx.clientError(400); //Bad request
+            Blocking.get(() -> repository.updateProfileImage(customerRef, new ProfileImage(data.getBytes(), contentType.getType()))).then(affectedRows -> {
+                if (affectedRows == 1) {
+                    ctx.redirect(202, "image"); //Accepted
+                } else {
+                    ctx.clientError(404); //Not found
                 }
-            }).then(() -> {
-                ctx.redirect(202,  "image"); //Accepted
             });
         });
     }
