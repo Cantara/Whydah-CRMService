@@ -100,6 +100,9 @@ public class Main {
                             delete(() -> ctx.get(Injector.class).getInstance(DeleteCustomerHandler.class).handle(ctx))
                     );
                 })
+                .prefix("customer/", chain -> {
+                    chain.post(chain.getRegistry().get(Injector.class).getInstance(CreateCustomerHandler.class));
+                })
                 .get("favicon.ico", sendFileHandler("assets/ico/3dlb-3d-Lock.ico"))
 
                 // redirect index* to root path

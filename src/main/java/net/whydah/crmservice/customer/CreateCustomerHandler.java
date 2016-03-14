@@ -6,6 +6,7 @@ import net.whydah.crmservice.customer.model.Customer;
 import ratpack.exec.Blocking;
 import ratpack.handling.Context;
 import ratpack.handling.Handler;
+import ratpack.handling.internal.UuidBasedRequestIdGenerator;
 
 import java.sql.SQLIntegrityConstraintViolationException;
 
@@ -24,7 +25,13 @@ public class CreateCustomerHandler implements Handler {
     @Override
     public void handle(Context ctx) throws Exception {
 
-        String customerRef = ctx.getPathTokens().get("customerRef");
+        String customerRef;
+        if (ctx.getPathTokens().get("customerRef") != null) {
+            customerRef = ctx.getPathTokens().get("customerRef");
+        } else {
+            customerRef = UuidBasedRequestIdGenerator.INSTANCE.generate(ctx.getRequest()).toString();
+        }
+
 
         ctx.parse(fromJson(Customer.class)).then(customer -> {
             Blocking.op(() -> {

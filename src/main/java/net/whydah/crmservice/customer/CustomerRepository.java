@@ -32,8 +32,6 @@ public class CustomerRepository {
 
         try (Connection connection = getConnection(false)) {
 
-            customer.setId(customerRef);
-
             PreparedStatement statement = connection.prepareCall(SQL_CREATE_CUSTOMER);
             statement.setString(1, customerRef);
             statement.setObject(2, jsonMapper.writeValueAsString(customer));
@@ -53,7 +51,6 @@ public class CustomerRepository {
 
     public int updateCustomer(String customerRef, Customer customer) {
         try (Connection connection = getConnection(false)) {
-            customer.setId(customerRef);
 
             PreparedStatement statement = connection.prepareCall(SQL_UPDATE_CUSTOMER);
             statement.setObject(1, jsonMapper.writeValueAsString(customer));
