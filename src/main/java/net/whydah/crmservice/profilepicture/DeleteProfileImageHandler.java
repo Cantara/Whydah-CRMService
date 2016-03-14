@@ -22,7 +22,7 @@ public class DeleteProfileImageHandler implements Handler {
 
         Blocking.get(() -> repository.deleteProfileImage(customerRef)).then(affectedRows -> {
             if (affectedRows == 1) {
-                ctx.redirect(204, customerRef); //No content
+                ctx.redirect(204, "image"); //No content
             } else {
                 ctx.clientError(404); //Not found
             }
