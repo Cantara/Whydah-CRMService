@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import net.whydah.crmservice.customer.model.Customer;
+import net.whydah.sso.customer.types.Customer;
 import org.postgresql.util.PGobject;
 
 import javax.sql.DataSource;

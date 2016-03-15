@@ -2,8 +2,8 @@ package net.whydah.crmservice;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.whydah.crmservice.customer.model.DeliveryAddress;
-import net.whydah.crmservice.customer.model.Customer;
+import net.whydah.sso.customer.types.Customer;
+import net.whydah.sso.customer.types.DeliveryAddress;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -41,7 +41,6 @@ public class IntegrationTest {
         client = TestHttpClient.testHttpClient(crmservice);
     }
 
-    @Ignore
     @Test
     public void testCRUDCustomer() throws Exception {
         Customer customer = createDummyCustomer(customerRef);
