@@ -1,10 +1,10 @@
 package net.whydah.crmservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.whydah.sso.customer.types.Customer;
-import net.whydah.sso.customer.types.DeliveryAddress;
-import net.whydah.sso.customer.types.EmailAddress;
-import net.whydah.sso.customer.types.PhoneNumber;
+import net.whydah.sso.extensions.crmcustomer.types.Customer;
+import net.whydah.sso.extensions.crmcustomer.types.DeliveryAddress;
+import net.whydah.sso.extensions.crmcustomer.types.EmailAddress;
+import net.whydah.sso.extensions.crmcustomer.types.PhoneNumber;
 import org.junit.Test;
 
 
