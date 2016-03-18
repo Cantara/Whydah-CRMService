@@ -41,6 +41,7 @@ public class IntegrationTest {
         client = TestHttpClient.testHttpClient(crmservice);
     }
 
+    @Ignore
     @Test
     public void testCRUDCustomer() throws Exception {
         Customer customer = createDummyCustomer(customerRef);
