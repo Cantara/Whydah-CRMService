@@ -8,6 +8,8 @@ import net.whydah.crmservice.profilepicture.CreateProfileImageHandler;
 import net.whydah.crmservice.profilepicture.DeleteProfileImageHandler;
 import net.whydah.crmservice.profilepicture.GetProfileImageHandler;
 import net.whydah.crmservice.profilepicture.UpdateProfileImageHandler;
+import net.whydah.crmservice.security.SecurityHandler;
+import net.whydah.crmservice.security.SecurityModule;
 import no.cantara.ratpack.config.RatpackConfigs;
 import no.cantara.ratpack.config.RatpackGuiceConfigModule;
 import org.slf4j.Logger;
@@ -54,6 +56,7 @@ public class Main {
                 .module(new RatpackGuiceConfigModule(bindings.getServerConfig()))
                 .module(PostgresModule.class)
                 .module(CustomerModule.class)
+                .module(SecurityModule.class)
                 .moduleConfig(DropwizardMetricsModule.class, new DropwizardMetricsConfig()
                                 .jmx(jmxConfig -> jmxConfig.enable(true))
                                 .jvmMetrics(true)
@@ -84,25 +87,29 @@ public class Main {
                     chain.get("metrics", new MetricsWebsocketBroadcastHandler());
                     chain.get("health/:name?", new HealthCheckHandler());
                 })
-                .path("customer/:customerRef/image", ctx -> {
-                    ctx.byMethod(m -> m.
-                            get(() -> ctx.get(Injector.class).getInstance(GetProfileImageHandler.class).handle(ctx)).
-                            post(() -> ctx.get(Injector.class).getInstance(CreateProfileImageHandler.class).handle(ctx)).
-                            put(() -> ctx.get(Injector.class).getInstance(UpdateProfileImageHandler.class).handle(ctx)).
-                            delete(() -> ctx.get(Injector.class).getInstance(DeleteProfileImageHandler.class).handle(ctx))
-                    );
+                .prefix(":apptokenId/:adminuserTokenId", chain -> {
+                    chain.all(appChain.getRegistry().get(SecurityHandler.class))
+                            .path("customer/:customerRef", ctx -> {
+                                ctx.byMethod(m -> m.
+                                                get(() -> ctx.get(Injector.class).getInstance(GetCustomerHandler.class).handle(ctx)).
+                                                post(() -> ctx.get(Injector.class).getInstance(CreateCustomerHandler.class).handle(ctx)).
+                                                put(() -> ctx.get(Injector.class).getInstance(UpdateCustomerHandler.class).handle(ctx)).
+                                                delete(() -> ctx.get(Injector.class).getInstance(DeleteCustomerHandler.class).handle(ctx))
+                                );
+                            })
+                        .path("customer/:customerRef/image", ctx -> {
+                            ctx.byMethod(m -> m.
+                                            get(() -> ctx.get(Injector.class).getInstance(GetProfileImageHandler.class).handle(ctx)).
+                                            post(() -> ctx.get(Injector.class).getInstance(CreateProfileImageHandler.class).handle(ctx)).
+                                            put(() -> ctx.get(Injector.class).getInstance(UpdateProfileImageHandler.class).handle(ctx)).
+                                            delete(() -> ctx.get(Injector.class).getInstance(DeleteProfileImageHandler.class).handle(ctx))
+                            );
+                        })
+                        .prefix("customer", postChain -> {
+                            postChain.post(chain.getRegistry().get(Injector.class).getInstance(CreateCustomerHandler.class));
+                        });
                 })
-                .path("customer/:customerRef", ctx -> {
-                    ctx.byMethod(m -> m.
-                            get(() -> ctx.get(Injector.class).getInstance(GetCustomerHandler.class).handle(ctx)).
-                            post(() -> ctx.get(Injector.class).getInstance(CreateCustomerHandler.class).handle(ctx)).
-                            put(() -> ctx.get(Injector.class).getInstance(UpdateCustomerHandler.class).handle(ctx)).
-                            delete(() -> ctx.get(Injector.class).getInstance(DeleteCustomerHandler.class).handle(ctx))
-                    );
-                })
-                .prefix("customer", chain -> {
-                    chain.post(chain.getRegistry().get(Injector.class).getInstance(CreateCustomerHandler.class));
-                })
+
                 .get("favicon.ico", sendFileHandler("assets/ico/3dlb-3d-Lock.ico"))
 
                 // redirect index* to root path
