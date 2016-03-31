@@ -23,6 +23,7 @@
     <properties>
         <service.name>Whydah-CRMService</service.name>
         <whydah-typelib-version>1.2.3</whydah-typelib-version>
+        <whydah-sdk-version>2.1.63</whydah-sdk-version>
         <slf4j.version>1.7.13</slf4j.version>
         <ratpack.version>1.1.1</ratpack.version>
     </properties>
@@ -92,6 +93,11 @@
             <groupId>net.whydah.sso</groupId>
             <artifactId>Whydah-TypeLib</artifactId>
             <version>${whydah-typelib-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.whydah.sso</groupId>
+            <artifactId>Whydah-Java-SDK</artifactId>
+            <version>${whydah-sdk-version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>

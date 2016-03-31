@@ -2,6 +2,8 @@ package net.whydah.crmservice.customer;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import net.whydah.crmservice.security.Authentication;
+import net.whydah.sso.user.types.UserToken;
 import ratpack.exec.Blocking;
 import ratpack.handling.Context;
 import ratpack.handling.Handler;
@@ -24,6 +26,11 @@ public class DeleteCustomerHandler implements Handler {
     public void handle(Context ctx) throws Exception {
 
         String customerRef = ctx.getPathTokens().get("customerRef");
+
+        if (customerRef == null || !customerRef.equals(Authentication.getAuthenticatedUser().getPersonRef())) {
+            ctx.clientError(401);
+            return;
+        }
 
         Blocking.get(() -> customerRepository.deleteCustomer(customerRef)).then(affectedRows -> {
             if (affectedRows == 1) {

@@ -2,6 +2,7 @@ package net.whydah.crmservice.customer;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import net.whydah.crmservice.security.Authentication;
 import ratpack.exec.Blocking;
 import ratpack.handling.Context;
 import ratpack.handling.Handler;
@@ -22,6 +23,11 @@ public class GetCustomerHandler implements Handler {
     public void handle(Context ctx) throws Exception {
 
         String customerRef = ctx.getPathTokens().get("customerRef");
+
+        if (customerRef == null || !customerRef.equals(Authentication.getAuthenticatedUser().getPersonRef())) {
+            ctx.clientError(401);
+            return;
+        }
 
         Blocking.get(() -> customerRepository.getCustomer(customerRef)).then(customer -> {
             if (customer != null) {

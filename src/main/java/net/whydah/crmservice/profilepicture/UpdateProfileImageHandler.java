@@ -3,6 +3,7 @@ package net.whydah.crmservice.profilepicture;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.whydah.crmservice.profilepicture.model.ProfileImage;
+import net.whydah.crmservice.security.Authentication;
 import ratpack.exec.Blocking;
 import ratpack.exec.Promise;
 import ratpack.handling.Context;
@@ -29,6 +30,10 @@ public class UpdateProfileImageHandler implements Handler {
     public void handle(Context ctx) throws Exception {
 
         String customerRef = ctx.getPathTokens().get("customerRef");
+
+        if (customerRef == null || !customerRef.equals(Authentication.getAuthenticatedUser().getPersonRef())) {
+            ctx.clientError(401);
+        }
 
         Request request = ctx.getRequest();
 

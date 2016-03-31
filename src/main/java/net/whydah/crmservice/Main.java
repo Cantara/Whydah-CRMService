@@ -87,7 +87,7 @@ public class Main {
                     chain.get("metrics", new MetricsWebsocketBroadcastHandler());
                     chain.get("health/:name?", new HealthCheckHandler());
                 })
-                .prefix(":apptokenId/:adminuserTokenId", chain -> {
+                .prefix(":apptokenId/:userTokenId", chain -> {
                     chain.all(appChain.getRegistry().get(SecurityHandler.class))
                             .path("customer/:customerRef", ctx -> {
                                 ctx.byMethod(m -> m.
