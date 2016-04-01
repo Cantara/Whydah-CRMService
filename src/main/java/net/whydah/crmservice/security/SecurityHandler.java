@@ -59,7 +59,7 @@ public class SecurityHandler implements Handler {
         log.warn("SSL disabled for development - should be removed.");
         SSLTool.disableCertificateValidation();
         String userTokenXml =  new CommandGetUsertokenByUsertokenId(new URI(securitytokenserviceurl), myAppTokenId, applicationTokenId, userTokenId).execute();
-        if (userTokenXml == null) {
+        if (userTokenXml == null || userTokenXml.isEmpty()) {
             log.debug("Usertoken [{}] has been rejected.", userTokenId);
             context.clientError(401);
             return;
