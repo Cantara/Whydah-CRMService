@@ -5,7 +5,7 @@ import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import net.whydah.sso.application.types.ApplicationCredential;
 import net.whydah.sso.commands.appauth.CommandLogonApplication;
-import net.whydah.sso.commands.userauth.CommandGetUsertokenByUsertokenId;
+//import net.whydah.sso.commands.userauth.CommandGetUsertokenByUsertokenId;
 import net.whydah.sso.user.helpers.UserTokenXpathHelper;
 import net.whydah.sso.user.mappers.UserTokenMapper;
 import net.whydah.sso.user.types.UserToken;
@@ -58,7 +58,7 @@ public class SecurityHandler implements Handler {
 
         log.warn("SSL disabled for development - should be removed.");
         SSLTool.disableCertificateValidation();
-        String userTokenXml =  new CommandGetUsertokenByUsertokenId(new URI(securitytokenserviceurl), myAppTokenId, applicationTokenId, userTokenId).execute();
+        String userTokenXml = new CommandGetUsertokenByUsertokenId(new URI(securitytokenserviceurl), myAppTokenId, myAppTokenXml, userTokenId).execute();
         if (userTokenXml == null || userTokenXml.isEmpty()) {
             log.debug("Usertoken [{}] has been rejected.", userTokenId);
             context.clientError(401);
@@ -74,7 +74,7 @@ public class SecurityHandler implements Handler {
     }
 
     private void logonApplication() {
-        ApplicationCredential appCredential = new ApplicationCredential(applicationId,applicationname,applicationsecret);
+        ApplicationCredential appCredential = new ApplicationCredential(applicationId, applicationname, applicationsecret);
 
         try {
             log.warn("SSL disabled for development - should be removed.");
