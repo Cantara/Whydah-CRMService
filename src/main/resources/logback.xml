@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="60 seconds">
-  <property name="LOG_DIR" value="logs/"/>
-  <property name="env" value="noEnvSet"/>
-  <property name="appName" value="Whydah-CRMService"/>
 
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
@@ -10,25 +7,23 @@
     </encoder>
   </appender>
 
-  <appender name="logfile" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>${LOG_DIR}/crmservice.log</file>
+  <!--Daily rolling file appender -->
+  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <File>logs/CRMService.log</File>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <fileNamePattern>${LOG_DIR}/crmservice-%d{yyyy-MM-dd}.log</fileNamePattern>
-      <maxHistory>30</maxHistory>
-      <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-        <maxFileSize>50MB</maxFileSize>
-      </timeBasedFileNamingAndTriggeringPolicy>
+      <FileNamePattern>logs/CRMService-%d{yyyy-MM-dd}.log</FileNamePattern>
+      <maxHistory>5</maxHistory>
     </rollingPolicy>
+
     <encoder>
-      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg%n</pattern>
+      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
     </encoder>
   </appender>
 
-  <logger name="net.whydah" level="TRACE"/>
+  <logger name="net.whydah.crmservice" level="TRACE" />
 
-  <root level="info">
-    <appender-ref ref="logfile"/>
-    <appender-ref ref="STDOUT"/>
+  <root level="TRACE">
+    <appender-ref ref="STDOUT" />
+    <appender-ref ref="FILE" />
   </root>
-
 </configuration>
