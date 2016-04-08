@@ -75,6 +75,7 @@ public class TokenServiceClient {
     }
 
     public boolean verifyEmailAddressToken(String userTokenId, String personRef, String emailaddress, String token) {
+        log.warn("Email verification is NOT yet implemented - returning false.");
         return false;
     }
 }
