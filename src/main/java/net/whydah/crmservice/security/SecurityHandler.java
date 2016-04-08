@@ -3,6 +3,7 @@ package net.whydah.crmservice.security;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
+import net.whydah.crmservice.util.TokenServiceClient;
 import net.whydah.sso.application.types.ApplicationCredential;
 import net.whydah.sso.commands.appauth.CommandLogonApplication;
 import net.whydah.sso.commands.userauth.CommandGetUsertokenByUsertokenId;
@@ -16,6 +17,7 @@ import ratpack.handling.Context;
 import ratpack.handling.Handler;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 
 
 @Singleton
@@ -23,22 +25,12 @@ public class SecurityHandler implements Handler {
 
     private static final Logger log = LoggerFactory.getLogger(SecurityHandler.class);
 
-    private final String securitytokenserviceurl;
-    private final String applicationId;
-    private final String applicationname;
-    private final String applicationsecret;
-    private static String myAppTokenId;
-    private static String myAppTokenXml;
+    private final TokenServiceClient tokenServiceClient;
+
 
     @Inject
-    public SecurityHandler(@Named("securitytokenserviceurl")String securitytokenserviceurl,
-                           @Named("applicationid") String activeApplicationId,
-                           @Named("applicationname") String applicationname,
-                           @Named("applicationsecret") String applicationsecret) {
-        this.securitytokenserviceurl = securitytokenserviceurl;
-        this.applicationId = activeApplicationId;
-        this.applicationname = applicationname;
-        this.applicationsecret = applicationsecret;
+    public SecurityHandler(TokenServiceClient tokenServiceClient) {
+        this.tokenServiceClient = tokenServiceClient;
     }
 
     @Override
@@ -47,18 +39,18 @@ public class SecurityHandler implements Handler {
         String applicationTokenId = context.getPathTokens().get("apptokenId");
         String userTokenId = context.getPathTokens().get("userTokenId");
 
-        if (myAppTokenId == null || myAppTokenId.isEmpty()) {
-            logonApplication();
+        if (tokenServiceClient.getMyAppTokenId() == null || tokenServiceClient.getMyAppTokenId().isEmpty()) {
+            tokenServiceClient.logonApplication();
         }
 
-        if (myAppTokenId == null || myAppTokenId.isEmpty()) {
+        if (tokenServiceClient.getMyAppTokenId() == null || tokenServiceClient.getMyAppTokenId().isEmpty()) {
             context.error(new ExceptionInInitializerError("Application authentication failed"));
             return;
         }
 
         log.warn("SSL disabled for development - should be removed.");
         SSLTool.disableCertificateValidation();
-        String userTokenXml = new CommandGetUsertokenByUsertokenId(new URI(securitytokenserviceurl), myAppTokenId, myAppTokenXml, userTokenId).execute();
+        String userTokenXml = tokenServiceClient.getUserTokenXml(userTokenId);
         if (userTokenXml == null || userTokenXml.isEmpty()) {
             log.debug("Usertoken [{}] has been rejected.", userTokenId);
             context.clientError(401);
@@ -73,21 +65,5 @@ public class SecurityHandler implements Handler {
         context.next();
     }
 
-    private void logonApplication() {
-        ApplicationCredential appCredential = new ApplicationCredential(applicationId, applicationname, applicationsecret);
 
-        try {
-            log.warn("SSL disabled for development - should be removed.");
-            SSLTool.disableCertificateValidation();
-            String appTokenXml = new CommandLogonApplication(new URI(securitytokenserviceurl), appCredential).execute();
-
-            myAppTokenXml = appTokenXml;
-            myAppTokenId = UserTokenXpathHelper.getAppTokenIdFromAppToken(myAppTokenXml);
-
-            log.debug("Applogon ok: apptokenxml: {}", myAppTokenXml);
-            log.debug("myAppTokenId: {}", myAppTokenId);
-        } catch (Throwable e) {
-            throw new RuntimeException(e);
-        }
-    }
 }

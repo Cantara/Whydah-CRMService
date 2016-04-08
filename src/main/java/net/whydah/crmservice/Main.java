@@ -10,6 +10,7 @@ import net.whydah.crmservice.profilepicture.GetProfileImageHandler;
 import net.whydah.crmservice.profilepicture.UpdateProfileImageHandler;
 import net.whydah.crmservice.security.SecurityHandler;
 import net.whydah.crmservice.security.SecurityModule;
+import net.whydah.crmservice.util.SecurityTokenServiceModule;
 import no.cantara.ratpack.config.RatpackConfigs;
 import no.cantara.ratpack.config.RatpackGuiceConfigModule;
 import org.slf4j.Logger;
@@ -55,6 +56,7 @@ public class Main {
         return Guice.registry(bindings -> bindings
                 .module(new RatpackGuiceConfigModule(bindings.getServerConfig()))
                 .module(PostgresModule.class)
+                        .module(SecurityTokenServiceModule.class)
                 .module(CustomerModule.class)
                 .module(SecurityModule.class)
                 .moduleConfig(DropwizardMetricsModule.class, new DropwizardMetricsConfig()
@@ -97,17 +99,25 @@ public class Main {
                                                 delete(() -> ctx.get(Injector.class).getInstance(DeleteCustomerHandler.class).handle(ctx))
                                 );
                             })
-                        .path("customer/:customerRef/image", ctx -> {
-                            ctx.byMethod(m -> m.
-                                            get(() -> ctx.get(Injector.class).getInstance(GetProfileImageHandler.class).handle(ctx)).
-                                            post(() -> ctx.get(Injector.class).getInstance(CreateProfileImageHandler.class).handle(ctx)).
-                                            put(() -> ctx.get(Injector.class).getInstance(UpdateProfileImageHandler.class).handle(ctx)).
-                                            delete(() -> ctx.get(Injector.class).getInstance(DeleteProfileImageHandler.class).handle(ctx))
-                            );
-                        })
-                        .prefix("customer", postChain -> {
-                            postChain.post(chain.getRegistry().get(Injector.class).getInstance(CreateCustomerHandler.class));
-                        });
+                            .path("customer/:customerRef/image", ctx -> {
+                                ctx.byMethod(m -> m.
+                                                get(() -> ctx.get(Injector.class).getInstance(GetProfileImageHandler.class).handle(ctx)).
+                                                post(() -> ctx.get(Injector.class).getInstance(CreateProfileImageHandler.class).handle(ctx)).
+                                                put(() -> ctx.get(Injector.class).getInstance(UpdateProfileImageHandler.class).handle(ctx)).
+                                                delete(() -> ctx.get(Injector.class).getInstance(DeleteProfileImageHandler.class).handle(ctx))
+                                );
+                            })
+                            .path("customer/:customerRef/verify/phone", ctx -> {
+                                ctx.byMethod(m ->
+                                        m.post(() -> ctx.get(Injector.class).getInstance(PhoneVerificationHandler.class).handle(ctx)));
+                            })
+                            .path("customer/:customerRef/verify/email", ctx -> {
+                                ctx.byMethod(m ->
+                                        m.post(() -> ctx.get(Injector.class).getInstance(EmailVerificationHandler.class).handle(ctx)));
+                            })
+                            .prefix("customer", postChain -> {
+                                postChain.post(chain.getRegistry().get(Injector.class).getInstance(CreateCustomerHandler.class));
+                            });
                 })
 
                 .get("favicon.ico", sendFileHandler("assets/ico/3dlb-3d-Lock.ico"))
