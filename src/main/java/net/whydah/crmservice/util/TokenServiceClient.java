@@ -6,13 +6,12 @@ import com.google.inject.Singleton;
 import net.whydah.sso.application.types.ApplicationCredential;
 import net.whydah.sso.commands.appauth.CommandLogonApplication;
 import net.whydah.sso.commands.userauth.CommandGetUsertokenByUsertokenId;
-import net.whydah.sso.commands.userauth.CommandVerifyPhoneByPin;
+import net.whydah.sso.commands.extensions.crmapi.CommandVerifyPhoneByPin;
 import net.whydah.sso.user.helpers.UserTokenXpathHelper;
 import net.whydah.sso.util.SSLTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -70,12 +69,12 @@ public class TokenServiceClient {
         return new CommandGetUsertokenByUsertokenId(securitytokenserviceurl, myAppTokenId, myAppTokenXml, userTokenId).execute();
     }
 
-    public boolean verifyPhonePin(String phoneNo, String pin) {
-        Response response = new CommandVerifyPhoneByPin(securitytokenserviceurl, myAppTokenXml, phoneNo, pin).execute();
-        return response.getStatus() == Response.Status.OK.getStatusCode();
+    public boolean verifyPhonePin(String userTokenId, String personRef, String phoneNo, String pin) {
+        Boolean result = new CommandVerifyPhoneByPin(securitytokenserviceurl, myAppTokenXml, userTokenId, personRef, phoneNo, pin).execute();
+        return result;
     }
 
-    public boolean verifyEmailAddressToken(String emailaddress, String token) {
+    public boolean verifyEmailAddressToken(String userTokenId, String personRef, String emailaddress, String token) {
         return false;
     }
 }

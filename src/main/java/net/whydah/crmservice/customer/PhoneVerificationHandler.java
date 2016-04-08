@@ -41,12 +41,14 @@ public class PhoneVerificationHandler implements Handler {
             return;
         }
 
+        String userTokenId = Authentication.getAuthenticatedUser().getTokenid();
+
         ctx.parse(new TypeToken<Form>() {
         }).then(form -> {
 
             String phoneNo = form.get("phoneNo");
             String pin = form.get("pin");
-            Blocking.get(() -> tokenServiceClient.verifyPhonePin(phoneNo, pin)).then(verified -> {
+            Blocking.get(() -> tokenServiceClient.verifyPhonePin(userTokenId, customerRef, phoneNo, pin)).then(verified -> {
                 if (verified) {
                     //Update data
                     Customer customer = customerRepository.getCustomer(customerRef);

@@ -44,12 +44,14 @@ public class EmailVerificationHandler implements Handler {
             return;
         }
 
+        String userTokenId = Authentication.getAuthenticatedUser().getTokenid();
+
         ctx.parse(new TypeToken<Form>() {
         }).then(form -> {
 
             String emailaddress = form.get("emailaddress");
             String token = form.get("token");
-            Blocking.get(() -> tokenServiceClient.verifyEmailAddressToken(emailaddress, token)).then(verified -> {
+            Blocking.get(() -> tokenServiceClient.verifyEmailAddressToken(userTokenId, customerRef, emailaddress, token)).then(verified -> {
                 if (verified) {
                     //Update data
                     Customer customer = customerRepository.getCustomer(customerRef);
