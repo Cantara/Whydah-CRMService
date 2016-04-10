@@ -7,6 +7,7 @@ import net.whydah.sso.application.types.ApplicationCredential;
 import net.whydah.sso.commands.appauth.CommandLogonApplication;
 import net.whydah.sso.commands.userauth.CommandGetUsertokenByUsertokenId;
 import net.whydah.sso.commands.extensions.crmapi.CommandVerifyPhoneByPin;
+import net.whydah.sso.session.WhydahApplicationSession;
 import net.whydah.sso.user.helpers.UserTokenXpathHelper;
 import net.whydah.sso.util.SSLTool;
 import org.slf4j.Logger;
@@ -25,8 +26,9 @@ public class TokenServiceClient {
     private final String applicationId;
     private final String applicationname;
     private final String applicationsecret;
-    private static String myAppTokenId;
-    private static String myAppTokenXml;
+    //    private static String myAppTokenId;
+//    private static String myAppTokenXml;
+    private static WhydahApplicationSession was;
 
     @Inject
     public TokenServiceClient(String securitytokenserviceurl,
@@ -39,12 +41,9 @@ public class TokenServiceClient {
         this.applicationsecret = applicationsecret;
     }
 
-    public static void setMyAppTokenId(String myAppTokenId) {
-        TokenServiceClient.myAppTokenId = myAppTokenId;
-    }
 
     public String getMyAppTokenId() {
-        return myAppTokenId;
+        return was.getActiveApplicationTokenId();
     }
 
     public void logonApplication() {
@@ -53,24 +52,25 @@ public class TokenServiceClient {
         try {
             log.warn("SSL disabled for development - should be removed.");
             SSLTool.disableCertificateValidation();
-            String appTokenXml = new CommandLogonApplication(securitytokenserviceurl, appCredential).execute();
+            was = new WhydahApplicationSession(securitytokenserviceurl.toString(), appCredential);
+            //String appTokenXml = new CommandLogonApplication(securitytokenserviceurl, appCredential).execute();
 
-            myAppTokenXml = appTokenXml;
-            myAppTokenId = UserTokenXpathHelper.getAppTokenIdFromAppToken(myAppTokenXml);
+            //myAppTokenXml = appTokenXml;
+            //myAppTokenId = UserTokenXpathHelper.getAppTokenIdFromAppToken(myAppTokenXml);
 
-            log.debug("Applogon ok: apptokenxml: {}", myAppTokenXml);
-            log.debug("myAppTokenId: {}", myAppTokenId);
+            log.debug("Applogon ok: apptokenxml: {}", was.getActiveApplicationTokenXML());
+            log.debug("myAppTokenId: {}", was.getActiveApplicationTokenId());
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }
     }
 
     public String getUserTokenXml(String userTokenId) throws URISyntaxException {
-        return new CommandGetUsertokenByUsertokenId(securitytokenserviceurl, myAppTokenId, myAppTokenXml, userTokenId).execute();
+        return new CommandGetUsertokenByUsertokenId(securitytokenserviceurl, was.getActiveApplicationTokenId(), was.getActiveApplicationTokenXML(), userTokenId).execute();
     }
 
     public boolean verifyPhonePin(String userTokenId, String personRef, String phoneNo, String pin) {
-        Boolean result = new CommandVerifyPhoneByPin(securitytokenserviceurl, myAppTokenXml, userTokenId, personRef, phoneNo, pin).execute();
+        Boolean result = new CommandVerifyPhoneByPin(securitytokenserviceurl, was.getActiveApplicationTokenXML(), userTokenId, personRef, phoneNo, pin).execute();
         return result;
     }
 
