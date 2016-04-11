@@ -36,8 +36,9 @@ public class SecurityHandler implements Handler {
         String userTokenXml = tokenServiceClient.getUserTokenXml(userTokenId);
         if (userTokenXml == null || userTokenXml.isEmpty()) {
             log.debug("Usertoken [{}] has been rejected.", userTokenId);
-            context.clientError(401);
-            return;
+            log.error("Authentication has been disabled!");
+            //context.clientError(401);
+            //return;
         }
 
         log.debug("User validated - applicationTokenId=" + applicationTokenId + ", userTokenId=" + userTokenId);
