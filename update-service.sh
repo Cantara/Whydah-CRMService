@@ -28,3 +28,11 @@ if [ -h $A.jar ]; then
    unlink $A.jar
 fi
 ln -s $JARFILE $A.jar
+
+# Delete old jar files
+jar=$A*.jar
+nrOfJarFilesToDelete=`ls $jar -A1t | tail -n +6 | wc -l`
+if [[ $nrOfJarFilesToDelete > 0 ]]; then
+    echo Deleting $nrOfJarFilesToDelete old jar files. Keep the 4 newest + the symlink.
+    ls $jar -A1t | tail -n +6 | xargs rm
+fi
