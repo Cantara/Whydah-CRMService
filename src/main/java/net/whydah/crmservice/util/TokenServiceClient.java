@@ -5,6 +5,7 @@ import com.google.inject.Singleton;
 import net.whydah.sso.commands.userauth.CommandGetUsertokenByUsertokenId;
 import net.whydah.sso.commands.extensions.crmapi.CommandVerifyPhoneByPin;
 import net.whydah.sso.session.WhydahApplicationSession;
+import net.whydah.sso.util.SSLTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,11 +23,16 @@ public class TokenServiceClient {
                               String activeApplicationId,
                               String applicationname,
                               String applicationsecret) throws URISyntaxException {
+
+        log.warn("SSL disabled for development - should be removed.");
+        SSLTool.disableCertificateValidation();
         applicationSession = new WhydahApplicationSession(securitytokenserviceurl, activeApplicationId, applicationname, applicationsecret);
     }
 
 
     public String getUserTokenXml(String userTokenId) throws URISyntaxException {
+        log.warn("SSL disabled for development - should be removed.");
+        SSLTool.disableCertificateValidation();
         return new CommandGetUsertokenByUsertokenId(new URI(applicationSession.getSTS()),
                                                     applicationSession.getActiveApplicationTokenId(),
                                                     applicationSession.getActiveApplicationTokenXML(),
@@ -35,6 +41,8 @@ public class TokenServiceClient {
     }
 
     public boolean verifyPhonePin(String userTokenId, String personRef, String phoneNo, String pin) throws URISyntaxException {
+        log.warn("SSL disabled for development - should be removed.");
+        SSLTool.disableCertificateValidation();
         Boolean result = new CommandVerifyPhoneByPin(new URI(applicationSession.getSTS()),
                                                 applicationSession.getActiveApplicationTokenXML(), userTokenId, personRef, phoneNo, pin).execute();
         return result;
