@@ -33,6 +33,7 @@ public class UpdateCustomerHandler implements Handler {
             ctx.clientError(401);
             return;
         }
+        log.trace("Updating customer with ref={}", customerRef);
 
         ctx.parse(fromJson(Customer.class)).then(customer -> {
             Blocking.get(() -> customerRepository.updateCustomer(customerRef, customer)).then(affectedRows -> {

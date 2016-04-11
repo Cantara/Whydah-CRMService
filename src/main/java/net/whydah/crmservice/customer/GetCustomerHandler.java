@@ -34,7 +34,10 @@ public class GetCustomerHandler implements Handler {
             return;
         }
 
+        log.trace("Getting customer with ref={}", customerRef);
+
         Blocking.get(() -> customerRepository.getCustomer(customerRef)).then(customer -> {
+            log.trace("Found customer-data: {}", customer);
             if (customer != null) {
                 ctx.render(json(customer));
             } else {

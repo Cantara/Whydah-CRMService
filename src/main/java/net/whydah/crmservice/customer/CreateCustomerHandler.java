@@ -43,6 +43,8 @@ public class CreateCustomerHandler implements Handler {
             customerRefIsGenerated = true;
         }
 
+        log.trace("Creating customer with ref={}", customerRef);
+
         ctx.parse(fromJson(Customer.class)).then(customer -> {
             Blocking.op(() -> {
 

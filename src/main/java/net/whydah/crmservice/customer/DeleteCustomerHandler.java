@@ -36,6 +36,8 @@ public class DeleteCustomerHandler implements Handler {
             return;
         }
 
+        log.trace("Deleting customer with ref={}", customerRef);
+
         Blocking.get(() -> customerRepository.deleteCustomer(customerRef)).then(affectedRows -> {
             if (affectedRows == 1) {
                 ctx.redirect(204, customerRef); //No content
