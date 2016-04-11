@@ -2,12 +2,7 @@ package net.whydah.crmservice.security;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.google.inject.name.Named;
 import net.whydah.crmservice.util.TokenServiceClient;
-import net.whydah.sso.application.types.ApplicationCredential;
-import net.whydah.sso.commands.appauth.CommandLogonApplication;
-import net.whydah.sso.commands.userauth.CommandGetUsertokenByUsertokenId;
-import net.whydah.sso.user.helpers.UserTokenXpathHelper;
 import net.whydah.sso.user.mappers.UserTokenMapper;
 import net.whydah.sso.user.types.UserToken;
 import net.whydah.sso.util.SSLTool;
@@ -15,9 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ratpack.handling.Context;
 import ratpack.handling.Handler;
-
-import java.net.URI;
-import java.net.URISyntaxException;
 
 
 @Singleton
@@ -38,15 +30,6 @@ public class SecurityHandler implements Handler {
 
         String applicationTokenId = context.getPathTokens().get("apptokenId");
         String userTokenId = context.getPathTokens().get("userTokenId");
-
-        if (tokenServiceClient.getMyAppTokenId() == null || tokenServiceClient.getMyAppTokenId().isEmpty()) {
-            tokenServiceClient.logonApplication();
-        }
-
-        if (tokenServiceClient.getMyAppTokenId() == null || tokenServiceClient.getMyAppTokenId().isEmpty()) {
-            context.error(new ExceptionInInitializerError("Application authentication failed"));
-            return;
-        }
 
         log.warn("SSL disabled for development - should be removed.");
         SSLTool.disableCertificateValidation();
