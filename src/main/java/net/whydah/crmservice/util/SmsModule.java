@@ -4,8 +4,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
 
-import java.net.URISyntaxException;
-
 public class SmsModule extends AbstractModule {
     @Override
     protected void configure() {
@@ -18,7 +16,7 @@ public class SmsModule extends AbstractModule {
                                           @Named("smsgw.serviceaccount") String serviceAccount,
                                           @Named("smsgw.username") String username,
                                           @Named("smsgw.password") String password,
-                                          @Named("smsgw.queryparams")String queryParam) throws URISyntaxException {
+                                          @Named("smsgw.queryparams")String queryParam) {
 
         return new SmsGatewayClient(serviceURL, serviceAccount, username, password, queryParam);
     }

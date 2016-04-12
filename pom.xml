@@ -127,7 +127,11 @@
             <artifactId>ratpack-dropwizard-metrics</artifactId>
             <version>${ratpack.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.5.0-b01</version>
+        </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>

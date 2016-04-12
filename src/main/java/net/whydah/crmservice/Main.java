@@ -10,6 +10,7 @@ import net.whydah.crmservice.profilepicture.GetProfileImageHandler;
 import net.whydah.crmservice.profilepicture.UpdateProfileImageHandler;
 import net.whydah.crmservice.security.SecurityHandler;
 import net.whydah.crmservice.security.SecurityModule;
+import net.whydah.crmservice.util.MailModule;
 import net.whydah.crmservice.util.SecurityTokenServiceModule;
 import net.whydah.crmservice.util.SmsModule;
 import no.cantara.ratpack.config.RatpackConfigs;
@@ -61,6 +62,7 @@ public class Main {
                 .module(CustomerModule.class)
                 .module(SecurityModule.class)
                 .module(SmsModule.class)
+                .module(MailModule.class)
                 .moduleConfig(DropwizardMetricsModule.class, new DropwizardMetricsConfig()
                                 .jmx(jmxConfig -> jmxConfig.enable(true))
                                 .jvmMetrics(true)

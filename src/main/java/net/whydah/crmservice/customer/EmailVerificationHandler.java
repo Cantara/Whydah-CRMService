@@ -1,21 +1,24 @@
 package net.whydah.crmservice.customer;
 
-import com.google.common.reflect.TypeToken;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.whydah.crmservice.security.Authentication;
+import net.whydah.crmservice.util.MailClient;
 import net.whydah.crmservice.util.TokenServiceClient;
-import net.whydah.sso.extensions.crmcustomer.types.Customer;
+import net.whydah.sso.commands.adminapi.user.CommandSendSMSToUser;
+import net.whydah.sso.commands.extensions.crmapi.CommandVerifyEmailByToken;
 import net.whydah.sso.extensions.crmcustomer.types.EmailAddress;
 import net.whydah.sso.extensions.crmcustomer.types.PhoneNumber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ratpack.exec.Blocking;
-import ratpack.form.Form;
 import ratpack.handling.Context;
 import ratpack.handling.Handler;
+import ratpack.util.MultiValueMap;
 
 import java.util.Map;
+import java.util.UUID;
+import java.util.WeakHashMap;
 
 import static ratpack.jackson.Jackson.json;
 
@@ -26,17 +29,21 @@ public class EmailVerificationHandler implements Handler {
 
     private final CustomerRepository customerRepository;
     private final TokenServiceClient tokenServiceClient;
+    private final MailClient mailClient;
+    private static WeakHashMap<String, String> emailTokenMap;
 
     @Inject
-    public EmailVerificationHandler(CustomerRepository customerRepository, TokenServiceClient tokenServiceClient) {
+    public EmailVerificationHandler(CustomerRepository customerRepository, TokenServiceClient tokenServiceClient, MailClient mailClient) {
         this.customerRepository = customerRepository;
         this.tokenServiceClient = tokenServiceClient;
+        this.mailClient = mailClient;
+        emailTokenMap = new WeakHashMap<>();
     }
 
     @Override
     public void handle(Context ctx) throws Exception {
 
-        String customerRef = ctx.getPathTokens().get("customerRef");
+        final String customerRef = ctx.getPathTokens().get("customerRef");
 
         if (customerRef == null || !customerRef.equals(Authentication.getAuthenticatedUser().getPersonRef())) {
             log.debug("User {} with personRef {} not authorized to get data for personRef {}", Authentication.getAuthenticatedUser().getUid(), Authentication.getAuthenticatedUser().getPersonRef(), customerRef);
@@ -44,36 +51,63 @@ public class EmailVerificationHandler implements Handler {
             return;
         }
 
-        String userTokenId = Authentication.getAuthenticatedUser().getTokenid();
+        MultiValueMap<String, String> queryParams = ctx.getRequest().getQueryParams();
+        if (queryParams == null) {
+            ctx.clientError(400); //Bad request
+            return;
+        }
 
-        ctx.parse(new TypeToken<Form>() {
-        }).then(form -> {
+        final String email = queryParams.get("email");
+        final String token = queryParams.get("token");
+        final String linkurl = queryParams.get("linkurl");
 
-            String emailaddress = form.get("emailaddress");
-            String token = form.get("token");
-            Blocking.get(() -> tokenServiceClient.verifyEmailAddressToken(userTokenId, customerRef, emailaddress, token)).then(verified -> {
-                if (verified) {
-                    //Update data
-                    Customer customer = customerRepository.getCustomer(customerRef);
+        if (token == null) {
+            //Send email verification token
+            String generatedToken = UUID.randomUUID().toString();
+
+            StringBuilder builder = new StringBuilder(linkurl).
+                            append("?token=").append(generatedToken).
+                            append("&email=").append(email);
+
+            String verificationLink = builder.toString();
+
+            log.debug("Verificationlink: " + verificationLink);
+
+            mailClient.sendVerificationEmail(email, verificationLink);
+
+            emailTokenMap.put(email, generatedToken);
+
+            ctx.redirect(200, customerRef);
+        } else {
+            String expectedToken = emailTokenMap.get(email);
+
+            final boolean verified = (expectedToken != null && expectedToken.equals(token));
+            if (verified) {
+                emailTokenMap.remove(email);
+
+                Blocking.get(() -> customerRepository.getCustomer(customerRef)).then(customer -> {
                     Map<String, EmailAddress> emailaddresses = customer.getEmailaddresses();
 
                     boolean foundMatch = false;
-                    for (EmailAddress email : emailaddresses.values()) {
-                        if (emailaddress.equalsIgnoreCase(email.getEmailaddress())) {
-                            email.setVerified(true);
+                    for (EmailAddress emailAddress : emailaddresses.values()) {
+                        if (email.equalsIgnoreCase(emailAddress.getEmailaddress())) {
+                            emailAddress.setVerified(true);
                             foundMatch = true;
                         }
                     }
                     if (foundMatch) {
                         customerRepository.updateCustomer(customerRef, customer);
                         ctx.redirect(200, customerRef);
+                        log.debug("Email {} flagged as verified.", email);
                     } else {
                         ctx.clientError(400); //Bad request
+                        log.debug("Email {} NOT found for customerRef={}.", email, customerRef);
                     }
-                } else {
-                    ctx.clientError(401); //Unauthorized
-                }
-            });
-        });
+                });
+
+            } else {
+                ctx.clientError(406); //Not acceptable
+            }
+        }
     }
 }
