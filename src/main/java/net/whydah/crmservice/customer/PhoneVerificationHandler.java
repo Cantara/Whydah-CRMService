@@ -72,6 +72,7 @@ public class PhoneVerificationHandler implements Handler {
 
             userpinmap.put(phoneNo, generatedPin);
 
+            ctx.redirect(200, customerRef);
 
         } else {
             //Verify pin against expected data
