@@ -11,6 +11,7 @@ import net.whydah.crmservice.profilepicture.UpdateProfileImageHandler;
 import net.whydah.crmservice.security.SecurityHandler;
 import net.whydah.crmservice.security.SecurityModule;
 import net.whydah.crmservice.util.SecurityTokenServiceModule;
+import net.whydah.crmservice.util.SmsModule;
 import no.cantara.ratpack.config.RatpackConfigs;
 import no.cantara.ratpack.config.RatpackGuiceConfigModule;
 import org.slf4j.Logger;
@@ -59,6 +60,7 @@ public class Main {
                         .module(SecurityTokenServiceModule.class)
                 .module(CustomerModule.class)
                 .module(SecurityModule.class)
+                .module(SmsModule.class)
                 .moduleConfig(DropwizardMetricsModule.class, new DropwizardMetricsConfig()
                                 .jmx(jmxConfig -> jmxConfig.enable(true))
                                 .jvmMetrics(true)
@@ -109,11 +111,11 @@ public class Main {
                             })
                             .path("customer/:customerRef/verify/phone", ctx -> {
                                 ctx.byMethod(m ->
-                                        m.post(() -> ctx.get(Injector.class).getInstance(PhoneVerificationHandler.class).handle(ctx)));
+                                        m.get(() -> ctx.get(Injector.class).getInstance(PhoneVerificationHandler.class).handle(ctx)));
                             })
                             .path("customer/:customerRef/verify/email", ctx -> {
                                 ctx.byMethod(m ->
-                                        m.post(() -> ctx.get(Injector.class).getInstance(EmailVerificationHandler.class).handle(ctx)));
+                                        m.get(() -> ctx.get(Injector.class).getInstance(EmailVerificationHandler.class).handle(ctx)));
                             })
                             .prefix("customer", postChain -> {
                                 postChain.post(chain.getRegistry().get(Injector.class).getInstance(CreateCustomerHandler.class));

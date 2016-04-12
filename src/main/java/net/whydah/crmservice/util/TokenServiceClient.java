@@ -40,14 +40,6 @@ public class TokenServiceClient {
                                                     execute();
     }
 
-    public boolean verifyPhonePin(String userTokenId, String personRef, String phoneNo, String pin) throws URISyntaxException {
-        log.warn("SSL disabled for development - should be removed.");
-        SSLTool.disableCertificateValidation();
-        Boolean result = new CommandVerifyPhoneByPin(new URI(applicationSession.getSTS()),
-                                                applicationSession.getActiveApplicationTokenXML(), userTokenId, personRef, phoneNo, pin).execute();
-        return result;
-    }
-
     public boolean verifyEmailAddressToken(String userTokenId, String personRef, String emailaddress, String token) {
         log.warn("Email verification is NOT yet implemented - returning false.");
         return false;
