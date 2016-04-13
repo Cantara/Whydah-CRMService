@@ -45,12 +45,12 @@ public class EmailVerificationHandler implements Handler {
         }
 
         MultiValueMap<String, String> queryParams = ctx.getRequest().getQueryParams();
-        if (queryParams == null) {
+        if (queryParams == null || queryParams.get("email") == null) {
             ctx.clientError(400); //Bad request
             return;
         }
 
-        final String email = queryParams.get("email");
+        final String email = queryParams.get("email").toLowerCase();
         final String token = queryParams.get("token");
         final String linkurl = queryParams.get("linkurl");
 
