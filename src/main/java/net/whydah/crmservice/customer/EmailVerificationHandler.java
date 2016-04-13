@@ -100,8 +100,9 @@ public class EmailVerificationHandler implements Handler {
                         ctx.redirect(200, customerRef);
                         log.debug("Email {} flagged as verified.", email);
                     } else {
-                        ctx.clientError(400); //Bad request
+                        ctx.clientError(412); //Precondition failed
                         log.debug("Email {} NOT found for customerRef={}.", email, customerRef);
+                        return;
                     }
                 });
 

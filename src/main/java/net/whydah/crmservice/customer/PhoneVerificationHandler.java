@@ -100,8 +100,9 @@ public class PhoneVerificationHandler implements Handler {
                         ctx.redirect(200, customerRef);
                         log.debug("Phone {} flagged as verified.", phoneNo);
                     } else {
-                        ctx.clientError(400); //Bad request
+                        ctx.clientError(412); //Precondition failed
                         log.debug("Phone {} NOT found for customerRef={}.", phoneNo, customerRef);
+                        return;
                     }
                 });
 
