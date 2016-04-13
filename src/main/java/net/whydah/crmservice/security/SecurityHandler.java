@@ -29,6 +29,13 @@ public class SecurityHandler implements Handler {
     public void handle(Context context) throws Exception {
 
         String applicationTokenId = context.getPathTokens().get("apptokenId");
+
+        if (!tokenServiceClient.isApplicationTokenIdValid(applicationTokenId)) {
+            log.debug("ApptokenId [{}] has been rejected.", applicationTokenId);
+            context.clientError(401);
+            return;
+        }
+
         String userTokenId = context.getPathTokens().get("userTokenId");
 
         log.warn("SSL disabled for development - should be removed.");

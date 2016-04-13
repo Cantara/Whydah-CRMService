@@ -2,8 +2,8 @@ package net.whydah.crmservice.util;
 
 
 import com.google.inject.Singleton;
+import net.whydah.sso.commands.appauth.CommandValidateApplicationTokenId;
 import net.whydah.sso.commands.userauth.CommandGetUsertokenByUsertokenId;
-import net.whydah.sso.commands.extensions.crmapi.CommandVerifyPhoneByPin;
 import net.whydah.sso.session.WhydahApplicationSession;
 import net.whydah.sso.util.SSLTool;
 import org.slf4j.Logger;
@@ -29,6 +29,9 @@ public class TokenServiceClient {
         applicationSession = new WhydahApplicationSession(securitytokenserviceurl, activeApplicationId, applicationname, applicationsecret);
     }
 
+    public Boolean isApplicationTokenIdValid(String applicationTokenId) {
+        return new CommandValidateApplicationTokenId(applicationSession.getSTS(), applicationTokenId).execute();
+    }
 
     public String getUserTokenXml(String userTokenId) throws URISyntaxException {
         log.warn("SSL disabled for development - should be removed.");
@@ -40,8 +43,4 @@ public class TokenServiceClient {
                                                     execute();
     }
 
-    public boolean verifyEmailAddressToken(String userTokenId, String personRef, String emailaddress, String token) {
-        log.warn("Email verification is NOT yet implemented - returning false.");
-        return false;
-    }
 }
