@@ -5,10 +5,7 @@ import com.google.inject.Singleton;
 import net.whydah.crmservice.security.Authentication;
 import net.whydah.crmservice.util.MailClient;
 import net.whydah.crmservice.util.TokenServiceClient;
-import net.whydah.sso.commands.adminapi.user.CommandSendSMSToUser;
-import net.whydah.sso.commands.extensions.crmapi.CommandVerifyEmailByToken;
 import net.whydah.sso.extensions.crmcustomer.types.EmailAddress;
-import net.whydah.sso.extensions.crmcustomer.types.PhoneNumber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ratpack.exec.Blocking;
@@ -16,11 +13,9 @@ import ratpack.handling.Context;
 import ratpack.handling.Handler;
 import ratpack.util.MultiValueMap;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import java.util.WeakHashMap;
-
-import static ratpack.jackson.Jackson.json;
 
 @Singleton
 public class EmailVerificationHandler implements Handler {
@@ -28,16 +23,14 @@ public class EmailVerificationHandler implements Handler {
     private static final Logger log = LoggerFactory.getLogger(EmailVerificationHandler.class);
 
     private final CustomerRepository customerRepository;
-    private final TokenServiceClient tokenServiceClient;
     private final MailClient mailClient;
-    private static WeakHashMap<String, String> emailTokenMap;
+    private static HashMap<String, String> emailTokenMap;
 
     @Inject
-    public EmailVerificationHandler(CustomerRepository customerRepository, TokenServiceClient tokenServiceClient, MailClient mailClient) {
+    public EmailVerificationHandler(CustomerRepository customerRepository, MailClient mailClient) {
         this.customerRepository = customerRepository;
-        this.tokenServiceClient = tokenServiceClient;
         this.mailClient = mailClient;
-        emailTokenMap = new WeakHashMap<>();
+        emailTokenMap = new HashMap<>();
     }
 
     @Override

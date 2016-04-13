@@ -1,24 +1,20 @@
 package net.whydah.crmservice.customer;
 
-import com.google.common.reflect.TypeToken;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.whydah.crmservice.security.Authentication;
 import net.whydah.crmservice.util.SmsGatewayClient;
-import net.whydah.crmservice.util.TokenServiceClient;
 import net.whydah.sso.commands.adminapi.user.CommandSendSMSToUser;
-import net.whydah.sso.extensions.crmcustomer.types.Customer;
 import net.whydah.sso.extensions.crmcustomer.types.PhoneNumber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ratpack.exec.Blocking;
-import ratpack.form.Form;
 import ratpack.handling.Context;
 import ratpack.handling.Handler;
 import ratpack.util.MultiValueMap;
 
 import java.util.Map;
-import java.util.WeakHashMap;
+import java.util.HashMap;
 
 @Singleton
 public class PhoneVerificationHandler implements Handler {
@@ -26,18 +22,16 @@ public class PhoneVerificationHandler implements Handler {
     private static final Logger log = LoggerFactory.getLogger(PhoneVerificationHandler.class);
 
     private final CustomerRepository customerRepository;
-    private final TokenServiceClient tokenServiceClient;
     private final SmsGatewayClient smsClient;
     private static java.util.Random generator = new java.util.Random();
 
-    private static WeakHashMap<String, String> userpinmap;
+    private static HashMap<String, String> userpinmap;
 
     @Inject
-    public PhoneVerificationHandler(CustomerRepository customerRepository, TokenServiceClient tokenServiceClient, SmsGatewayClient smsClient) {
+    public PhoneVerificationHandler(CustomerRepository customerRepository, SmsGatewayClient smsClient) {
         this.customerRepository = customerRepository;
-        this.tokenServiceClient = tokenServiceClient;
         this.smsClient = smsClient;
-        userpinmap = new WeakHashMap<>();
+        userpinmap = new HashMap<>();
     }
 
     @Override
