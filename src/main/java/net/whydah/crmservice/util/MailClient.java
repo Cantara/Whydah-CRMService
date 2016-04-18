@@ -10,8 +10,6 @@ import java.util.Properties;
 
 public class MailClient {
     private static final Logger log = LoggerFactory.getLogger(MailClient.class);
-    public static  String FROM_ADDRESS = "notworking@whydah.net";
-
 
     private static final boolean SMTP_AUTH = true;
     private static final boolean SMTP_STARTTTLS_ENABLE = true;
@@ -21,9 +19,10 @@ public class MailClient {
     private String smtpPassword;
     private String subject;
     private String bodyTemplate;
+    private String fromAddress;
 
 
-    public MailClient(String smtpHost, String smtpPort, String smtpUsername, String smtpPassword, String subject, String bodyTemplate) {
+    public MailClient(String smtpHost, String smtpPort, String smtpUsername, String smtpPassword, String subject, String bodyTemplate, String fromAddress) {
         this.smtpHost = smtpHost;
         this.smtpPort = smtpPort;
         this.smtpUsername = smtpUsername;
@@ -37,7 +36,6 @@ public class MailClient {
         String body = String.format(bodyTemplate, verificationLink);
 
         log.debug("Sending email to recipients={}, subject={}, body={}", recipients, subject, body);
-        FROM_ADDRESS=smtpUsername;
 
         //Gmail properties
         Properties smtpProperties = new Properties();
@@ -57,7 +55,7 @@ public class MailClient {
 
         try {
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(FROM_ADDRESS));
+            message.setFrom(new InternetAddress(fromAddress));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipients));
             message.setSubject(subject);
 

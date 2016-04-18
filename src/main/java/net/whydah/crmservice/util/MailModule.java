@@ -19,8 +19,9 @@ public class MailModule extends AbstractModule {
                           @Named("smtp.username") String username,
                           @Named("smtp.password") String password,
                           @Named("email.verification.subject") String subject,
-                          @Named("email.verification.body") String bodyTemplate) {
+                          @Named("email.verification.body") String bodyTemplate,
+                          @Named("email.verification.fromaddress") String fromAddress) {
 
-        return new MailClient(smtpHost, smtpPort, username, password, subject, bodyTemplate);
+        return new MailClient(smtpHost, smtpPort, username, password, subject, bodyTemplate, fromAddress);
     }
 }
