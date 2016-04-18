@@ -42,11 +42,11 @@ public class ActiveVerificationCache {
         }
         hazelcastConfig.setProperty("hazelcast.logging.type", "slf4j");
         HazelcastInstance hazelcastInstance = Hazelcast.newHazelcastInstance(hazelcastConfig);
-        userpinmap = hazelcastInstance.getMap(gridPrefix+"userpinmap");
-        log.info("Connecting to map {}",gridPrefix+"userpinmap");
+        userpinmap = hazelcastInstance.getMap(gridPrefix+"CRM_userpinmap");
+        log.info("Connecting to map {}",gridPrefix+"CRM_userpinmap");
 
-        emailTokenMap = hazelcastInstance.getMap(gridPrefix+"emailtokenmap");
-        log.info("Connecting to map {}", gridPrefix + "emailtokenmap");
+        emailTokenMap = hazelcastInstance.getMap(gridPrefix+"CRM_emailtokenmap");
+        log.info("Connecting to map {}", gridPrefix + "CRM_emailtokenmap");
     }
 
 
