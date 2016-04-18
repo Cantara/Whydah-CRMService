@@ -13,6 +13,9 @@ import net.whydah.crmservice.security.SecurityModule;
 import net.whydah.crmservice.util.MailModule;
 import net.whydah.crmservice.util.SecurityTokenServiceModule;
 import net.whydah.crmservice.util.SmsModule;
+import net.whydah.crmservice.verification.ActiveVerificationCacheModule;
+import net.whydah.crmservice.verification.EmailVerificationHandler;
+import net.whydah.crmservice.verification.PhoneVerificationHandler;
 import no.cantara.ratpack.config.RatpackConfigs;
 import no.cantara.ratpack.config.RatpackGuiceConfigModule;
 import org.slf4j.Logger;
@@ -63,6 +66,7 @@ public class Main {
                 .module(SecurityModule.class)
                 .module(SmsModule.class)
                 .module(MailModule.class)
+                .module(ActiveVerificationCacheModule.class)
                 .moduleConfig(DropwizardMetricsModule.class, new DropwizardMetricsConfig()
                                 .jmx(jmxConfig -> jmxConfig.enable(true))
                                 .jvmMetrics(true)

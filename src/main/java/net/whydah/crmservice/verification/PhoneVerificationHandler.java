@@ -1,7 +1,8 @@
-package net.whydah.crmservice.customer;
+package net.whydah.crmservice.verification;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import net.whydah.crmservice.customer.CustomerRepository;
 import net.whydah.crmservice.security.Authentication;
 import net.whydah.crmservice.util.SmsGatewayClient;
 import net.whydah.sso.commands.adminapi.user.CommandSendSMSToUser;
@@ -14,7 +15,7 @@ import ratpack.handling.Handler;
 import ratpack.util.MultiValueMap;
 
 import java.util.Map;
-import java.util.HashMap;
+
 
 @Singleton
 public class PhoneVerificationHandler implements Handler {
@@ -24,14 +25,13 @@ public class PhoneVerificationHandler implements Handler {
     private final CustomerRepository customerRepository;
     private final SmsGatewayClient smsClient;
     private static java.util.Random generator = new java.util.Random();
-
-    private static HashMap<String, String> userpinmap;
+    private final ActiveVerificationCache userpinmap;
 
     @Inject
-    public PhoneVerificationHandler(CustomerRepository customerRepository, SmsGatewayClient smsClient) {
+    public PhoneVerificationHandler(CustomerRepository customerRepository, SmsGatewayClient smsClient, ActiveVerificationCache userpinmap) {
         this.customerRepository = customerRepository;
         this.smsClient = smsClient;
-        userpinmap = new HashMap<>();
+        this.userpinmap = userpinmap;
     }
 
     @Override
@@ -64,20 +64,18 @@ public class PhoneVerificationHandler implements Handler {
                     smsClient.getUsername(), smsClient.getPassword(), smsClient.getQueryParam(), cellNo, generatedPin).execute();
             log.debug("Answer from smsgw: " + response);
 
-            userpinmap.put(phoneNo, generatedPin);
+            userpinmap.addPin(phoneNo, generatedPin);
 
             ctx.redirect(200, customerRef);
 
         } else {
             //Verify pin against expected data
 
-            String expectedPin = userpinmap.get(phoneNo);
+            String expectedPin = userpinmap.usePin(phoneNo);
 
             final boolean verified = (expectedPin != null && expectedPin.equals(pin));
 
             if (verified) {
-                userpinmap.remove(phoneNo);
-
                 Blocking.get(() -> customerRepository.getCustomer(customerRef)).then(customer -> {
 
                     Map<String, PhoneNumber> phonenumbers = customer.getPhonenumbers();

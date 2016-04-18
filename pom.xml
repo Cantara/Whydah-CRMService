@@ -137,6 +137,11 @@
             <artifactId>postgresql</artifactId>
             <version>9.4.1208</version>
         </dependency>
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-all</artifactId>
+            <version>3.6.2</version>
+        </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>

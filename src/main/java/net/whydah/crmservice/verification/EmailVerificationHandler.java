@@ -1,10 +1,10 @@
-package net.whydah.crmservice.customer;
+package net.whydah.crmservice.verification;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import net.whydah.crmservice.customer.CustomerRepository;
 import net.whydah.crmservice.security.Authentication;
 import net.whydah.crmservice.util.MailClient;
-import net.whydah.crmservice.util.TokenServiceClient;
 import net.whydah.sso.extensions.crmcustomer.types.EmailAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +13,6 @@ import ratpack.handling.Context;
 import ratpack.handling.Handler;
 import ratpack.util.MultiValueMap;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -24,13 +23,13 @@ public class EmailVerificationHandler implements Handler {
 
     private final CustomerRepository customerRepository;
     private final MailClient mailClient;
-    private static HashMap<String, String> emailTokenMap;
+    private final ActiveVerificationCache emailTokenMap;
 
     @Inject
-    public EmailVerificationHandler(CustomerRepository customerRepository, MailClient mailClient) {
+    public EmailVerificationHandler(CustomerRepository customerRepository, MailClient mailClient, ActiveVerificationCache emailTokenMap) {
         this.customerRepository = customerRepository;
         this.mailClient = mailClient;
-        emailTokenMap = new HashMap<>();
+        this.emailTokenMap = emailTokenMap;
     }
 
     @Override
@@ -50,7 +49,7 @@ public class EmailVerificationHandler implements Handler {
             return;
         }
 
-        final String email = queryParams.get("email").toLowerCase();
+        final String email = queryParams.get("email");
         final String token = queryParams.get("token");
         final String linkurl = queryParams.get("linkurl");
 
@@ -68,15 +67,14 @@ public class EmailVerificationHandler implements Handler {
 
             mailClient.sendVerificationEmail(email, verificationLink);
 
-            emailTokenMap.put(email, generatedToken);
+            emailTokenMap.addToken(email, generatedToken);
 
             ctx.redirect(200, customerRef);
         } else {
-            String expectedToken = emailTokenMap.get(email);
+            String expectedToken = emailTokenMap.useToken(email);
 
             final boolean verified = (expectedToken != null && expectedToken.equals(token));
             if (verified) {
-                emailTokenMap.remove(email);
 
                 Blocking.get(() -> customerRepository.getCustomer(customerRef)).then(customer -> {
                     Map<String, EmailAddress> emailaddresses = customer.getEmailaddresses();
