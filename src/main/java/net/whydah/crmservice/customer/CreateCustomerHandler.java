@@ -48,21 +48,26 @@ public class CreateCustomerHandler implements Handler {
         ctx.parse(fromJson(Customer.class)).then(customer -> {
             Blocking.op(() -> {
 
-                if (customerRefIsGenerated) {
-                    //Verify userId
-                    if (customer.getId() == null || !customer.getId().equals(Authentication.getAuthenticatedUser().getUid())) {
-                        log.debug("User {} not authorized to create data for uid {}", Authentication.getAuthenticatedUser().getUid(), customer.getId());
-                        ctx.clientError(401);
-                    }
+                // TODO  fix this to verify against a sensible UserRole
+                if ("useradmin".equalsIgnoreCase(Authentication.getAuthenticatedUser().getUserName())) {
+                    customerRepository.createCustomer(customerRef, customer);
                 } else {
-                    //Verify customerRef
-                    if (customerRef == null || !customerRef.equals(Authentication.getAuthenticatedUser().getPersonRef())) {
-                        log.debug("User {} with personRef {} not authorized to create data for personRef {}", Authentication.getAuthenticatedUser().getUid(), Authentication.getAuthenticatedUser().getPersonRef(), customerRef);
-                        ctx.clientError(401);
+                    if (customerRefIsGenerated) {
+                        //Verify userId
+                        if (customer.getId() == null || !customer.getId().equals(Authentication.getAuthenticatedUser().getUid())) {
+                            log.debug("User {} not authorized to create data for uid {}", Authentication.getAuthenticatedUser().getUid(), customer.getId());
+                            ctx.clientError(401);
+                        }
+                    } else {
+                        //Verify customerRef
+                        if (customerRef == null || !customerRef.equals(Authentication.getAuthenticatedUser().getPersonRef())) {
+                            log.debug("User {} with personRef {} not authorized to create data for personRef {}", Authentication.getAuthenticatedUser().getUid(), Authentication.getAuthenticatedUser().getPersonRef(), customerRef);
+                            ctx.clientError(401);
+                        }
                     }
-                }
 
-                customerRepository.createCustomer(customerRef, customer);
+                    customerRepository.createCustomer(customerRef, customer);
+                }
             }).onError(throwable -> {
                 if (throwable instanceof SQLIntegrityConstraintViolationException) {
                     ctx.clientError(400); //Bad request
