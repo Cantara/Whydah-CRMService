@@ -49,7 +49,7 @@ public class CreateCustomerHandler implements Handler {
             Blocking.op(() -> {
 
                 // TODO  fix this to verify against a sensible UserRole
-                if ("useradmin".equalsIgnoreCase(Authentication.getAuthenticatedUser().getUserName())) {
+                if ("useradmin".equalsIgnoreCase(Authentication.getAuthenticatedUser().getUid())) {
                     customerRepository.createCustomer(customerRef, customer);
                 } else {
                     if (customerRefIsGenerated) {
