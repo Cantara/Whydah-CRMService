@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.whydah.service</groupId>
     <artifactId>Whydah-CRMService</artifactId>
-    <version>0.0.3-SNAPSHOT</version>
+    <version>0.1.0-SNAPSHOT</version>
     <name>Whydah-CRMService</name>
     <packaging>jar</packaging>
     <url>https://wiki.cantara.no/display/iam/Whydah-CRMService</url>
@@ -10,7 +10,7 @@
     <parent>
         <groupId>no.cantara.emi</groupId>
         <artifactId>parent</artifactId>
-        <version>5</version>
+        <version>6</version>
     </parent>
 
     <scm>
@@ -22,7 +22,7 @@
     <properties>
         <service.name>Whydah-CRMService</service.name>
         <whydah-typelib-version>1.2.4</whydah-typelib-version>
-        <whydah-sdk-version>2.1.135</whydah-sdk-version>
+        <whydah-sdk-version>2.1.150</whydah-sdk-version>
         <slf4j.version>1.7.13</slf4j.version>
         <ratpack.version>1.2.0</ratpack.version>
     </properties>
