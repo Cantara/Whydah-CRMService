@@ -26,7 +26,7 @@ public class TokenServiceClient {
 
         log.warn("SSL disabled for development - should be removed.");
         SSLTool.disableCertificateValidation();
-        applicationSession = new WhydahApplicationSession(securitytokenserviceurl, activeApplicationId, applicationname, applicationsecret);
+        applicationSession = WhydahApplicationSession.getInstance(securitytokenserviceurl, activeApplicationId, applicationname, applicationsecret);
     }
 
     public Boolean isApplicationTokenIdValid(String applicationTokenId) {
