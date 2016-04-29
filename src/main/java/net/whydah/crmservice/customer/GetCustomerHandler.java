@@ -27,8 +27,9 @@ public class GetCustomerHandler implements Handler {
     public void handle(Context ctx) throws Exception {
 
         String customerRef = ctx.getPathTokens().get("customerRef");
-
-        if (customerRef == null || !customerRef.equals(Authentication.getAuthenticatedUser().getPersonRef())) {
+        // TODO  fix this to verify against a sensible UserRole
+        if ("useradmin".equalsIgnoreCase(Authentication.getAuthenticatedUser().getUid().toString())) {
+        } else if (customerRef == null || !customerRef.equals(Authentication.getAuthenticatedUser().getPersonRef())) {
             log.debug("User {} with personRef {} not authorized to get data for personRef {}", Authentication.getAuthenticatedUser().getUid(), Authentication.getAuthenticatedUser().getPersonRef(), customerRef);
             ctx.clientError(401);
             return;

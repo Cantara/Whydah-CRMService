@@ -31,7 +31,8 @@ public class UpdateProfileImageHandler implements Handler {
 
         String customerRef = ctx.getPathTokens().get("customerRef");
 
-        if (customerRef == null || !customerRef.equals(Authentication.getAuthenticatedUser().getPersonRef())) {
+        if ("useradmin".equalsIgnoreCase(Authentication.getAuthenticatedUser().getUid().toString())) {
+        } else if (customerRef == null || !customerRef.equals(Authentication.getAuthenticatedUser().getPersonRef())) {
             ctx.clientError(401);
         }
 
