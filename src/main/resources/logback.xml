@@ -21,6 +21,8 @@
   </appender>
 
   <logger name="net.whydah.crmservice" level="TRACE" />
+  <logger name="net.whydah.sso.application.helpers" level="INFO"/>
+
 
   <root level="TRACE">
     <appender-ref ref="STDOUT" />
