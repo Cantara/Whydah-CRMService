@@ -50,7 +50,7 @@ public class CreateCustomerHandler implements Handler {
 
                 // TODO  fix this to verify against a sensible UserRole
                 if ("useradmin".equalsIgnoreCase(Authentication.getAuthenticatedUser().getUid().toString())) {
-                    customerRepository.createCustomer(customerRef, customer);
+                    customerRepository.createCustomer(getCorrectID(customerRef, customer), customer);
                 } else {
                     if (customerRefIsGenerated) {
                         //Verify userId
@@ -66,7 +66,7 @@ public class CreateCustomerHandler implements Handler {
                         }
                     }
 
-                    customerRepository.createCustomer(customerRef, customer);
+                    customerRepository.createCustomer(getCorrectID(customerRef, customer), customer);
                 }
             }).onError(throwable -> {
                 if (throwable instanceof SQLIntegrityConstraintViolationException) {
@@ -78,5 +78,13 @@ public class CreateCustomerHandler implements Handler {
                 ctx.redirect(201, customerRef); //Created
             });
         });
+    }
+
+    private String getCorrectID(String customerRef, Customer customer) {
+        if (customer.getId() == null || customer.getId().length() < 5) {
+            return customerRef;
+        }
+        return customer.getId();
+
     }
 }
