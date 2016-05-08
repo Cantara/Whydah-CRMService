@@ -75,7 +75,7 @@ public class CreateCustomerHandler implements Handler {
                     throw new RuntimeException(throwable);
                 }
             }).then(() -> {
-                ctx.redirect(201, customerRef); //Created
+                ctx.redirect(201, getCorrectID(customerRef, customer)); //Created
             });
         });
     }
