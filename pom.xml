@@ -22,7 +22,7 @@
 
     <properties>
         <service.name>Whydah-CRMService</service.name>
-        <whydah-sdk-version>2.1.213</whydah-sdk-version>
+        <whydah-sdk-version>2.1.214</whydah-sdk-version>
         <slf4j.version>1.7.13</slf4j.version>
         <ratpack.version>1.2.0</ratpack.version>
     </properties>
@@ -92,6 +92,12 @@
             <artifactId>Whydah-Java-SDK</artifactId>
             <version>${whydah-sdk-version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.valuereporter</groupId>
+            <artifactId>valuereporter-agent</artifactId>
+            <version>0.7.1</version>
+        </dependency>
+
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-xml</artifactId>
