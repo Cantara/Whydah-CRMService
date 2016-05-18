@@ -3,9 +3,12 @@ package net.whydah.crmservice.customer;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.whydah.crmservice.security.Authentication;
+import net.whydah.crmservice.util.CRMSessionObservedActivity;
 import net.whydah.sso.user.types.UserToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.valuereporter.agent.MonitorReporter;
+import org.valuereporter.agent.activity.ObservedActivity;
 import ratpack.exec.Blocking;
 import ratpack.handling.Context;
 import ratpack.handling.Handler;
@@ -41,6 +44,9 @@ public class DeleteCustomerHandler implements Handler {
 
         Blocking.get(() -> customerRepository.deleteCustomer(customerRef)).then(affectedRows -> {
             if (affectedRows == 1) {
+                ObservedActivity observedActivity = new CRMSessionObservedActivity(customerRef, "crmUserDeleted", Authentication.getAuthenticatedUser().getUid());
+                MonitorReporter.reportActivity(observedActivity);
+
                 ctx.redirect(204, customerRef); //No content
             } else {
                 ctx.clientError(404); //Not found

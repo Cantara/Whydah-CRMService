@@ -3,9 +3,12 @@ package net.whydah.crmservice.customer;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.whydah.crmservice.security.Authentication;
+import net.whydah.crmservice.util.CRMSessionObservedActivity;
 import net.whydah.sso.extensions.crmcustomer.types.Customer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.valuereporter.agent.MonitorReporter;
+import org.valuereporter.agent.activity.ObservedActivity;
 import ratpack.exec.Blocking;
 import ratpack.handling.Context;
 import ratpack.handling.Handler;
@@ -39,6 +42,9 @@ public class UpdateCustomerHandler implements Handler {
         ctx.parse(fromJson(Customer.class)).then(customer -> {
             Blocking.get(() -> customerRepository.updateCustomer(customerRef, customer)).then(affectedRows -> {
                 if (affectedRows == 1) {
+                    ObservedActivity observedActivity = new CRMSessionObservedActivity(customerRef, "crmUserUpdated", Authentication.getAuthenticatedUser().getUid());
+                    MonitorReporter.reportActivity(observedActivity);
+
                     ctx.redirect(202, customerRef); //Accepted
                 } else {
                     ctx.clientError(404); //Not found

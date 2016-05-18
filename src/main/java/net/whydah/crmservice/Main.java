@@ -11,6 +11,7 @@ import net.whydah.crmservice.profilepicture.UpdateProfileImageHandler;
 import net.whydah.crmservice.security.SecurityHandler;
 import net.whydah.crmservice.security.SecurityModule;
 import net.whydah.crmservice.util.MailModule;
+import net.whydah.crmservice.util.ReporterModule;
 import net.whydah.crmservice.util.SecurityTokenServiceModule;
 import net.whydah.crmservice.util.SmsModule;
 import net.whydah.crmservice.verification.ActiveVerificationCacheModule;
@@ -20,6 +21,8 @@ import no.cantara.ratpack.config.RatpackConfigs;
 import no.cantara.ratpack.config.RatpackGuiceConfigModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.valuereporter.agent.activity.ObservedActivityDistributer;
+import org.valuereporter.agent.http.HttpObservationDistributer;
 import ratpack.dropwizard.metrics.DropwizardMetricsConfig;
 import ratpack.dropwizard.metrics.DropwizardMetricsModule;
 import ratpack.dropwizard.metrics.MetricsWebsocketBroadcastHandler;
@@ -50,6 +53,9 @@ public class Main {
     }
 
     public void start() throws Exception {
+
+
+
         RatpackServer.start(server -> server
                 .serverConfig(RatpackConfigs.configuration(APPLICATION_NAME, HTTP_PORT, DEFAULT_CONFIGURATION_RESOURCE_PATH, OVERRIDE_CONFIGURATION_FILE_PATH))
                 .registry(registry())
@@ -66,6 +72,7 @@ public class Main {
                 .module(SecurityModule.class)
                 .module(SmsModule.class)
                 .module(MailModule.class)
+                .module(ReporterModule.class)
                 .module(ActiveVerificationCacheModule.class)
                 .moduleConfig(DropwizardMetricsModule.class, new DropwizardMetricsConfig()
                                 .jmx(jmxConfig -> jmxConfig.enable(true))

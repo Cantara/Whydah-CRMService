@@ -3,10 +3,13 @@ package net.whydah.crmservice.customer;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.whydah.crmservice.security.Authentication;
+import net.whydah.crmservice.util.CRMSessionObservedActivity;
 import net.whydah.sso.extensions.crmcustomer.types.Customer;
 import net.whydah.sso.user.types.UserToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.valuereporter.agent.MonitorReporter;
+import org.valuereporter.agent.activity.ObservedActivity;
 import ratpack.exec.Blocking;
 import ratpack.handling.Context;
 import ratpack.handling.Handler;
@@ -75,6 +78,9 @@ public class CreateCustomerHandler implements Handler {
                     throw new RuntimeException(throwable);
                 }
             }).then(() -> {
+                ObservedActivity observedActivity = new CRMSessionObservedActivity(customerRef, "crmUserCreated", Authentication.getAuthenticatedUser().getUid());
+                MonitorReporter.reportActivity(observedActivity);
+
                 ctx.redirect(201, getCorrectID(ctx, customerRef, customer)); //Created
             });
         });
