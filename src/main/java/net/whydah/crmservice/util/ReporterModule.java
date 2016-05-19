@@ -14,7 +14,7 @@ public class ReporterModule extends AbstractModule {
 
 
     @Provides
-    void reporterClient(@Named("valuereporter.host") String reporterHost,
+    String reporterClient(@Named("valuereporter.host") String reporterHost,
                           @Named("valuereporter.port") String reporterPort,
                           @Named("applicationname") String prefix,
                           @Named("valuereporter.activity.batchsize") int cacheSize,
@@ -23,5 +23,6 @@ public class ReporterModule extends AbstractModule {
         //Start Valuereporter event distributer.
         new Thread(new ObservedActivityDistributer(reporterHost, reporterPort, prefix, cacheSize, forwardInterval)).start();
         new Thread(new HttpObservationDistributer(reporterHost, reporterPort, prefix)).start();
+        return "reporterClient started";
     }
 }
