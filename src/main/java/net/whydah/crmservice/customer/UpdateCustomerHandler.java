@@ -31,7 +31,7 @@ public class UpdateCustomerHandler implements Handler {
 
         String customerRef = ctx.getPathTokens().get("customerRef");
 
-        if ("useradmin".equalsIgnoreCase(Authentication.getAuthenticatedUser().getUid().toString())) {
+        if (Authentication.isAdminUser()) {
         } else if (customerRef == null || !customerRef.equals(Authentication.getAuthenticatedUser().getPersonRef())) {
             log.debug("User {} with personRef {} not authorized to update data for personRef {}", Authentication.getAuthenticatedUser().getUid(), Authentication.getAuthenticatedUser().getPersonRef(), customerRef);
             ctx.clientError(401);

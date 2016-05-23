@@ -5,7 +5,6 @@ import com.google.inject.Singleton;
 import net.whydah.crmservice.security.Authentication;
 import net.whydah.crmservice.util.CRMSessionObservedActivity;
 import net.whydah.sso.extensions.crmcustomer.types.Customer;
-import net.whydah.sso.user.types.UserToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.valuereporter.agent.MonitorReporter;
@@ -51,8 +50,7 @@ public class CreateCustomerHandler implements Handler {
         ctx.parse(fromJson(Customer.class)).then(customer -> {
             Blocking.op(() -> {
 
-                // TODO  fix this to verify against a sensible UserRole
-                if ("useradmin".equalsIgnoreCase(Authentication.getAuthenticatedUser().getUid().toString())) {
+                if (Authentication.isAdminUser()) {
                     customerRepository.createCustomer(getCorrectID(ctx, customerRef, customer), customer);
                 } else {
                     if (customerRefIsGenerated) {

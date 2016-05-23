@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.whydah.crmservice.security.Authentication;
 import net.whydah.crmservice.util.CRMSessionObservedActivity;
-import net.whydah.sso.user.types.UserToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.valuereporter.agent.MonitorReporter;
@@ -12,9 +11,6 @@ import org.valuereporter.agent.activity.ObservedActivity;
 import ratpack.exec.Blocking;
 import ratpack.handling.Context;
 import ratpack.handling.Handler;
-
-import static ratpack.jackson.Jackson.fromJson;
-import static ratpack.jackson.Jackson.json;
 
 @Singleton
 public class DeleteCustomerHandler implements Handler {
@@ -33,7 +29,7 @@ public class DeleteCustomerHandler implements Handler {
 
         String customerRef = ctx.getPathTokens().get("customerRef");
 
-        if ("useradmin".equalsIgnoreCase(Authentication.getAuthenticatedUser().getUid().toString())) {
+        if (Authentication.isAdminUser()) {
         } else if (customerRef == null || !customerRef.equals(Authentication.getAuthenticatedUser().getPersonRef())) {
             log.debug("User {} with personRef {} not authorized to update data for personRef {}", Authentication.getAuthenticatedUser().getUid(), Authentication.getAuthenticatedUser().getPersonRef(), customerRef);
             ctx.clientError(401);

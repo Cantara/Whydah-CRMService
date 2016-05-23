@@ -3,6 +3,7 @@ package net.whydah.crmservice.security;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.whydah.crmservice.util.TokenServiceClient;
+import net.whydah.sso.user.helpers.UserXpathHelper;
 import net.whydah.sso.user.mappers.UserTokenMapper;
 import net.whydah.sso.user.types.UserToken;
 import net.whydah.sso.util.SSLTool;
@@ -50,7 +51,8 @@ public class SecurityHandler implements Handler {
         log.debug("User validated - applicationTokenId=" + applicationTokenId + ", userTokenId=" + userTokenId);
 
         UserToken userToken = UserTokenMapper.fromUserTokenXml(userTokenXml);
-        Authentication.setAuthenticatedUser(userToken);
+        boolean adminUser = UserXpathHelper.hasRoleFromUserToken(userTokenXml, "2219", "WhydahUserAdmin");
+        Authentication.setAuthenticatedUser(userToken, adminUser);
 
         context.next();
     }
