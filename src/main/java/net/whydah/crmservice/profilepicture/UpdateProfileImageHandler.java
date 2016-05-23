@@ -12,10 +12,6 @@ import ratpack.http.MediaType;
 import ratpack.http.Request;
 import ratpack.http.TypedData;
 
-import java.sql.SQLIntegrityConstraintViolationException;
-
-import static ratpack.jackson.Jackson.fromJson;
-
 @Singleton
 public class UpdateProfileImageHandler implements Handler {
 
@@ -31,7 +27,7 @@ public class UpdateProfileImageHandler implements Handler {
 
         String customerRef = ctx.getPathTokens().get("customerRef");
 
-        if ("useradmin".equalsIgnoreCase(Authentication.getAuthenticatedUser().getUid().toString())) {
+        if (Authentication.isAdminUser()) {
         } else if (customerRef == null || !customerRef.equals(Authentication.getAuthenticatedUser().getPersonRef())) {
             ctx.clientError(401);
         }

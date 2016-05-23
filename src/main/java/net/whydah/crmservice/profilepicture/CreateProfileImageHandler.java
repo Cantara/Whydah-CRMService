@@ -29,7 +29,7 @@ public class CreateProfileImageHandler implements Handler {
 
         String customerRef = ctx.getPathTokens().get("customerRef");
 
-        if ("useradmin".equalsIgnoreCase(Authentication.getAuthenticatedUser().getUid().toString())) {
+        if (Authentication.isAdminUser()) {
         } else if (customerRef == null || !customerRef.equals(Authentication.getAuthenticatedUser().getPersonRef())) {
             ctx.clientError(401);
         }
