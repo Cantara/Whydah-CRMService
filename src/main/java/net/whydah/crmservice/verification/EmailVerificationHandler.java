@@ -56,6 +56,7 @@ public class EmailVerificationHandler implements Handler {
         final String email = queryParams.get("email");
         final String token = queryParams.get("token");
         final String linkurl = queryParams.get("linkurl");
+        log.debug("Ready to send email verificationmail. email:{}, token:{}, linkurl:{} ", email, token, linkurl);
 
         if (token == null) {
             //Send email verification token
