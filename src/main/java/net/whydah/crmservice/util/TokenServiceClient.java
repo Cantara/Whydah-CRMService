@@ -15,11 +15,12 @@ public class TokenServiceClient extends BaseWhydahServiceClient {
 
 
     public TokenServiceClient(String securitytokenserviceurl,
+                              String useradminserviceurl,
                               String activeApplicationId,
                               String applicationname,
                               String applicationsecret) throws URISyntaxException {
 
-        super(securitytokenserviceurl, null, activeApplicationId, applicationname, applicationsecret);
+        super(securitytokenserviceurl, useradminserviceurl, activeApplicationId, applicationname, applicationsecret);
     }
 
 

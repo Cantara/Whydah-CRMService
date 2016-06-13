@@ -10,7 +10,7 @@ CREATE DATABASE crmservice OWNER crmadmin;
 
 CREATE TABLE customers (
    customer_id    CHAR(256) PRIMARY KEY      NOT NULL,
-   data           CHAR(5000) NOT NULL
+   data           CHAR(25000) NOT NULL
 );
 
 CREATE TABLE profileimages (

@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.util.Date;
 import java.util.Properties;
 
 public class MailClient {
@@ -20,6 +21,7 @@ public class MailClient {
     private String subject;
     private String bodyTemplate;
     private String fromAddress;
+
 
 
     public MailClient(String smtpHost, String smtpPort, String smtpUsername, String smtpPassword, String subject, String bodyTemplate, String fromAddress) {
@@ -52,6 +54,10 @@ public class MailClient {
                         return new PasswordAuthentication(smtpUsername, smtpPassword);
                     }
                 });
+        long timestamp = new Date().getTime() + 8 * 1000;   // send mail after 8 seconds
+
+//        new CommandSendScheduledMail(uasServiceUri, serviceClient.getMyAppTokenID(), serviceClient.getMyAppTokenXml(), Long.toString(timestamp), email, properties.getProperty("inn-email-signupmessage-subject"), properties.getProperty("inn-email-signupmessage-body")).execute();
+
 
         try {
             Message message = new MimeMessage(session);

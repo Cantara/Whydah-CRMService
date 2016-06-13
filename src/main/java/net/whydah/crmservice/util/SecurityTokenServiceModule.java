@@ -14,10 +14,11 @@ public class SecurityTokenServiceModule extends AbstractModule {
 
     @Provides
     TokenServiceClient tokenServiceClient(@Named("securitytokenserviceurl") String securitytokenserviceurl,
+                                          @Named("useradminserviceurl") String useradminserviceurl,
                                           @Named("applicationid") String activeApplicationId,
                                           @Named("applicationname") String applicationname,
                                           @Named("applicationsecret") String applicationsecret) throws URISyntaxException {
-        return new TokenServiceClient(securitytokenserviceurl,
+        return new TokenServiceClient(securitytokenserviceurl, useradminserviceurl,
                 activeApplicationId, applicationname, applicationsecret);
     }
 }

@@ -4,8 +4,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
 
-import java.net.URISyntaxException;
-
 public class MailModule extends AbstractModule {
     @Override
     protected void configure() {
@@ -21,6 +19,7 @@ public class MailModule extends AbstractModule {
                           @Named("email.verification.subject") String subject,
                           @Named("email.verification.body") String bodyTemplate,
                           @Named("email.verification.fromaddress") String fromAddress) {
+
 
         return new MailClient(smtpHost, smtpPort, username, password, subject, bodyTemplate, fromAddress);
     }
