@@ -5,6 +5,7 @@ import com.google.inject.Singleton;
 import net.whydah.crmservice.customer.CustomerRepository;
 import net.whydah.crmservice.security.Authentication;
 import net.whydah.crmservice.util.MailClient;
+import net.whydah.crmservice.util.TokenServiceClient;
 import net.whydah.sso.extensions.crmcustomer.types.EmailAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,12 +22,14 @@ public class EmailVerificationHandler implements Handler {
 
     private static final Logger log = LoggerFactory.getLogger(EmailVerificationHandler.class);
 
+    private final TokenServiceClient tokenServiceClient;
     private final CustomerRepository customerRepository;
     private final MailClient mailClient;
     private final ActiveVerificationCache emailTokenMap;
 
     @Inject
-    public EmailVerificationHandler(CustomerRepository customerRepository, MailClient mailClient, ActiveVerificationCache emailTokenMap) {
+    public EmailVerificationHandler(TokenServiceClient tokenServiceClient, CustomerRepository customerRepository, MailClient mailClient, ActiveVerificationCache emailTokenMap) {
+        this.tokenServiceClient = tokenServiceClient;
         this.customerRepository = customerRepository;
         this.mailClient = mailClient;
         this.emailTokenMap = emailTokenMap;
@@ -66,7 +69,7 @@ public class EmailVerificationHandler implements Handler {
 
             log.debug("Verificationlink: " + verificationLink);
 
-            mailClient.sendVerificationEmail(email, verificationLink);
+            mailClient.sendVerificationEmailViaWhydah(tokenServiceClient, email, verificationLink);
 
             emailTokenMap.addToken(email, generatedToken);
 

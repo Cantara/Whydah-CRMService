@@ -12,7 +12,8 @@ public class MailModule extends AbstractModule {
 
 
     @Provides
-    MailClient mailClient(@Named("smtp.host") String smtpHost,
+    MailClient mailClient(@Named("useradminserviceurl") String uasUrl,
+                          @Named("smtp.host") String smtpHost,
                           @Named("smtp.port") String smtpPort,
                           @Named("smtp.username") String username,
                           @Named("smtp.password") String password,
@@ -21,6 +22,6 @@ public class MailModule extends AbstractModule {
                           @Named("email.verification.fromaddress") String fromAddress) {
 
 
-        return new MailClient(smtpHost, smtpPort, username, password, subject, bodyTemplate, fromAddress);
+        return new MailClient(uasUrl, smtpHost, smtpPort, username, password, subject, bodyTemplate, fromAddress);
     }
 }

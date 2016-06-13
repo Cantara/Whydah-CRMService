@@ -1,11 +1,13 @@
 package net.whydah.crmservice.util;
 
+import net.whydah.sso.commands.extras.CommandSendScheduledMail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.net.URI;
 import java.util.Date;
 import java.util.Properties;
 
@@ -21,10 +23,12 @@ public class MailClient {
     private String subject;
     private String bodyTemplate;
     private String fromAddress;
+    private String uasUrl;
+    private TokenServiceClient serviceClient;
 
 
-
-    public MailClient(String smtpHost, String smtpPort, String smtpUsername, String smtpPassword, String subject, String bodyTemplate, String fromAddress) {
+    public MailClient(String uasUrl, String smtpHost, String smtpPort, String smtpUsername, String smtpPassword, String subject, String bodyTemplate, String fromAddress) {
+        this.uasUrl = uasUrl;
         this.smtpHost = smtpHost;
         this.smtpPort = smtpPort;
         this.smtpUsername = smtpUsername;
@@ -33,7 +37,7 @@ public class MailClient {
         this.bodyTemplate = bodyTemplate;
     }
 
-    public void sendVerificationEmail(String recipients, String verificationLink) {
+    public void sendVerificationEmailLocally(String recipients, String verificationLink) {
 
         String body = String.format(bodyTemplate, verificationLink);
 
@@ -54,10 +58,6 @@ public class MailClient {
                         return new PasswordAuthentication(smtpUsername, smtpPassword);
                     }
                 });
-        long timestamp = new Date().getTime() + 8 * 1000;   // send mail after 8 seconds
-
-//        new CommandSendScheduledMail(uasServiceUri, serviceClient.getMyAppTokenID(), serviceClient.getMyAppTokenXml(), Long.toString(timestamp), email, properties.getProperty("inn-email-signupmessage-subject"), properties.getProperty("inn-email-signupmessage-body")).execute();
-
 
         try {
             Message message = new MimeMessage(session);
@@ -76,4 +76,21 @@ public class MailClient {
             throw new RuntimeException(smtpInfo, e);
         }
     }
+
+    public void sendVerificationEmailViaWhydah(TokenServiceClient tokenServiceClient, String recipients, String verificationLink) {
+        this.serviceClient = tokenServiceClient;
+
+        String body = String.format(bodyTemplate, verificationLink);
+
+        log.debug("Sending email to recipients={}, subject={}, body={}", recipients, subject, body);
+
+        try {
+            long timestamp = new Date().getTime() + 8 * 1000;   // send mail after 8 seconds
+            new CommandSendScheduledMail(URI.create(uasUrl), serviceClient.getMyAppTokenID(), serviceClient.getMyAppTokenXml(), Long.toString(timestamp), recipients, subject, body).execute();
+            log.info("Sent email to " + recipients);
+        } catch (Exception e) {
+            log.warn("Failed to send mail due to missconfiguration? Reason {}", e.getCause().getMessage());
+        }
+    }
+
 }
