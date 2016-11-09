@@ -86,6 +86,13 @@ public class CreateCustomerHandler implements Handler {
     }
 
     private String getCorrectID(Context ctx, String customerRef, Customer customer) {
+    	
+    	//TODO: HUY Nov092016 Please check this
+    	//This code block may change the customer_ref which was predefined in UserToken
+    	//This results in wrong customerRef which we use to query (customer_id = customerRef)
+    	
+    	
+    	/* UNCOMMENTED
         if (customer.getId() == null || customer.getId().length() < 5) {
             customer.setId(customerRef);
         }
@@ -93,6 +100,15 @@ public class CreateCustomerHandler implements Handler {
             customer.setId(UuidBasedRequestIdGenerator.INSTANCE.generate(ctx.getRequest()).toString());
         }
         return customer.getId();
-
+    	 */
+    	
+    	//FIX, make it simple
+    	if (customer.getId() == null) {
+            customer.setId(customerRef);
+        }
+    	return customerRef;
+    	
+    	
+    	
     }
 }
