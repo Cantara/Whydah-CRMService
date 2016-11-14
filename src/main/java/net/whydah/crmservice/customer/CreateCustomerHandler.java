@@ -52,7 +52,10 @@ public class CreateCustomerHandler implements Handler {
             Blocking.op(() -> {
             	
             	if (Authentication.isAdminUser()) {
-                    customerRepository.createCustomer(getCorrectID(ctx, customerRef, customer), customer);
+            		
+            			customerRepository.deleteCustomer(getCorrectID(ctx, customerRef, customer));
+            			customerRepository.createCustomer(getCorrectID(ctx, customerRef, customer), customer);
+            		
                 } else {
                     if (customerRefIsGenerated) {
                         //Verify userId
@@ -68,6 +71,7 @@ public class CreateCustomerHandler implements Handler {
                         }
                     }
 
+                    customerRepository.deleteCustomer(getCorrectID(ctx, customerRef, customer));
                     customerRepository.createCustomer(getCorrectID(ctx, customerRef, customer), customer);
                 }
             	
@@ -89,11 +93,11 @@ public class CreateCustomerHandler implements Handler {
 
     private String getCorrectID(Context ctx, String customerRef, Customer customer) {
     	
-    	if (customer.getId() != null &&  customer.getId().length() < 5) {
+    	if (customer.getId() != null && !customer.getId().trim().equals("") && customer.getId().length() < 5) {
             return customer.getId();
         } else {
     	
-        	if (customer.getId() == null) {
+        	if (customer.getId() == null || customer.getId().length() < 5) {
         		customer.setId(customerRef);
         	}
         	if (customer.getId() == null || customer.getId().length() < 5) {
