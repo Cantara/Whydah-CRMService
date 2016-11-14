@@ -96,16 +96,17 @@ public class CreateCustomerHandler implements Handler {
 
     private String getCorrectID(Context ctx, String customerRef, Customer customer) {
     	
-
-    	if (customer.getId() == null) {
-            customer.setId(customerRef);
+    	if (customer.getId() != null &&  customer.getId().length() < 5) {
+            return customer.getId();
+        } else {
+    	
+        	if (customer.getId() == null) {
+        		customer.setId(customerRef);
+        	}
+        	if (customer.getId().length() < 5) {
+        		customer.setId(UuidBasedRequestIdGenerator.INSTANCE.generate(ctx.getRequest()).toString());
+        	}
+        	return customer.getId();
         }
-//        if (customer.getId() == null || customer.getId().length() < 5) {
-//            customer.setId(UuidBasedRequestIdGenerator.INSTANCE.generate(ctx.getRequest()).toString());
-//        }
-        return customer.getId();
-    	
-    	
-    	
     }
 }
