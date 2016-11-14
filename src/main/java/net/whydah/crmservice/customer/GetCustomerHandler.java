@@ -27,17 +27,13 @@ public class GetCustomerHandler implements Handler {
 
         String customerRef = ctx.getPathTokens().get("customerRef");
         
-        //HUYDO: comment this code block on 11 Nov
-        //This is because customerRef in the test is a random value while Authentication.getAuthenticatedUser().getPersonRef() = 42 when running against useradmin/useradmin42
-        //SOLUTION: Just skip, check if customerRef is found 
-        
-//        if (Authentication.isAdminUser()) {
-//        	
-//        } else if (customerRef == null || !customerRef.equals(Authentication.getAuthenticatedUser().getPersonRef())) {
-//            log.debug("User {} with personRef {} not authorized to get data for personRef {}", Authentication.getAuthenticatedUser().getUid(), Authentication.getAuthenticatedUser().getPersonRef(), customerRef);
-//            ctx.clientError(401);
-//            return;
-//        }
+        if (Authentication.isAdminUser()) {
+        	
+        } else if (customerRef == null || !customerRef.equals(Authentication.getAuthenticatedUser().getPersonRef())) {
+            log.debug("User {} with personRef {} not authorized to get data for personRef {}", Authentication.getAuthenticatedUser().getUid(), Authentication.getAuthenticatedUser().getPersonRef(), customerRef);
+            ctx.clientError(401);
+            return;
+        }
 
         log.trace("Getting customer with ref={}", customerRef);
 
