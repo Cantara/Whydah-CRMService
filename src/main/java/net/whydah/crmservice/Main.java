@@ -67,8 +67,8 @@ public class Main {
         return Guice.registry(bindings -> bindings
                 .module(new RatpackGuiceConfigModule(bindings.getServerConfig()))
                 .module(PostgresModule.class)
-                .module(HealthModule.class)
                 .module(SecurityTokenServiceModule.class)
+                .module(HealthModule.class)
                 .module(CustomerModule.class)
                 .module(SecurityModule.class)
                 .module(SmsModule.class)
@@ -135,7 +135,10 @@ public class Main {
                                 postChain.post(chain.getRegistry().get(Injector.class).getInstance(CreateCustomerHandler.class));
                             });
                 })
-                .get("health", new GetHealthHandler())
+                .get("health", ctx -> {
+                    ctx.byMethod(m ->
+                            m.get(() -> ctx.get(Injector.class).getInstance(GetHealthHandler.class).handle(ctx)));
+                })//new GetHealthHandler())
                 .get("favicon.ico", sendFileHandler("assets/ico/3dlb-3d-Lock.ico"))
 
                 // redirect index* to root path

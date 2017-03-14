@@ -1,6 +1,8 @@
 package net.whydah.crmservice.health;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import net.whydah.crmservice.util.TokenServiceClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ratpack.handling.Context;
@@ -13,7 +15,13 @@ import java.util.Properties;
 @Singleton
 public class GetHealthHandler implements Handler {
     private static final Logger log = LoggerFactory.getLogger(GetHealthHandler.class);
+    private final TokenServiceClient tokenServiceClient;
 
+
+    @Inject
+    public GetHealthHandler(TokenServiceClient tokenServiceClient) {
+        this.tokenServiceClient = tokenServiceClient;
+    }
 
     @Override
     public void handle(Context ctx) throws Exception {
@@ -22,13 +30,24 @@ public class GetHealthHandler implements Handler {
     }
 
     public String getHealthTextJson() {
+        boolean hasApplicationToken = false;
+        boolean hasValidApplicationToken = false;
+        boolean hasApplicationsMetadata = false;
+        try {
+            hasApplicationToken = (tokenServiceClient.getWAS().getActiveApplicationTokenId() != null);
+            hasValidApplicationToken = tokenServiceClient.getWAS().checkActiveSession();
+            hasApplicationsMetadata = tokenServiceClient.getWAS().getApplicationList().size() > 2;
+
+        } catch (Exception e) {
+
+        }
         return "{\n" +
                 "  \"Status\": \"OK\",\n" +
                 "  \"Version\": \"" + getVersion() + "\",\n" +
                 "  \"DEFCON\": \"" + "DEFCON5" + "\"\n" +
-//                "  \"hasApplicationToken\": \"" + Boolean.toString((credentialStore.getWas().getActiveApplicationTokenId() != null)) + "\"\n" +
-//                "  \"hasValidApplicationToken\": \"" + Boolean.toString(credentialStore.getWas().checkActiveSession()) + "\"\n" +
-//                "  \"hasApplicationsMetadata\": \"" + Boolean.toString(credentialStore.getWas().getApplicationList().size() > 2) + "\"\n" +
+                "  \"hasApplicationToken\": \"" + Boolean.toString(hasApplicationToken) + "\"\n" +
+                "  \"hasValidApplicationToken\": \"" + Boolean.toString(hasValidApplicationToken) + "\"\n" +
+                "  \"hasApplicationsMetadata\": \"" + Boolean.toString(hasApplicationsMetadata) + "\"\n" +
 
 
                 "}\n";
