@@ -2,8 +2,10 @@ package net.whydah.crmservice;
 
 import com.codahale.metrics.MetricRegistry;
 import com.google.inject.Injector;
-import net.whydah.crmservice.postgresql.PostgresModule;
 import net.whydah.crmservice.customer.*;
+import net.whydah.crmservice.health.GetHealthHandler;
+import net.whydah.crmservice.health.HealthModule;
+import net.whydah.crmservice.postgresql.PostgresModule;
 import net.whydah.crmservice.profilepicture.CreateProfileImageHandler;
 import net.whydah.crmservice.profilepicture.DeleteProfileImageHandler;
 import net.whydah.crmservice.profilepicture.GetProfileImageHandler;
@@ -21,8 +23,6 @@ import no.cantara.ratpack.config.RatpackConfigs;
 import no.cantara.ratpack.config.RatpackGuiceConfigModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.valuereporter.agent.activity.ObservedActivityDistributer;
-import org.valuereporter.agent.http.HttpObservationDistributer;
 import ratpack.dropwizard.metrics.DropwizardMetricsConfig;
 import ratpack.dropwizard.metrics.DropwizardMetricsModule;
 import ratpack.dropwizard.metrics.MetricsWebsocketBroadcastHandler;
@@ -67,7 +67,8 @@ public class Main {
         return Guice.registry(bindings -> bindings
                 .module(new RatpackGuiceConfigModule(bindings.getServerConfig()))
                 .module(PostgresModule.class)
-                        .module(SecurityTokenServiceModule.class)
+                .module(HealthModule.class)
+                .module(SecurityTokenServiceModule.class)
                 .module(CustomerModule.class)
                 .module(SecurityModule.class)
                 .module(SmsModule.class)
@@ -134,7 +135,7 @@ public class Main {
                                 postChain.post(chain.getRegistry().get(Injector.class).getInstance(CreateCustomerHandler.class));
                             });
                 })
-
+                .get("health", new GetHealthHandler())
                 .get("favicon.ico", sendFileHandler("assets/ico/3dlb-3d-Lock.ico"))
 
                 // redirect index* to root path
