@@ -30,6 +30,7 @@ public class GetHealthHandler implements Handler {
     }
 
     public String getHealthTextJson() {
+        String DEFCON = "";
         boolean hasApplicationToken = false;
         boolean hasValidApplicationToken = false;
         boolean hasApplicationsMetadata = false;
