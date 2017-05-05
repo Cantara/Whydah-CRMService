@@ -61,7 +61,7 @@
                 <role>Developer</role>
             </roles>
             <organization>Capra Consulting AS</organization>
-            <organizationUrl>http://www.capraconsulting.no/</organizationUrl>
+            <organizationUrl>https://www.capraconsulting.no/</organizationUrl>
         </developer>
         <developer>
             <id>kimcs</id>
@@ -71,7 +71,7 @@
                 <role>Developer</role>
             </roles>
             <organization>Capra Consulting AS</organization>
-            <organizationUrl>http://www.capraconsulting.no/</organizationUrl>
+            <organizationUrl>https://www.capraconsulting.no/</organizationUrl>
         </developer>
         <developer>
             <id>lty</id>
@@ -81,7 +81,7 @@
                 <role>Developer</role>
             </roles>
             <organization>Capra Consulting AS</organization>
-            <organizationUrl>http://www.capraconsulting.no/</organizationUrl>
+            <organizationUrl>https://www.capraconsulting.no/</organizationUrl>
         </developer>
     </developers>
 
