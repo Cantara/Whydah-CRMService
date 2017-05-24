@@ -53,8 +53,8 @@ public class SecurityHandler implements Handler {
         UserToken userToken = UserTokenMapper.fromUserTokenXml(userTokenXml);
         boolean adminUser = UserXpathHelper.hasRoleFromUserToken(userTokenXml, "2219", "WhydahUserAdmin");
         if (!adminUser) {
-            adminUser = "systest".equalsIgnoreCase(UserXpathHelper.getUserNameFromUserTokenXml(userTokenXml)) ||
-            		"useradmin".equalsIgnoreCase(UserXpathHelper.getUserNameFromUserTokenXml(userTokenXml));
+            adminUser = "systest".equalsIgnoreCase(UserXpathHelper.getUserIdFromUserTokenXml(userTokenXml)) ||
+                    "useradmin".equalsIgnoreCase(UserXpathHelper.getUserIdFromUserTokenXml(userTokenXml));
         }
         Authentication.setAuthenticatedUser(userToken, adminUser);
 
