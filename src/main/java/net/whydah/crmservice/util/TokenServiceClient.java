@@ -2,6 +2,7 @@ package net.whydah.crmservice.util;
 
 
 import com.google.inject.Singleton;
+import net.whydah.sso.application.types.ApplicationCredential;
 import net.whydah.sso.session.baseclasses.BaseWhydahServiceClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +21,7 @@ public class TokenServiceClient extends BaseWhydahServiceClient {
                               String applicationname,
                               String applicationsecret) throws URISyntaxException {
 
-        super(securitytokenserviceurl, useradminserviceurl, activeApplicationId, applicationname, applicationsecret);
+        super(securitytokenserviceurl, useradminserviceurl, new ApplicationCredential(activeApplicationId, applicationname, applicationsecret));
         this.getWAS().setDisableUpdateAppLink(true);
     }
 
