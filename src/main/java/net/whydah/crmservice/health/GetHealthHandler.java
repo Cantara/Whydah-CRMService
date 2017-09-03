@@ -37,7 +37,8 @@ public class GetHealthHandler implements Handler {
         try {
             hasApplicationToken = (tokenServiceClient.getWAS().getActiveApplicationTokenId() != null);
             hasValidApplicationToken = tokenServiceClient.getWAS().checkActiveSession();
-            hasApplicationsMetadata = tokenServiceClient.getWAS().getApplicationList().size() > 2;
+            hasApplicationsMetadata = tokenServiceClient.getWAS().hasApplicationMetaData();
+            DEFCON = tokenServiceClient.getWAS().getDefcon().toString();
 
         } catch (Exception e) {
 
@@ -45,7 +46,7 @@ public class GetHealthHandler implements Handler {
         return "{\n" +
                 "  \"Status\": \"OK\",\n" +
                 "  \"Version\": \"" + getVersion() + "\",\n" +
-                "  \"DEFCON\": \"" + "DEFCON5" + "\"\n" +
+                "  \"DEFCON\": \"" + DEFCON + "\"\n" +
                 "  \"hasApplicationToken\": \"" + Boolean.toString(hasApplicationToken) + "\"\n" +
                 "  \"hasValidApplicationToken\": \"" + Boolean.toString(hasValidApplicationToken) + "\"\n" +
                 "  \"hasApplicationsMetadata\": \"" + Boolean.toString(hasApplicationsMetadata) + "\"\n" +
