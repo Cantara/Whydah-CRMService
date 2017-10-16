@@ -32,7 +32,7 @@ public class SecurityHandler implements Handler {
         String applicationTokenId = context.getPathTokens().get("apptokenId");
 
         if (!tokenServiceClient.isApplicationTokenIdValid(applicationTokenId)) {
-            log.debug("ApptokenId [{}] has been rejected.", applicationTokenId);
+            log.debug("ApplicationTokenId [{}] has been rejected.", applicationTokenId);
             context.clientError(401);
             return;
         }
@@ -43,7 +43,7 @@ public class SecurityHandler implements Handler {
         SSLTool.disableCertificateValidation();
         String userTokenXml = tokenServiceClient.getUserTokenXml(userTokenId);
         if (userTokenXml == null || userTokenXml.isEmpty()) {
-            log.debug("Usertoken [{}] has been rejected.", userTokenId);
+            log.debug("UsertokenId [{}] has been rejected.", userTokenId);
             context.clientError(401);
             return;
         }
