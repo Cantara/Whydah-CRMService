@@ -3,6 +3,9 @@ package net.whydah.crmservice.health;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.whydah.crmservice.util.TokenServiceClient;
+import net.whydah.sso.util.WhydahUtil;
+import org.constretto.annotation.Configuration;
+import org.constretto.annotation.Configure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ratpack.handling.Context;
@@ -16,11 +19,14 @@ import java.util.Properties;
 public class GetHealthHandler implements Handler {
     private static final Logger log = LoggerFactory.getLogger(GetHealthHandler.class);
     private final TokenServiceClient tokenServiceClient;
+    private static String applicationInstanceName;
 
 
     @Inject
-    public GetHealthHandler(TokenServiceClient tokenServiceClient) {
+    @Configure
+    public GetHealthHandler(TokenServiceClient tokenServiceClient, @Configuration("applicationname") String applicationname) {
         this.tokenServiceClient = tokenServiceClient;
+        this.applicationInstanceName = applicationname;
     }
 
     @Override
@@ -39,6 +45,16 @@ public class GetHealthHandler implements Handler {
             hasValidApplicationToken = tokenServiceClient.getWAS().checkActiveSession();
             hasApplicationsMetadata = tokenServiceClient.getWAS().hasApplicationMetaData();
             DEFCON = tokenServiceClient.getWAS().getDefcon().toString();
+            return "{\n" +
+                    "  \"Status\": \"OK\",\n" +
+                    "  \"Version\": \"" + getVersion() + "\",\n" +
+                    "  \"DEFCON\": \"" + DEFCON + "\"\n" +
+                    "  \"hasApplicationToken\": \"" + Boolean.toString(hasApplicationToken) + "\"\n" +
+                    "  \"hasValidApplicationToken\": \"" + Boolean.toString(hasValidApplicationToken) + "\"\n" +
+                    "  \"hasApplicationsMetadata\": \"" + Boolean.toString(hasApplicationsMetadata) + "\"\n" +
+
+
+                    "}\n";
 
         } catch (Exception e) {
 
@@ -47,9 +63,6 @@ public class GetHealthHandler implements Handler {
                 "  \"Status\": \"OK\",\n" +
                 "  \"Version\": \"" + getVersion() + "\",\n" +
                 "  \"DEFCON\": \"" + DEFCON + "\"\n" +
-                "  \"hasApplicationToken\": \"" + Boolean.toString(hasApplicationToken) + "\"\n" +
-                "  \"hasValidApplicationToken\": \"" + Boolean.toString(hasValidApplicationToken) + "\"\n" +
-                "  \"hasApplicationsMetadata\": \"" + Boolean.toString(hasApplicationsMetadata) + "\"\n" +
 
 
                 "}\n";
@@ -62,12 +75,12 @@ public class GetHealthHandler implements Handler {
         if (mavenVersionResource != null) {
             try {
                 mavenProperties.load(mavenVersionResource.openStream());
-                return mavenProperties.getProperty("version", "missing version info in " + resourcePath);
+                return mavenProperties.getProperty("version", "missing version info in " + resourcePath) + " [" + applicationInstanceName + " - " + WhydahUtil.getMyIPAddresssesString() + "]";
             } catch (IOException e) {
                 log.warn("Problem reading version resource from classpath: ", e);
             }
         }
-        return "(DEV VERSION)";
+        return "(DEV VERSION)" + " [" + applicationInstanceName + " - " + WhydahUtil.getMyIPAddresssesString() + "]";
     }
 
 }
