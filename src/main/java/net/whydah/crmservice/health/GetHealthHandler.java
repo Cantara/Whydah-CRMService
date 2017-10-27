@@ -13,6 +13,7 @@ import ratpack.handling.Handler;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.Instant;
 import java.util.Properties;
 
 @Singleton
@@ -52,6 +53,8 @@ public class GetHealthHandler implements Handler {
                     "  \"hasApplicationToken\": \"" + Boolean.toString(hasApplicationToken) + "\"\n" +
                     "  \"hasValidApplicationToken\": \"" + Boolean.toString(hasValidApplicationToken) + "\"\n" +
                     "  \"hasApplicationsMetadata\": \"" + Boolean.toString(hasApplicationsMetadata) + "\"\n" +
+                    "  \"now\": \"" + Instant.now() + "\",\n" +
+                    "  \"running since\": \"" + WhydahUtil.getRunningSince() + "\"," +
 
 
                     "}\n";
