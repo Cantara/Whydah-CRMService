@@ -17,12 +17,11 @@
         <developerConnection>scm:git:ssh://git@github.com/cantara/Whydah-CRMService.git</developerConnection>
         <connection>scm:git:https://github.com/cantara/Whydah-CRMService.git</connection>
         <url>https://github.com/cantara/Whydah-CRMService</url>
-    <tag>HEAD</tag>
-  </scm>
+    </scm>
 
     <properties>
         <service.name>Whydah-CRMService</service.name>
-        <whydah.sdk.version>2.3.36</whydah.sdk.version>
+        <whydah.sdk.version>2.3.39</whydah.sdk.version>
         <slf4j.version>1.7.13</slf4j.version>
         <ratpack.version>1.2.0</ratpack.version>
     </properties>
