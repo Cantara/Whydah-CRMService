@@ -7,7 +7,6 @@ import net.whydah.sso.extensions.crmcustomer.types.EmailAddress;
 import net.whydah.sso.extensions.crmcustomer.types.PhoneNumber;
 import org.junit.Test;
 
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,9 +57,9 @@ public class JsonSerializationTest {
 
 
         Map<String, PhoneNumber> phoneNumberMap = new HashMap<>();
-        PhoneNumber p1 = new PhoneNumber("jobb", "91905054", false);
+        PhoneNumber p1 = new PhoneNumber("91905054", "jobb", false);
         phoneNumberMap.put("tja", p1);
-        PhoneNumber p2 = new PhoneNumber("privat", "96909999", true);
+        PhoneNumber p2 = new PhoneNumber("96909999", "privat", true);
         phoneNumberMap.put("tja", p2);
         customer.setDefaultPhoneLabel("jobb");
 
