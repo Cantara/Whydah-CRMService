@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.whydah.service</groupId>
     <artifactId>Whydah-CRMService</artifactId>
@@ -17,8 +18,8 @@
         <developerConnection>scm:git:ssh://git@github.com/cantara/Whydah-CRMService.git</developerConnection>
         <connection>scm:git:https://github.com/cantara/Whydah-CRMService.git</connection>
         <url>https://github.com/cantara/Whydah-CRMService</url>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
 
     <properties>
         <service.name>Whydah-CRMService</service.name>
@@ -122,6 +123,10 @@
                     <groupId>com.fasterxml.jackson.dataformat</groupId>
                     <artifactId>jackson-dataformat-xml</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.dataformat</groupId>
+                    <artifactId>jackson-core</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -133,6 +138,10 @@
                     <groupId>com.fasterxml.jackson.dataformat</groupId>
                     <artifactId>jackson-dataformat-xml</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.dataformat</groupId>
+                    <artifactId>jackson-core</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -143,6 +152,10 @@
                 <exclusion>
                     <groupId>com.fasterxml.jackson.dataformat</groupId>
                     <artifactId>jackson-dataformat-xml</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.dataformat</groupId>
+                    <artifactId>jackson-core</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -241,8 +254,10 @@
                                 </excludes>
                             </artifactSet>
                             <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ComponentsXmlResourceTransformer" />
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ComponentsXmlResourceTransformer"/>
                             </transformers>
                         </configuration>
                     </execution>
@@ -307,7 +322,8 @@
                                     <extraArgument>-XX:PermSize=32m</extraArgument>
                                     <extraArgument>-XX:MaxPermSize=32m</extraArgument>
                                     <extraArgument>-DIAM_MODE=PROD</extraArgument>
-                                    <extraArgument>-DIAM_CONFIG=config_override/securitytokenservice.PROD.properties</extraArgument>
+                                    <extraArgument>-DIAM_CONFIG=config_override/securitytokenservice.PROD.properties
+                                    </extraArgument>
                                     <!--<extraArgument>-Dlogback.configurationFile=file:config_override/logback.xml</extraArgument>-->
                                 </extraArguments>
                             </jvmSettings>
