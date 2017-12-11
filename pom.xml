@@ -129,7 +129,7 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-handler</artifactId>
-            <version>4.1.18.Final</version>
+            <version>5.0.0.Alpha3</version>
         </dependency>
 
         <dependency>
@@ -150,22 +150,6 @@
             <version>2.9.3</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>18.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.api-client</groupId>
-            <artifactId>google-api-client</artifactId>
-            <version>1.21.0</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.google.guava</groupId>
-                    <artifactId>guava-jdk5</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
 
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
@@ -502,7 +486,7 @@
                                     <extraArgument>-XX:PermSize=32m</extraArgument>
                                     <extraArgument>-XX:MaxPermSize=32m</extraArgument>
                                     <extraArgument>-DIAM_MODE=PROD</extraArgument>
-                                    <extraArgument>-DIAM_CONFIG=config_override/securitytokenservice.PROD.properties
+                                    <extraArgument>-DIAM_CONFIG=crmservice.properties
                                     </extraArgument>
                                     <!--<extraArgument>-Dlogback.configurationFile=file:config_override/logback.xml</extraArgument>-->
                                 </extraArguments>
