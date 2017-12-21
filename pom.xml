@@ -1,9 +1,8 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.whydah.service</groupId>
     <artifactId>Whydah-CRMService</artifactId>
-    <version>2.4-rc-3-SNAPSHOT</version>
+    <version>2.4</version>
     <name>Whydah-CRMService</name>
     <packaging>jar</packaging>
     <url>https://wiki.cantara.no/display/iam/Whydah-CRMService</url>
@@ -18,7 +17,7 @@
         <developerConnection>scm:git:ssh://git@github.com/cantara/Whydah-CRMService.git</developerConnection>
         <connection>scm:git:https://github.com/cantara/Whydah-CRMService.git</connection>
         <url>https://github.com/cantara/Whydah-CRMService</url>
-        <tag>HEAD</tag>
+        <tag>Whydah-CRMService-2.4</tag>
     </scm>
 
     <properties>
@@ -474,10 +473,8 @@
                                 </excludes>
                             </artifactSet>
                             <transformers>
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.ComponentsXmlResourceTransformer"/>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ComponentsXmlResourceTransformer" />
                             </transformers>
                         </configuration>
                     </execution>
