@@ -22,7 +22,7 @@ public class TokenServiceClient extends BaseWhydahServiceClient {
                               String applicationsecret) throws URISyntaxException {
 
         super(securitytokenserviceurl, useradminserviceurl, new ApplicationCredential(activeApplicationId, applicationname, applicationsecret));
-        this.getWAS().setDisableUpdateAppLink(true);
+        this.getWAS().updateApplinks(false);
     }
 
 
