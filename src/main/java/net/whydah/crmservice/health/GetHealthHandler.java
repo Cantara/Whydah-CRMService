@@ -2,7 +2,7 @@ package net.whydah.crmservice.health;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import net.whydah.crmservice.util.TokenServiceClient;
+import net.whydah.crmservice.util.SecurityTokenServiceClient;
 import net.whydah.sso.util.WhydahUtil;
 import org.constretto.annotation.Configuration;
 import org.constretto.annotation.Configure;
@@ -19,13 +19,13 @@ import java.util.Properties;
 @Singleton
 public class GetHealthHandler implements Handler {
     private static final Logger log = LoggerFactory.getLogger(GetHealthHandler.class);
-    private final TokenServiceClient tokenServiceClient;
+    private final SecurityTokenServiceClient tokenServiceClient;
     private static String applicationInstanceName;
 
 
     @Inject
     @Configure
-    public GetHealthHandler(TokenServiceClient tokenServiceClient, @Configuration("applicationname") String applicationname) {
+    public GetHealthHandler(SecurityTokenServiceClient tokenServiceClient, @Configuration("applicationname") String applicationname) {
         this.tokenServiceClient = tokenServiceClient;
         this.applicationInstanceName = applicationname;
     }

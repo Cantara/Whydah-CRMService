@@ -1,7 +1,7 @@
 package net.whydah.crmservice.security;
 
 import com.google.inject.Inject;
-import net.whydah.crmservice.util.TokenServiceClient;
+import net.whydah.crmservice.util.SecurityTokenServiceClient;
 import net.whydah.sso.user.helpers.UserXpathHelper;
 import net.whydah.sso.user.mappers.UserTokenMapper;
 import net.whydah.sso.user.types.UserToken;
@@ -18,11 +18,11 @@ public class SecurityHandler implements Handler {
 
     private static final Logger log = LoggerFactory.getLogger(SecurityHandler.class);
 
-    private final TokenServiceClient tokenServiceClient;
+    private final SecurityTokenServiceClient tokenServiceClient;
 
 
     @Inject
-    public SecurityHandler(TokenServiceClient tokenServiceClient) {
+    public SecurityHandler(SecurityTokenServiceClient tokenServiceClient) {
         this.tokenServiceClient = tokenServiceClient;
     }
 

@@ -24,7 +24,7 @@ public class MailClient {
     private String bodyTemplate;
     private String fromAddress;
     private String uasUrl;
-    private TokenServiceClient serviceClient;
+    private SecurityTokenServiceClient serviceClient;
 
 
     public MailClient(String uasUrl, String smtpHost, String smtpPort, String smtpUsername, String smtpPassword, String subject, String bodyTemplate, String fromAddress) {
@@ -77,7 +77,7 @@ public class MailClient {
         }
     }
 
-    public void sendVerificationEmailViaWhydah(TokenServiceClient tokenServiceClient, String recipients, String verificationLink) {
+    public void sendVerificationEmailViaWhydah(SecurityTokenServiceClient tokenServiceClient, String recipients, String verificationLink) {
         this.serviceClient = tokenServiceClient;
 
         String body = String.format(bodyTemplate, verificationLink);

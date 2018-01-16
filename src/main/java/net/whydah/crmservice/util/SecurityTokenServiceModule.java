@@ -11,15 +11,16 @@ public class SecurityTokenServiceModule extends AbstractModule {
     protected void configure() {
 
     }
-    static TokenServiceClient client;
+
+    static SecurityTokenServiceClient client;
     @Provides
-    TokenServiceClient tokenServiceClient(@Named("securitytokenserviceurl") String securitytokenserviceurl,
-                                          @Named("useradminserviceurl") String useradminserviceurl,
-                                          @Named("applicationid") String activeApplicationId,
-                                          @Named("applicationname") String applicationname,
-                                          @Named("applicationsecret") String applicationsecret) throws URISyntaxException {
+    SecurityTokenServiceClient tokenServiceClient(@Named("securitytokenserviceurl") String securitytokenserviceurl,
+                                                  @Named("useradminserviceurl") String useradminserviceurl,
+                                                  @Named("applicationid") String activeApplicationId,
+                                                  @Named("applicationname") String applicationname,
+                                                  @Named("applicationsecret") String applicationsecret) throws URISyntaxException {
     	if(client==null){
-    		client = new TokenServiceClient(securitytokenserviceurl, useradminserviceurl,
+            client = new SecurityTokenServiceClient(securitytokenserviceurl, useradminserviceurl,
     				activeApplicationId, applicationname, applicationsecret);
     	} 
     	return client;
