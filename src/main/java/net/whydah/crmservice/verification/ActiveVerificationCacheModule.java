@@ -13,6 +13,6 @@ public class ActiveVerificationCacheModule extends AbstractModule {
 
     @Provides
     ActiveVerificationCache activeVerificationCache(@Named("hazelcast.config")String hazelcastConfig, @Named("gridprefix") String gridPrefix) {
-        return new ActiveVerificationCache(hazelcastConfig, gridPrefix);
+    	return new ActiveVerificationCache(hazelcastConfig, gridPrefix);
     }
 }

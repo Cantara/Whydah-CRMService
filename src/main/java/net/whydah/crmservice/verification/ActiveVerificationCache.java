@@ -2,6 +2,7 @@ package net.whydah.crmservice.verification;
 
 import com.google.inject.Singleton;
 import com.hazelcast.config.Config;
+import com.hazelcast.config.NetworkConfig;
 import com.hazelcast.config.XmlConfigBuilder;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
@@ -29,21 +30,28 @@ public class ActiveVerificationCache {
         }
     }
 
-    private void init() {
-        log.info("Loading hazelcast configuration from :" + hazelcastConfigFilename);
-        Config hazelcastConfig = new Config();
-        if (hazelcastConfigFilename != null && hazelcastConfigFilename.length() > 10) {
-            try {
-                hazelcastConfig = new XmlConfigBuilder(hazelcastConfigFilename).build();
-                log.info("Loading hazelcast configuration from :" + hazelcastConfigFilename);
-            } catch (FileNotFoundException notFound) {
-                log.error("Error - not able to load hazelcast.xml configuration.  Using embedded as fallback");
-            }
-        }
-        hazelcastConfig.setProperty("hazelcast.logging.type", "slf4j");
-        HazelcastInstance hazelcastInstance = Hazelcast.newHazelcastInstance(hazelcastConfig);
+    public void init() {
+    	
+    	
+    	String xmlFileName = hazelcastConfigFilename;
+		log.info("Loading hazelcast configuration from :" + xmlFileName);
+		Config hazelcastConfig = new Config();
+		if (xmlFileName != null && xmlFileName.length() > 10) {
+			try {
+				hazelcastConfig = new XmlConfigBuilder(xmlFileName).build();
+				log.info("Loading hazelcast configuration from :" + xmlFileName);
+			} catch (FileNotFoundException notFound) {
+				log.error("Error - not able to load hazelcast.xml configuration.  Using embedded configuration as fallback");
+			}
+		}
+		//we have to set the group here; otherwise we will get trouble of port binding due to being occupied
+		hazelcastConfig.getGroupConfig().setName("CRM_HAZELCAST");
+		hazelcastConfig.setProperty("hazelcast.logging.type", "slf4j");
+		
+		HazelcastInstance hazelcastInstance = Hazelcast.newHazelcastInstance(hazelcastConfig);		
+		
         userpinmap = hazelcastInstance.getMap(gridPrefix+"CRM_userpinmap");
-        log.info("Connecting to map {}",gridPrefix+"CRM_userpinmap");
+        log.info("Connecting to map {}", gridPrefix+"CRM_userpinmap");
 
         emailTokenMap = hazelcastInstance.getMap(gridPrefix+"CRM_emailtokenmap");
         log.info("Connecting to map {}", gridPrefix + "CRM_emailtokenmap");

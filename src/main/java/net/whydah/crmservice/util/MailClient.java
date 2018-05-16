@@ -86,7 +86,7 @@ public class MailClient {
 
         try {
             long timestamp = new Date().getTime() + 8 * 1000;   // send mail after 8 seconds
-            new CommandSendScheduledMail(URI.create(uasUrl), serviceClient.getMyAppTokenID(), serviceClient.getMyAppTokenXml(), Long.toString(timestamp), recipients, subject, body).execute();
+            new CommandSendScheduledMail(URI.create(uasUrl), serviceClient.getMyAppTokenID(), Long.toString(timestamp), recipients, subject, body).queue();
             log.info("Sent email to " + recipients);
         } catch (Exception e) {
             log.warn("Failed to send mail due to missconfiguration? Reason {}", e.getCause().getMessage());
