@@ -111,6 +111,7 @@ public class EmailVerificationHandler implements Handler {
 					for (EmailAddress emailAddress : emailaddresses.values()) {
 						if (email.equalsIgnoreCase(emailAddress.getEmailaddress())) {
 							emailAddress.setVerified(true);
+							emailAddress.setTags(TagsParser.addTag(emailAddress.getTags(), "pending", true));
 							foundMatch = true;
 						}
 						emailList.put(emailAddress.getEmailaddress(), emailAddress);
