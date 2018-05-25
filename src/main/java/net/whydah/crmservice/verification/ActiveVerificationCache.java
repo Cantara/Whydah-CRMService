@@ -44,8 +44,7 @@ public class ActiveVerificationCache {
 				log.error("Error - not able to load hazelcast.xml configuration.  Using embedded configuration as fallback");
 			}
 		}
-		//we have to set the group here; otherwise we will get trouble of port binding due to being occupied
-		hazelcastConfig.getGroupConfig().setName("CRM_HAZELCAST");
+		
 		hazelcastConfig.setProperty("hazelcast.logging.type", "slf4j");
 		
 		HazelcastInstance hazelcastInstance = Hazelcast.newHazelcastInstance(hazelcastConfig);		
