@@ -89,9 +89,8 @@ public class EmailVerificationHandler implements Handler {
 				Map<String, EmailAddress> emailaddresses = customer.getEmailaddresses();
 				for (EmailAddress emailAddress : emailaddresses.values()) {
 					if (email.equalsIgnoreCase(emailAddress.getEmailaddress())) {
-						String tags = emailAddress.getTags();
-						emailAddress.setTags(TagsParser.addTag(tags, "pending", true));
-						emailAddress.setTags(TagsParser.addTag(tags, "registrationTime", System.currentTimeMillis()));
+						emailAddress.setTags(TagsParser.addTag(emailAddress.getTags(), "pending", true));
+						emailAddress.setTags(TagsParser.addTag(emailAddress.getTags(), "registrationTime", System.currentTimeMillis()));
 					}
 				}
 				customerRepository.updateCustomer(customerRef, customer);
@@ -112,6 +111,7 @@ public class EmailVerificationHandler implements Handler {
 						if (email.equalsIgnoreCase(emailAddress.getEmailaddress())) {
 							emailAddress.setVerified(true);
 							emailAddress.setTags(TagsParser.addTag(emailAddress.getTags(), "pending", true));
+							emailAddress.setTags(TagsParser.addTag(emailAddress.getTags(), "verificationTime", System.currentTimeMillis()));
 							foundMatch = true;
 						}
 						emailList.put(emailAddress.getEmailaddress(), emailAddress);
