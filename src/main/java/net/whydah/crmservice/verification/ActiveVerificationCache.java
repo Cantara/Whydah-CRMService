@@ -47,7 +47,6 @@ public class ActiveVerificationCache {
 		}
 		
 		//hazelcastConfig.setProperty("hazelcast.logging.type", "slf4j");
-		//hazelcastConfig.getNetworkConfig().setPort(5801);
 		hazelcastConfig.setGroupConfig(new GroupConfig("CRM_SERVICE"));
 		HazelcastInstance hazelcastInstance = Hazelcast.newHazelcastInstance(hazelcastConfig);		
 		

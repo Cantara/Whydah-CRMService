@@ -110,14 +110,12 @@ public class EmailVerificationHandler implements Handler {
 					for (EmailAddress emailAddress : emailaddresses.values()) {
 						if (email.equalsIgnoreCase(emailAddress.getEmailaddress())) {
 							emailAddress.setVerified(true);
-							emailAddress.setTags(TagsParser.addTag(emailAddress.getTags(), "pending", true));
+							emailAddress.setTags(TagsParser.addTag(emailAddress.getTags(), "pending", false));
 							emailAddress.setTags(TagsParser.addTag(emailAddress.getTags(), "verificationTime", System.currentTimeMillis()));
 							foundMatch = true;
 						}
 						emailList.put(emailAddress.getEmailaddress(), emailAddress);
 					}
-					customerRepository.updateCustomer(customerRef, customer);
-					ctx.redirect(200, customerRef);
 					if (foundMatch) {
 						//update verified emails
 						for(DeliveryAddress da : customer.getDeliveryaddresses().values()) {
@@ -126,9 +124,8 @@ public class EmailVerificationHandler implements Handler {
 						}
 						customerRepository.updateCustomer(customerRef, customer);
 						log.debug("Email {} flagged as verified.", email);
-						ctx.redirect(200, customerRef);
-						
 					}
+					ctx.redirect(200, customerRef);
 				});
 
 			} else {
