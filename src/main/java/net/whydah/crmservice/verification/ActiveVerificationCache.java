@@ -2,6 +2,7 @@ package net.whydah.crmservice.verification;
 
 import com.google.inject.Singleton;
 import com.hazelcast.config.Config;
+import com.hazelcast.config.GroupConfig;
 import com.hazelcast.config.NetworkConfig;
 import com.hazelcast.config.XmlConfigBuilder;
 import com.hazelcast.core.Hazelcast;
@@ -45,7 +46,9 @@ public class ActiveVerificationCache {
 			}
 		}
 		
-		hazelcastConfig.setProperty("hazelcast.logging.type", "slf4j");
+		//hazelcastConfig.setProperty("hazelcast.logging.type", "slf4j");
+		//hazelcastConfig.getNetworkConfig().setPort(5801);
+		hazelcastConfig.setGroupConfig(new GroupConfig("CRM_SERVICE"));
 		HazelcastInstance hazelcastInstance = Hazelcast.newHazelcastInstance(hazelcastConfig);		
 		
         userpinmap = hazelcastInstance.getMap(gridPrefix+"CRM_userpinmap");
