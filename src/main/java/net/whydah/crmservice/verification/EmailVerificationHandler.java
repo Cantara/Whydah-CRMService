@@ -49,7 +49,8 @@ public class EmailVerificationHandler implements Handler {
 	public void handle(Context ctx) throws Exception {
 
 		final String customerRef = ctx.getPathTokens().get("customerRef");
-
+		
+		
 		if ("useradmin".equalsIgnoreCase(Authentication.getAuthenticatedUser().getUid().toString())) {
 		} else if (customerRef == null || !customerRef.equals(Authentication.getAuthenticatedUser().getPersonRef())) {
 			log.debug("User {} with personRef {} not authorized to get data for personRef {}", Authentication.getAuthenticatedUser().getUid(), Authentication.getAuthenticatedUser().getPersonRef(), customerRef);
@@ -66,6 +67,8 @@ public class EmailVerificationHandler implements Handler {
 		final String email = queryParams.get("email");
 		final String token = queryParams.get("emailverificationtoken");
 		final String linkurl = queryParams.get("linkurl");
+		final String userticket = queryParams.get("userticket");
+		
 		log.debug("Ready to send email verificationmail. email:{}, token:{}, linkurl:{} ", email, token, linkurl);
 
 		if (token == null) {
@@ -74,7 +77,8 @@ public class EmailVerificationHandler implements Handler {
 
 			StringBuilder builder = new StringBuilder(linkurl).
 					append("?token=").append(generatedToken).
-					append("&email=").append(email);
+					append("&email=").append(email).
+					append("&userticket=").append(userticket);
 
 			String verificationLink = builder.toString();
 
