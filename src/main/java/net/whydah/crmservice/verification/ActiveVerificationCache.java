@@ -55,6 +55,19 @@ public class ActiveVerificationCache {
 
         emailTokenMap = hazelcastInstance.getMap(gridPrefix+"CRM_emailtokenmap");
         log.info("Connecting to map {}", gridPrefix + "CRM_emailtokenmap");
+        
+    }
+
+    public String getMapInfo() {
+    	
+    	StringBuilder sb = new StringBuilder();
+        for(String key: emailTokenMap.keySet()) {
+        	sb.append("email: " + key + ", token:" + emailTokenMap.get(key) + System.lineSeparator());
+        }
+        for(String key: userpinmap.keySet()) {
+        	sb.append("phone: " + key + ", pin:" + emailTokenMap.get(key) + System.lineSeparator());
+        }
+        return sb.toString();
     }
 
 

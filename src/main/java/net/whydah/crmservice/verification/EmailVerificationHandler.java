@@ -35,20 +35,21 @@ public class EmailVerificationHandler implements Handler {
 	private final SecurityTokenServiceClient tokenServiceClient;
 	private final CustomerRepository customerRepository;
 	private final MailClient mailClient;
-	private final ActiveVerificationCache emailTokenMap;
+	private final ActiveVerificationCache verificationMap;
 
 	@Inject
 	public EmailVerificationHandler(SecurityTokenServiceClient tokenServiceClient, CustomerRepository customerRepository, MailClient mailClient, ActiveVerificationCache emailTokenMap) {
 		this.tokenServiceClient = tokenServiceClient;
 		this.customerRepository = customerRepository;
 		this.mailClient = mailClient;
-		this.emailTokenMap = emailTokenMap;
+		this.verificationMap = emailTokenMap;
 	}
 
 	@Override
 	public void handle(Context ctx) throws Exception {
 
 		final String customerRef = ctx.getPathTokens().get("customerRef");
+		log.info("Map found " + System.lineSeparator() + verificationMap.getMapInfo());
 		
 		
 		if ("useradmin".equalsIgnoreCase(Authentication.getAuthenticatedUser().getUid().toString())) {
@@ -82,11 +83,12 @@ public class EmailVerificationHandler implements Handler {
 
 			String verificationLink = builder.toString();
 
-			log.debug("Verificationlink: " + verificationLink);
+			log.debug("added verificationlink: " + verificationLink);
 
+			verificationMap.addToken(email, generatedToken);
+			
 			mailClient.sendVerificationEmailViaWhydah(tokenServiceClient, email, verificationLink);
 
-			emailTokenMap.addToken(email, generatedToken);
 
 			//set pending status to true
 			Blocking.get(() -> customerRepository.getCustomer(customerRef)).then(customer -> {
@@ -103,10 +105,11 @@ public class EmailVerificationHandler implements Handler {
 			ctx.redirect(200, customerRef);
 			
 		} else {
-			String expectedToken = emailTokenMap.useToken(email);
-
+			String expectedToken = verificationMap.useToken(email);
+			log.debug("Found verification token {} for {}", expectedToken, email);
 			final boolean verified = (expectedToken != null && expectedToken.equals(token));
 			if (verified) {
+				log.debug("token {} matched", expectedToken);
 				Blocking.get(() -> customerRepository.getCustomer(customerRef)).then(customer -> {
 					Map<String, EmailAddress> emailaddresses = customer.getEmailaddresses();
 					Map<String, EmailAddress> emailList = new HashMap<>();
