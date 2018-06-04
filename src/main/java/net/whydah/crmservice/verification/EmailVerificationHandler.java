@@ -2,6 +2,8 @@ package net.whydah.crmservice.verification;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.google.inject.name.Named;
+
 import net.whydah.crmservice.customer.CustomerRepository;
 import net.whydah.crmservice.security.Authentication;
 import net.whydah.crmservice.util.MailClient;
@@ -35,21 +37,21 @@ public class EmailVerificationHandler implements Handler {
 	private final SecurityTokenServiceClient tokenServiceClient;
 	private final CustomerRepository customerRepository;
 	private final MailClient mailClient;
-	private final ActiveVerificationCache verificationMap;
+	//private final ActiveVerificationCache verificationMap;
 
 	@Inject
-	public EmailVerificationHandler(SecurityTokenServiceClient tokenServiceClient, CustomerRepository customerRepository, MailClient mailClient, ActiveVerificationCache emailTokenMap) {
+	public EmailVerificationHandler(SecurityTokenServiceClient tokenServiceClient, CustomerRepository customerRepository, MailClient mailClient, @Named("hazelcast.config")String hazelcastConfig, @Named("gridprefix") String gridPrefix) {
 		this.tokenServiceClient = tokenServiceClient;
 		this.customerRepository = customerRepository;
 		this.mailClient = mailClient;
-		this.verificationMap = emailTokenMap;
+		ActiveVerificationCache.init(hazelcastConfig, gridPrefix);
 	}
 
 	@Override
 	public void handle(Context ctx) throws Exception {
 
 		final String customerRef = ctx.getPathTokens().get("customerRef");
-		log.info("Map found " + System.lineSeparator() + verificationMap.getMapInfo());
+		log.info("Map found " + System.lineSeparator() + ActiveVerificationCache.getMapInfo());
 		
 		
 		if ("useradmin".equalsIgnoreCase(Authentication.getAuthenticatedUser().getUid().toString())) {
@@ -70,7 +72,7 @@ public class EmailVerificationHandler implements Handler {
 		final String linkurl = queryParams.get("linkurl");
 		final String userticket = queryParams.get("userticket");
 		
-		log.debug("Ready to send email verificationmail. email:{}, token:{}, linkurl:{} ", email, token, linkurl);
+		
 
 		if (token == null) {
 			//Send email verification token
@@ -85,7 +87,9 @@ public class EmailVerificationHandler implements Handler {
 
 			log.debug("added verificationlink: " + verificationLink);
 
-			verificationMap.addToken(email, generatedToken);
+			ActiveVerificationCache.addToken(email, generatedToken);
+			
+			log.debug("Ready to send email verificationmail. email:{}, token:{}, linkurl:{} ", email, token, linkurl);
 			
 			mailClient.sendVerificationEmailViaWhydah(tokenServiceClient, email, verificationLink);
 
@@ -105,7 +109,7 @@ public class EmailVerificationHandler implements Handler {
 			ctx.redirect(200, customerRef);
 			
 		} else {
-			String expectedToken = verificationMap.useToken(email);
+			String expectedToken = ActiveVerificationCache.useToken(email);
 			log.debug("Found verification token {} for {}", expectedToken, email);
 			final boolean verified = (expectedToken != null && expectedToken.equals(token));
 			if (verified) {

@@ -1,8 +1,18 @@
 package net.whydah.crmservice;
 
+import java.nio.file.Paths;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.codahale.metrics.MetricRegistry;
 import com.google.inject.Injector;
-import net.whydah.crmservice.customer.*;
+
+import net.whydah.crmservice.customer.CreateCustomerHandler;
+import net.whydah.crmservice.customer.CustomerModule;
+import net.whydah.crmservice.customer.DeleteCustomerHandler;
+import net.whydah.crmservice.customer.GetCustomerHandler;
+import net.whydah.crmservice.customer.UpdateCustomerHandler;
 import net.whydah.crmservice.health.GetHealthHandler;
 import net.whydah.crmservice.health.HealthModule;
 import net.whydah.crmservice.postgresql.PostgresModule;
@@ -16,13 +26,10 @@ import net.whydah.crmservice.util.MailModule;
 import net.whydah.crmservice.util.ReporterModule;
 import net.whydah.crmservice.util.SecurityTokenServiceModule;
 import net.whydah.crmservice.util.SmsModule;
-import net.whydah.crmservice.verification.ActiveVerificationCacheModule;
 import net.whydah.crmservice.verification.EmailVerificationHandler;
 import net.whydah.crmservice.verification.PhoneVerificationHandler;
 import no.cantara.ratpack.config.RatpackConfigs;
 import no.cantara.ratpack.config.RatpackGuiceConfigModule;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ratpack.dropwizard.metrics.DropwizardMetricsConfig;
 import ratpack.dropwizard.metrics.DropwizardMetricsModule;
 import ratpack.dropwizard.metrics.MetricsWebsocketBroadcastHandler;
@@ -36,8 +43,6 @@ import ratpack.handling.Handler;
 import ratpack.health.HealthCheckHandler;
 import ratpack.registry.Registry;
 import ratpack.server.RatpackServer;
-
-import java.nio.file.Paths;
 
 public class Main {
     private static final Logger log = LoggerFactory.getLogger(Main.class);
@@ -74,7 +79,7 @@ public class Main {
                 .module(SmsModule.class)
                 .module(MailModule.class)
                 .module(ReporterModule.class)
-                .module(ActiveVerificationCacheModule.class)
+               // .module(ActiveVerificationCacheModule.class)
                 .moduleConfig(DropwizardMetricsModule.class, new DropwizardMetricsConfig()
                                 .jmx(jmxConfig -> jmxConfig.enable(true))
                                 .jvmMetrics(true)

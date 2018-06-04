@@ -18,20 +18,20 @@ public class ActiveVerificationCache {
 
     private static final Logger log = LoggerFactory.getLogger(ActiveVerificationCache.class);
 
-    Map<String, String> userpinmap;
-    Map<String, String> emailTokenMap;
-    private String gridPrefix;
-    private String hazelcastConfigFilename;
+    static Map<String, String> userpinmap;
+    static Map<String, String> emailTokenMap;
+    //private static String gridPrefix;
+    //private static String hazelcastConfigFilename;
 
-    public ActiveVerificationCache(String hazelcastConfigFilename, String gridPrefix){
-        this.gridPrefix = gridPrefix;
-        this.hazelcastConfigFilename = hazelcastConfigFilename;
-        if (userpinmap == null || emailTokenMap == null) {
-            init();
-        }
-    }
+//    public ActiveVerificationCache(String hazelcastConfigFilename, String gridPrefix){
+//        this.gridPrefix = gridPrefix;
+//        this.hazelcastConfigFilename = hazelcastConfigFilename;
+//        if (userpinmap == null || emailTokenMap == null) {
+//            init();
+//        }
+//    }
 
-    public void init() {
+    public static void init(String hazelcastConfigFilename, String gridPrefix) {
     	
     	
     	String xmlFileName = hazelcastConfigFilename;
@@ -58,7 +58,7 @@ public class ActiveVerificationCache {
         
     }
 
-    public String getMapInfo() {
+    public static String getMapInfo() {
     	
     	StringBuilder sb = new StringBuilder();
         for(String key: emailTokenMap.keySet()) {
@@ -71,27 +71,27 @@ public class ActiveVerificationCache {
     }
 
 
-    public String addToken(String email, String token) {
+    public static String addToken(String email, String token) {
         return emailTokenMap.put(email.toLowerCase(), token);
     }
 
-    public boolean tokenExists(String email) {
+    public static boolean tokenExists(String email) {
         return emailTokenMap.containsKey(email.toLowerCase());
     }
 
-    public String useToken(String email) {
+    public static String useToken(String email) {
         return emailTokenMap.remove(email.toLowerCase());
     }
 
-    public String addPin(String phoneNo, String generatedPin) {
+    public static String addPin(String phoneNo, String generatedPin) {
         return userpinmap.put(phoneNo, generatedPin);
     }
 
-    public boolean pinExists(String phoneNo) {
+    public static boolean pinExists(String phoneNo) {
         return userpinmap.containsKey(phoneNo);
     }
 
-    public String usePin(String phoneNo) {
+    public static String usePin(String phoneNo) {
         return userpinmap.remove(phoneNo);
     }
 }

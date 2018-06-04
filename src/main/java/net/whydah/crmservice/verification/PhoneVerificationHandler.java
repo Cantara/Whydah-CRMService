@@ -2,6 +2,8 @@ package net.whydah.crmservice.verification;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.google.inject.name.Named;
+
 import net.whydah.crmservice.customer.CustomerRepository;
 import net.whydah.crmservice.security.Authentication;
 import net.whydah.crmservice.util.SmsGatewayClient;
@@ -25,13 +27,13 @@ public class PhoneVerificationHandler implements Handler {
     private final CustomerRepository customerRepository;
     private final SmsGatewayClient smsClient;
     private static java.util.Random generator = new java.util.Random();
-    private final ActiveVerificationCache userpinmap;
+    //private final ActiveVerificationCache userpinmap;
 
     @Inject
-    public PhoneVerificationHandler(CustomerRepository customerRepository, SmsGatewayClient smsClient, ActiveVerificationCache userpinmap) {
+    public PhoneVerificationHandler(CustomerRepository customerRepository, SmsGatewayClient smsClient, @Named("hazelcast.config")String hazelcastConfig, @Named("gridprefix") String gridPrefix) {
         this.customerRepository = customerRepository;
         this.smsClient = smsClient;
-        this.userpinmap = userpinmap;
+       // this.userpinmap = userpinmap;
     }
 
     @Override
@@ -65,14 +67,14 @@ public class PhoneVerificationHandler implements Handler {
                     smsClient.getUsername(), smsClient.getPassword(), smsClient.getQueryParam(), cellNo, generatedPin).execute();
             log.debug("Answer from smsgw: " + response);
 
-            userpinmap.addPin(phoneNo, generatedPin);
+            ActiveVerificationCache.addPin(phoneNo, generatedPin);
 
             ctx.redirect(200, customerRef);
 
         } else {
             //Verify pin against expected data
 
-            String expectedPin = userpinmap.usePin(phoneNo);
+            String expectedPin = ActiveVerificationCache.usePin(phoneNo);
 
             final boolean verified = (expectedPin != null && expectedPin.equals(pin));
 

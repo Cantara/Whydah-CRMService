@@ -7,11 +7,11 @@ import org.junit.Test;
 import static junit.framework.TestCase.*;
 
 public class ActiveVerificationCacheTest {
-    private static ActiveVerificationCache cache;
+    //private static ActiveVerificationCache cache;
 
     @BeforeClass
     public static void init() {
-        cache = new ActiveVerificationCache("hazelcast.xml", "LA8PV");
+        ActiveVerificationCache.init("hazelcast.xml", "LA8PV");
     }
 
     @Test
@@ -19,20 +19,20 @@ public class ActiveVerificationCacheTest {
         String email = "foo@@bar.com";
         String secretToken = "secret_token";
 
-        cache.addToken(email, secretToken);
+        ActiveVerificationCache.addToken(email, secretToken);
 
         // Verify upper- and lowercase
-        assertTrue(cache.tokenExists(email));
-        assertTrue(cache.tokenExists(email.toUpperCase()));
-        assertTrue(cache.tokenExists(email.toLowerCase()));
-        assertFalse(cache.tokenExists(email + email));
+        assertTrue(ActiveVerificationCache.tokenExists(email));
+        assertTrue(ActiveVerificationCache.tokenExists(email.toUpperCase()));
+        assertTrue(ActiveVerificationCache.tokenExists(email.toLowerCase()));
+        assertFalse(ActiveVerificationCache.tokenExists(email + email));
 
         // Use token - should also remove token
-        String token = cache.useToken(email);
+        String token = ActiveVerificationCache.useToken(email);
         assertEquals(secretToken, token);
 
         // Verify that token is removed
-        String nullToken = cache.useToken(email);
+        String nullToken = ActiveVerificationCache.useToken(email);
         assertNull(nullToken);
     }
 
@@ -41,18 +41,18 @@ public class ActiveVerificationCacheTest {
         String phoneNo = "99887766";
         String generetedPin = "4321";
 
-        String previousPin = cache.addPin(phoneNo, generetedPin);
+        String previousPin = ActiveVerificationCache.addPin(phoneNo, generetedPin);
         assertNull(previousPin);
 
         //Verify that pin exists
-        assertTrue(cache.pinExists(phoneNo));
+        assertTrue(ActiveVerificationCache.pinExists(phoneNo));
 
         // Use pin - should also remove pin
-        String pin = cache.usePin(phoneNo);
+        String pin = ActiveVerificationCache.usePin(phoneNo);
         assertEquals(generetedPin, pin);
 
         // Verify that pin is removed
-        String nullPin = cache.usePin(phoneNo);
+        String nullPin = ActiveVerificationCache.usePin(phoneNo);
         assertNull(nullPin);
     }
 }
