@@ -47,7 +47,7 @@ public class ActiveVerificationCache {
 		}
 		
 		//hazelcastConfig.setProperty("hazelcast.logging.type", "slf4j");
-		hazelcastConfig.setGroupConfig(new GroupConfig("CRM_SERVICE"));
+		
 		HazelcastInstance hazelcastInstance = Hazelcast.newHazelcastInstance(hazelcastConfig);		
 		
         userpinmap = hazelcastInstance.getMap(gridPrefix+"CRM_userpinmap");
