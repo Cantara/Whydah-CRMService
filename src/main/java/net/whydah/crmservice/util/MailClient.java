@@ -77,10 +77,11 @@ public class MailClient {
         }
     }
 
-    public void sendVerificationEmailViaWhydah(SecurityTokenServiceClient tokenServiceClient, String recipients, String verificationLink) {
+    public void sendVerificationEmailViaWhydah(SecurityTokenServiceClient tokenServiceClient, String recipients, String name, String verificationLink) {
         this.serviceClient = tokenServiceClient;
 
-        String body = String.format(bodyTemplate, verificationLink);
+        //String body = String.format(bodyTemplate, verificationLink);
+        String body = EmailBodyGenerator.generateVerificationLink(verificationLink, name);
 
         log.debug("Sending email to recipients={}, subject={}, body={}", recipients, subject, body);
 

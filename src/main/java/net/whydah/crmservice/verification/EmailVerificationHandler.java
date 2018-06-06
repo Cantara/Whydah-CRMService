@@ -75,25 +75,7 @@ public class EmailVerificationHandler implements Handler {
 		
 
 		if (token == null) {
-			//Send email verification token
-			String generatedToken = UUID.randomUUID().toString();
-
-			StringBuilder builder = new StringBuilder(linkurl).
-					append("?token=").append(generatedToken).
-					append("&email=").append(email).
-					append("&userticket=").append(userticket);
-
-			String verificationLink = builder.toString();
-
-			log.debug("added verificationlink: " + verificationLink);
-
-			ActiveVerificationCache.addToken(email, generatedToken);
 			
-			log.debug("Ready to send email verificationmail. email:{}, token:{}, linkurl:{} ", email, token, linkurl);
-			
-			mailClient.sendVerificationEmailViaWhydah(tokenServiceClient, email, verificationLink);
-
-
 			//set pending status to true
 			Blocking.get(() -> customerRepository.getCustomer(customerRef)).then(customer -> {
 				Map<String, EmailAddress> emailaddresses = customer.getEmailaddresses();
@@ -103,6 +85,29 @@ public class EmailVerificationHandler implements Handler {
 						emailAddress.setTags(TagsParser.addTag(emailAddress.getTags(), "registrationTime", System.currentTimeMillis()));
 					}
 				}
+				
+				//Send email verification token
+				String generatedToken = UUID.randomUUID().toString();
+
+				StringBuilder builder = new StringBuilder(linkurl).
+						append("?token=").append(generatedToken).
+						append("&email=").append(email).
+						append("&userticket=").append(userticket);
+
+				String verificationLink = builder.toString();
+
+				log.debug("added verificationlink: " + verificationLink);
+
+				ActiveVerificationCache.addToken(email, generatedToken);
+				
+				log.debug("Ready to send email verificationmail. email:{}, token:{}, linkurl:{} ", email, token, linkurl);
+				
+				String fullName = (customer.getFirstname()!=null?customer.getFirstname() + " ":"")+
+				(customer.getMiddlename()!=null?customer.getMiddlename()+ " ":"")+
+				(customer.getLastname()!=null?customer.getLastname():"");
+				
+				mailClient.sendVerificationEmailViaWhydah(tokenServiceClient, email, fullName, verificationLink);
+				
 				customerRepository.updateCustomer(customerRef, customer);
 			});
 			
