@@ -3,6 +3,7 @@
                                http://www.hazelcast.com/schema/config/hazelcast-config-3.5.xsd"
            xmlns="http://www.hazelcast.com/schema/config">
     <network>
+    	
         <join>
             <!--  default configuration = hazelcast = OFF -->
             <multicast enabled="false">

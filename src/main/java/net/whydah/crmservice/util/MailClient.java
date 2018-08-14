@@ -4,11 +4,15 @@ import net.whydah.sso.commands.extras.CommandSendScheduledMail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.net.URI;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Properties;
 
 public class MailClient {
@@ -79,15 +83,18 @@ public class MailClient {
 
     public void sendVerificationEmailViaWhydah(SecurityTokenServiceClient tokenServiceClient, String recipients, String name, String verificationLink) {
         this.serviceClient = tokenServiceClient;
-
-        //String body = String.format(bodyTemplate, verificationLink);
-        String body = EmailBodyGenerator.generateVerificationLink(verificationLink, name);
-
-        log.debug("Sending email to recipients={}, subject={}, body={}", recipients, subject, body);
-
         try {
+        	//String body = EmailBodyGenerator.generateVerificationLink(verificationLink, name);
+        	HashMap<String, String> model = new HashMap<>();
+        	model.put("name", name);
+        	model.put("url", verificationLink);
+        	ObjectMapper mapper = new ObjectMapper();
+        	String params = mapper.writeValueAsString(model);
+        	String templateName = "EmailVerification.ftl";
             long timestamp = new Date().getTime() + 8 * 1000;   // send mail after 8 seconds
-            new CommandSendScheduledMail(URI.create(uasUrl), serviceClient.getMyAppTokenID(), Long.toString(timestamp), recipients, subject, body).queue();
+            log.debug("Sending email to recipients={}", recipients);
+
+            new CommandSendScheduledMail(URI.create(uasUrl), serviceClient.getMyAppTokenID(), Long.toString(timestamp), recipients, "", templateName, params, 0).queue();
             log.info("Sent email to " + recipients);
         } catch (Exception e) {
             log.warn("Failed to send mail due to missconfiguration? Reason {}", e.getCause().getMessage());

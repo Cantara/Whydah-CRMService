@@ -1,5 +1,6 @@
 package net.whydah.crmservice;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.whydah.sso.extensions.crmcustomer.types.Customer;
 import net.whydah.sso.extensions.crmcustomer.types.DeliveryAddress;
@@ -16,7 +17,19 @@ public class JsonSerializationTest {
 
     private static final ObjectMapper mapper = new ObjectMapper();
 
-
+    @Test
+    public void test() {
+    	HashMap<String, String> model = new HashMap<>();
+		model.put("name", "abc");
+		model.put("url", "http://google.com");
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+			System.out.println(mapper.writeValueAsString(model));
+		} catch (JsonProcessingException e1) {
+			
+		}
+    }
+    
     @Test
     public void createExampleCustomerAndCheckJson() throws Exception {
         Customer customer = new Customer();
