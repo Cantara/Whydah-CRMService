@@ -22,7 +22,7 @@
 
     <properties>
         <service.name>Whydah-CRMService</service.name>
-        <whydah.sdk.version>2.4.76</whydah.sdk.version>
+        <whydah.sdk.version>2.5</whydah.sdk.version>
         <slf4j.version>1.7.13</slf4j.version>
         <ratpack.version>1.5.4</ratpack.version>
     </properties>
