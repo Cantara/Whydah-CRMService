@@ -1,46 +1,45 @@
 package net.whydah.crmservice.verification;
 
-import com.google.inject.Singleton;
 import com.hazelcast.config.Config;
-import com.hazelcast.config.GroupConfig;
-import com.hazelcast.config.NetworkConfig;
 import com.hazelcast.config.XmlConfigBuilder;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import net.whydah.crmservice.configuration.HazelcastConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ratpack.service.Service;
+import ratpack.service.StartEvent;
+import ratpack.service.StopEvent;
 
 import java.io.FileNotFoundException;
 import java.util.Map;
 
-@Singleton
-public class ActiveVerificationCache {
+public class ActiveVerificationCache implements Service {
 
     private static final Logger log = LoggerFactory.getLogger(ActiveVerificationCache.class);
 
     static Map<String, String> userpinmap;
     static Map<String, String> emailTokenMap;
-    //private static String gridPrefix;
-    //private static String hazelcastConfigFilename;
 
-//    public ActiveVerificationCache(String hazelcastConfigFilename, String gridPrefix){
-//        this.gridPrefix = gridPrefix;
-//        this.hazelcastConfigFilename = hazelcastConfigFilename;
-//        if (userpinmap == null || emailTokenMap == null) {
-//            init();
-//        }
-//    }
+
+    public void onStart(StartEvent event) {
+        HazelcastConfig hazelcastConfig = event.getRegistry().get(HazelcastConfig.class);
+        log.info("Executing onStart of ActiveVerificationCache");
+        ActiveVerificationCache.init(hazelcastConfig.getFilename(), hazelcastConfig.getGridprefix());
+    }
+
+    public void onStop(StopEvent event) {
+    }
 
     public static void init(String hazelcastConfigFilename, String gridPrefix) {
-    	
-    	
-    	String xmlFileName = hazelcastConfigFilename;
-		log.info("Loading hazelcast configuration from :" + xmlFileName);
+
+
+        log.info("Loading hazelcast configuration from :" + hazelcastConfigFilename);
 		Config hazelcastConfig = new Config();
-		if (xmlFileName != null && xmlFileName.length() > 10) {
+		if (hazelcastConfigFilename != null && hazelcastConfigFilename.length() > 10) {
 			try {
-				hazelcastConfig = new XmlConfigBuilder(xmlFileName).build();
-				log.info("Loading hazelcast configuration from :" + xmlFileName);
+				hazelcastConfig = new XmlConfigBuilder(hazelcastConfigFilename).build();
+				log.info("Loading hazelcast configuration from :" + hazelcastConfigFilename);
 			} catch (FileNotFoundException notFound) {
 				log.error("Error - not able to load hazelcast.xml configuration.  Using embedded configuration as fallback");
 			}

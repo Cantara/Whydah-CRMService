@@ -2,8 +2,6 @@ package net.whydah.crmservice.verification;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.google.inject.name.Named;
-
 import net.whydah.crmservice.customer.CustomerRepository;
 import net.whydah.crmservice.security.Authentication;
 import net.whydah.crmservice.util.MailClient;
@@ -11,10 +9,8 @@ import net.whydah.crmservice.util.SecurityTokenServiceClient;
 import net.whydah.sso.extensions.crmcustomer.types.DeliveryAddress;
 import net.whydah.sso.extensions.crmcustomer.types.EmailAddress;
 import net.whydah.sso.user.helpers.TagsParser;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ratpack.exec.Blocking;
@@ -22,10 +18,7 @@ import ratpack.handling.Context;
 import ratpack.handling.Handler;
 import ratpack.util.MultiValueMap;
 
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -40,11 +33,10 @@ public class EmailVerificationHandler implements Handler {
 	//private final ActiveVerificationCache verificationMap;
 
 	@Inject
-	public EmailVerificationHandler(SecurityTokenServiceClient tokenServiceClient, CustomerRepository customerRepository, MailClient mailClient, @Named("hazelcast.config")String hazelcastConfig, @Named("gridprefix") String gridPrefix) {
+	public EmailVerificationHandler(SecurityTokenServiceClient tokenServiceClient, CustomerRepository customerRepository, MailClient mailClient) {
 		this.tokenServiceClient = tokenServiceClient;
 		this.customerRepository = customerRepository;
 		this.mailClient = mailClient;
-		ActiveVerificationCache.init(hazelcastConfig, gridPrefix);
 	}
 
 	@Override

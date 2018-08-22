@@ -2,6 +2,8 @@ package net.whydah.crmservice;
 
 import java.nio.file.Paths;
 
+import net.whydah.crmservice.configuration.HazelcastConfig;
+import net.whydah.crmservice.verification.ActiveVerificationCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,6 +45,8 @@ import ratpack.handling.Handler;
 import ratpack.health.HealthCheckHandler;
 import ratpack.registry.Registry;
 import ratpack.server.RatpackServer;
+import ratpack.server.ServerConfig;
+import ratpack.server.ServerConfigBuilder;
 
 public class Main {
     private static final Logger log = LoggerFactory.getLogger(Main.class);
@@ -53,21 +57,28 @@ public class Main {
     public static final String DEFAULT_CONFIGURATION_RESOURCE_PATH = "appconfig/crmservice.properties";
     public static final String OVERRIDE_CONFIGURATION_FILE_PATH = "crmservice.properties";
 
+    private ServerConfig serverConfig;
+
     public static void main(String... args) throws Exception {
         new Main().start();
     }
 
     public void start() throws Exception {
 
+        Action<ServerConfigBuilder> configurationBuilder = RatpackConfigs
+                .configuration(APPLICATION_NAME, HTTP_PORT, DEFAULT_CONFIGURATION_RESOURCE_PATH, OVERRIDE_CONFIGURATION_FILE_PATH);
+
+        serverConfig = ServerConfig.of(configurationBuilder);
 
 
-        RatpackServer.start(server -> server
-                .serverConfig(RatpackConfigs.configuration(APPLICATION_NAME, HTTP_PORT, DEFAULT_CONFIGURATION_RESOURCE_PATH, OVERRIDE_CONFIGURATION_FILE_PATH))
+        RatpackServer ratpackServer = RatpackServer.of(server -> server
+                .serverConfig(serverConfig)
                 .registry(registry())
                 .handlers(rootChain(CONTEXT_ROOT))
         );
-    }
 
+        ratpackServer.start();
+    }
     private Function<Registry, Registry> registry() {
         return Guice.registry(bindings -> bindings
                 .module(new RatpackGuiceConfigModule(bindings.getServerConfig()))
@@ -87,6 +98,8 @@ public class Main {
                                 })
                 )
                 .bind(ClientErrorHandler.class, DefaultDevelopmentErrorHandler.class)
+                .bind(ActiveVerificationCache.class)
+                .bindInstance(HazelcastConfig.class, serverConfig.get("/hazelcast", HazelcastConfig.class))
         );
     }
 
