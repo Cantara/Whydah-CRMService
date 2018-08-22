@@ -46,7 +46,7 @@ public class ActiveVerificationCache {
 			}
 		}
 		
-		//hazelcastConfig.setProperty("hazelcast.logging.type", "slf4j");
+		hazelcastConfig.setProperty("hazelcast.logging.type", "slf4j");
 		
 		HazelcastInstance hazelcastInstance = Hazelcast.newHazelcastInstance(hazelcastConfig);		
 		

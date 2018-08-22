@@ -22,6 +22,7 @@
 
   <logger name="net.whydah.crmservice" level="TRACE" />
   <logger name="net.whydah.sso.application.helpers" level="INFO"/>
+  <logger name="com.hazelcast" level="INFO"/>
 
 
   <root level="TRACE">
