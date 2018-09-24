@@ -2,8 +2,16 @@ package net.whydah.crmservice;
 
 import java.nio.file.Paths;
 
+import javax.sql.DataSource;
+
 import net.whydah.crmservice.configuration.HazelcastConfig;
 import net.whydah.crmservice.verification.ActiveVerificationCache;
+
+import org.constretto.ConstrettoBuilder;
+import org.constretto.ConstrettoConfiguration;
+import org.constretto.model.Resource;
+import org.flywaydb.core.internal.resolver.MigrationInfoHelper;
+import org.postgresql.ds.PGSimpleDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +32,7 @@ import net.whydah.crmservice.profilepicture.GetProfileImageHandler;
 import net.whydah.crmservice.profilepicture.UpdateProfileImageHandler;
 import net.whydah.crmservice.security.SecurityHandler;
 import net.whydah.crmservice.security.SecurityModule;
+import net.whydah.crmservice.util.DatabaseMigrationHelper;
 import net.whydah.crmservice.util.MailModule;
 import net.whydah.crmservice.util.ReporterModule;
 import net.whydah.crmservice.util.SecurityTokenServiceModule;
@@ -67,10 +76,11 @@ public class Main {
 
         Action<ServerConfigBuilder> configurationBuilder = RatpackConfigs
                 .configuration(APPLICATION_NAME, HTTP_PORT, DEFAULT_CONFIGURATION_RESOURCE_PATH, OVERRIDE_CONFIGURATION_FILE_PATH);
-
+        
         serverConfig = ServerConfig.of(configurationBuilder);
-
-
+       
+        migrateDb();
+        
         RatpackServer ratpackServer = RatpackServer.of(server -> server
                 .serverConfig(serverConfig)
                 .registry(registry())
@@ -79,7 +89,48 @@ public class Main {
 
         ratpackServer.start();
     }
-    private Function<Registry, Registry> registry() {
+    
+    public void migrateDb() {
+    	 final ConstrettoConfiguration configuration = new ConstrettoBuilder()
+                 .createPropertiesStore()
+                 .addResource(Resource.create("classpath:appconfig/crmservice.properties"))
+                 .addResource(Resource.create("file:./crmservice.properties"))
+                 .done()
+                 .getConfiguration();
+
+    	
+         
+         migrateDb(configuration.evaluateToString("postgres.server"),
+        		 configuration.evaluateToInt("postgres.port"), 
+        		 configuration.evaluateToString("postgres.db"), 
+        		 configuration.evaluateToString("postgres.user"), 
+        		 configuration.evaluateToString("postgres.password"));
+    	 
+		
+	}
+    
+    public void migrateDb(String server, int port, String db, String user, String pwd) {
+   	 final ConstrettoConfiguration configuration = new ConstrettoBuilder()
+                .createPropertiesStore()
+                .addResource(Resource.create("classpath:appconfig/crmservice.properties"))
+                .addResource(Resource.create("file:./crmservice.properties"))
+                .done()
+                .getConfiguration();
+
+   	 PGSimpleDataSource dataSource = new PGSimpleDataSource();       
+        dataSource.setServerName(server);
+        dataSource.setPortNumber(port);
+        dataSource.setDatabaseName(db);
+        dataSource.setUser(user);
+        dataSource.setPassword(pwd);
+        
+        DatabaseMigrationHelper dbmh = new DatabaseMigrationHelper(dataSource, "db/migration/postgresql");
+        dbmh.upgradeDatabase();
+   	 
+		
+	}
+
+	private Function<Registry, Registry> registry() {
         return Guice.registry(bindings -> bindings
                 .module(new RatpackGuiceConfigModule(bindings.getServerConfig()))
                 .module(PostgresModule.class)
