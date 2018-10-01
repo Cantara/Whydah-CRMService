@@ -92,7 +92,7 @@
             <artifactId>Whydah-Java-SDK</artifactId>
             <version>${whydah.sdk.version}</version>
         </dependency>
-		<dependency>
+        <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
             <version>3.2.1</version>
@@ -103,16 +103,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        
-        <!-- embedded postgresql for testing.-->
-        <!-- https://mvnrepository.com/artifact/ru.yandex.qatools.embed/postgresql-embedded -->
-		<dependency>
-		    <groupId>ru.yandex.qatools.embed</groupId>
-		    <artifactId>postgresql-embedded</artifactId>
-		    <version>2.9</version>
-		    <scope>test</scope>
-		</dependency>
-        
+
         <dependency>
             <groupId>org.constretto</groupId>
             <artifactId>constretto-spring</artifactId>
@@ -171,7 +162,7 @@
             <version>2.9.5</version>
         </dependency>
 
-		<dependency>
+        <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20090211</version>
@@ -438,7 +429,22 @@
             <version>1.2.3</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.23</version>
+        </dependency>
 
+
+        <!-- TEST dependencies below -->
+
+        <!-- embedded postgresql for testing.-->
+        <dependency>
+            <groupId>ru.yandex.qatools.embed</groupId>
+            <artifactId>postgresql-embedded</artifactId>
+            <version>2.9</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>io.ratpack</groupId>
             <artifactId>ratpack-test</artifactId>
@@ -451,30 +457,11 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.freemarker</groupId>
-            <artifactId>freemarker</artifactId>
-            <version>2.3.23</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-compress -->
-		<dependency>
-		    <groupId>org.apache.commons</groupId>
-		    <artifactId>commons-compress</artifactId>
-		    <version>1.18</version>
-		</dependency>
-		        
     </dependencies>
 
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <configuration>
-                    <mainClass>net.whydah.crmservice.Main</mainClass>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -592,12 +579,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <descriptors>
-                        <descriptor>src/main/assembly/assembly.xml</descriptor>
-                    </descriptors>
-                    <appendAssemblyId>false</appendAssemblyId>
-                </configuration>
+                <version>2.5.3</version>
                 <executions>
                     <execution>
                         <id>assemble-zip</id>
@@ -605,42 +587,35 @@
                         <goals>
                             <goal>single</goal>
                         </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>src/main/assembly/assembly.xml</descriptor>
+                            </descriptors>
+                            <appendAssemblyId>false</appendAssemblyId>
+                        </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.5.3</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.codehaus.plexus</groupId>
                         <artifactId>plexus-archiver</artifactId>
                         <version>2.10-beta-1</version>
+                        <scope>compile</scope>
                     </dependency>
                     <dependency>
                         <groupId>org.codehaus.plexus</groupId>
                         <artifactId>plexus-io</artifactId>
                         <version>2.4.1</version>
+                        <scope>compile</scope>
                     </dependency>
                 </dependencies>
-            </plugin>
-            <!--
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
                     <descriptors>
-                        <descriptor>src/main/assembly/winservice.xml</descriptor>
+                        <descriptor>src/main/assembly/assembly.xml</descriptor>
                     </descriptors>
+                    <appendAssemblyId>false</appendAssemblyId>
                 </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals><goal>single</goal></goals>
-                    </execution>
-                </executions>
             </plugin>
-            -->
         </plugins>
     </build>
 </project>

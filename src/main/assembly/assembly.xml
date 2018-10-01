@@ -11,30 +11,30 @@
     <fileSets>
         <fileSet>
             <directory>${project.build.directory}/jsw/${project.name}</directory>
-            <outputDirectory>/</outputDirectory>
+            <outputDirectory/>
         </fileSet>
 
         <fileSet>
             <directory>src/main/assembly/config_override</directory>
-            <outputDirectory>/config_override</outputDirectory>
+            <outputDirectory>config_override</outputDirectory>
         </fileSet>
 
 
         <!-- config_examples -->
         <fileSet>
             <directory>dist/config</directory>
-            <outputDirectory>/config_examples</outputDirectory>
+            <outputDirectory>config_examples</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>src/main/resources</directory>
-            <outputDirectory>/config_examples</outputDirectory>
+            <outputDirectory>config_examples</outputDirectory>
             <includes>
                 <include>*.properties</include>
             </includes>
         </fileSet>
         <fileSet>
             <directory>src/main/assembly/config_override</directory>
-            <outputDirectory>/config_examples</outputDirectory>
+            <outputDirectory>config_examples</outputDirectory>
             <includes>
                 <include>logback.xml</include>
             </includes>
