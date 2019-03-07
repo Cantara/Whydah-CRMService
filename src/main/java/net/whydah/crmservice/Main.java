@@ -1,28 +1,9 @@
 package net.whydah.crmservice;
 
-import java.nio.file.Paths;
-
-import javax.sql.DataSource;
-
-import net.whydah.crmservice.configuration.HazelcastConfig;
-import net.whydah.crmservice.verification.ActiveVerificationCache;
-
-import org.constretto.ConstrettoBuilder;
-import org.constretto.ConstrettoConfiguration;
-import org.constretto.model.Resource;
-import org.flywaydb.core.internal.resolver.MigrationInfoHelper;
-import org.postgresql.ds.PGSimpleDataSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.codahale.metrics.MetricRegistry;
 import com.google.inject.Injector;
-
-import net.whydah.crmservice.customer.CreateCustomerHandler;
-import net.whydah.crmservice.customer.CustomerModule;
-import net.whydah.crmservice.customer.DeleteCustomerHandler;
-import net.whydah.crmservice.customer.GetCustomerHandler;
-import net.whydah.crmservice.customer.UpdateCustomerHandler;
+import net.whydah.crmservice.configuration.HazelcastConfig;
+import net.whydah.crmservice.customer.*;
 import net.whydah.crmservice.health.GetHealthHandler;
 import net.whydah.crmservice.health.HealthModule;
 import net.whydah.crmservice.postgresql.PostgresModule;
@@ -32,15 +13,18 @@ import net.whydah.crmservice.profilepicture.GetProfileImageHandler;
 import net.whydah.crmservice.profilepicture.UpdateProfileImageHandler;
 import net.whydah.crmservice.security.SecurityHandler;
 import net.whydah.crmservice.security.SecurityModule;
-import net.whydah.crmservice.util.DatabaseMigrationHelper;
-import net.whydah.crmservice.util.MailModule;
-import net.whydah.crmservice.util.ReporterModule;
-import net.whydah.crmservice.util.SecurityTokenServiceModule;
-import net.whydah.crmservice.util.SmsModule;
+import net.whydah.crmservice.util.*;
+import net.whydah.crmservice.verification.ActiveVerificationCache;
 import net.whydah.crmservice.verification.EmailVerificationHandler;
 import net.whydah.crmservice.verification.PhoneVerificationHandler;
 import no.cantara.ratpack.config.RatpackConfigs;
 import no.cantara.ratpack.config.RatpackGuiceConfigModule;
+import org.constretto.ConstrettoBuilder;
+import org.constretto.ConstrettoConfiguration;
+import org.constretto.model.Resource;
+import org.postgresql.ds.PGSimpleDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ratpack.dropwizard.metrics.DropwizardMetricsConfig;
 import ratpack.dropwizard.metrics.DropwizardMetricsModule;
 import ratpack.dropwizard.metrics.MetricsWebsocketBroadcastHandler;
@@ -56,6 +40,10 @@ import ratpack.registry.Registry;
 import ratpack.server.RatpackServer;
 import ratpack.server.ServerConfig;
 import ratpack.server.ServerConfigBuilder;
+
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Main {
     private static final Logger log = LoggerFactory.getLogger(Main.class);
@@ -76,11 +64,11 @@ public class Main {
 
         Action<ServerConfigBuilder> configurationBuilder = RatpackConfigs
                 .configuration(APPLICATION_NAME, HTTP_PORT, DEFAULT_CONFIGURATION_RESOURCE_PATH, OVERRIDE_CONFIGURATION_FILE_PATH);
-        
+
         serverConfig = ServerConfig.of(configurationBuilder);
-       
+
         migrateDb();
-        
+
         RatpackServer ratpackServer = RatpackServer.of(server -> server
                 .serverConfig(serverConfig)
                 .registry(registry())
@@ -89,46 +77,43 @@ public class Main {
 
         ratpackServer.start();
     }
-    
+
     public void migrateDb() {
     	 final ConstrettoConfiguration configuration = new ConstrettoBuilder()
                  .createPropertiesStore()
-                 .addResource(Resource.create("classpath:appconfig/crmservice.properties"))
-                 .addResource(Resource.create("file:./crmservice.properties"))
+                 .addResource(Resource.create("classpath:" + DEFAULT_CONFIGURATION_RESOURCE_PATH))
+                 .addResource(Resource.create("file:./" + OVERRIDE_CONFIGURATION_FILE_PATH))
                  .done()
                  .getConfiguration();
 
-    	
-         
-         migrateDb(configuration.evaluateToString("postgres.server"),
-        		 configuration.evaluateToInt("postgres.port"), 
-        		 configuration.evaluateToString("postgres.db"), 
-        		 configuration.evaluateToString("postgres.user"), 
-        		 configuration.evaluateToString("postgres.password"));
-    	 
-		
-	}
-    
-    public void migrateDb(String server, int port, String db, String user, String pwd) {
-   	 final ConstrettoConfiguration configuration = new ConstrettoBuilder()
-                .createPropertiesStore()
-                .addResource(Resource.create("classpath:appconfig/crmservice.properties"))
-                .addResource(Resource.create("file:./crmservice.properties"))
-                .done()
-                .getConfiguration();
 
-   	 PGSimpleDataSource dataSource = new PGSimpleDataSource();       
+
+         migrateDb(configuration.evaluateToString("postgres.server"),
+        		 configuration.evaluateToInt("postgres.port"),
+        		 configuration.evaluateToString("postgres.db"),
+        		 configuration.evaluateToString("postgres.user"),
+        		 configuration.evaluateToString("postgres.password"));
+
+
+	}
+
+    public void migrateDb(String server, int port, String db, String user, String pwd) {
+        PGSimpleDataSource dataSource = new PGSimpleDataSource();
         dataSource.setServerName(server);
         dataSource.setPortNumber(port);
         dataSource.setDatabaseName(db);
         dataSource.setUser(user);
         dataSource.setPassword(pwd);
-        
-        DatabaseMigrationHelper dbmh = new DatabaseMigrationHelper(dataSource, "db/migration/postgresql");
-        dbmh.upgradeDatabase();
-   	 
-		
-	}
+
+        Map<String, String> placeholders = new HashMap<>();
+        placeholders.put("username", user);
+
+        DatabaseMigrationHelper migrationHelper = new DatabaseMigrationHelper(
+                dataSource, "db/migration/postgresql", placeholders);
+        migrationHelper.upgradeDatabase();
+
+
+    }
 
 	private Function<Registry, Registry> registry() {
         return Guice.registry(bindings -> bindings

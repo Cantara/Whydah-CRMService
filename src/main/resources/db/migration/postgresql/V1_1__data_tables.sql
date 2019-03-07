@@ -10,5 +10,5 @@ CREATE TABLE IF NOT EXISTS profileimages (
    contenttype    CHAR(256)
 );
 
-GRANT ALL ON customers TO crmadmin;
-GRANT ALL ON profileimages TO crmadmin;
+GRANT ALL ON customers TO ${username};
+GRANT ALL ON profileimages TO ${username};

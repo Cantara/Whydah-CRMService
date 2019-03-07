@@ -7,6 +7,8 @@ import org.flywaydb.core.api.FlywayException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Map;
+
 /**
  * Ensure database has the necessary DDL and all migrations have been applied.
  *
@@ -16,23 +18,23 @@ public class DatabaseMigrationHelper {
     private static final Logger log = LoggerFactory.getLogger(DatabaseMigrationHelper.class);
 
     private Flyway flyway;
-    private String dbUrl;
 
-    public DatabaseMigrationHelper(DataSource dataSource, String location) {
+    public DatabaseMigrationHelper(DataSource dataSource, String location, Map<String, String> placeholders) {
         flyway = new Flyway();
         flyway.setDataSource(dataSource);
         flyway.setLocations(location);
+        flyway.setPlaceholders(placeholders);
         //flyway.setBaselineOnMigrate(true);
     }
 
 
     public void upgradeDatabase() {
-        log.info("Upgrading database with url={} using migration files from {}", dbUrl, flyway.getLocations());
+        log.info("Upgrading database using migration files from {}", flyway.getLocations());
         try {
             flyway.migrate();
         } catch (FlywayException e) {
-            log.error("Database upgrade failed using " + dbUrl, e);
-//            throw new RuntimeException("Database upgrade failed using " + dbUrl, e);
+            log.error("Database migration failed", e);
+           // throw new RuntimeException("Database upgrade failed using " + dbUrl, e);
         }
     }
 
