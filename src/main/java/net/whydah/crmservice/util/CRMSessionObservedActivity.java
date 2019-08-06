@@ -1,6 +1,6 @@
 package net.whydah.crmservice.util;
 
-import org.valuereporter.agent.activity.ObservedActivity;
+import org.valuereporter.activity.ObservedActivity;
 
 public class CRMSessionObservedActivity extends ObservedActivity {
     public static final String USER_SESSION_ACTIVITY = "crmSession";
