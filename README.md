@@ -2,7 +2,7 @@
 
 
 
-![Build Status](https://jenkins.quadim.ai/buildStatus/icon?job=Whydah-CRMService) [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)  [![Known Vulnerabilities](https://snyk.io/test/github/Cantara/Whydah-CRMService/badge.svg)](https://snyk.io/test/github/Cantara/Whydah-CRMService)
+![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/Cantara/Whydah-CRMService) ![Build Status](https://jenkins.quadim.ai/buildStatus/icon?job=Whydah-CRMService) [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)  [![Known Vulnerabilities](https://snyk.io/test/github/Cantara/Whydah-CRMService/badge.svg)](https://snyk.io/test/github/Cantara/Whydah-CRMService)
 
 A Whydah CRM API with simple standalone persistent customer implementation 
 
