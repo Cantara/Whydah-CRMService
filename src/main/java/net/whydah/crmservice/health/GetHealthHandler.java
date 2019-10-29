@@ -16,6 +16,8 @@ import java.net.URL;
 import java.time.Instant;
 import java.util.Properties;
 
+import static ratpack.jackson.Jackson.json;
+
 @Singleton
 public class GetHealthHandler implements Handler {
     private static final Logger log = LoggerFactory.getLogger(GetHealthHandler.class);
@@ -33,7 +35,7 @@ public class GetHealthHandler implements Handler {
     @Override
     public void handle(Context ctx) throws Exception {
 
-        ctx.render(getHealthTextJson());
+        ctx.render(json(getHealthTextJson()));
     }
 
     public String getHealthTextJson() {
@@ -54,7 +56,7 @@ public class GetHealthHandler implements Handler {
                     "  \"hasValidApplicationToken\": \"" + Boolean.toString(hasValidApplicationToken) + "\"\n" +
                     "  \"hasApplicationsMetadata\": \"" + Boolean.toString(hasApplicationsMetadata) + "\"\n" +
                     "  \"now\": \"" + Instant.now() + "\",\n" +
-                    "  \"running since\": \"" + WhydahUtil.getRunningSince() + "\"," +
+                    "  \"running since\": \"" + WhydahUtil.getRunningSince()  +
 
 
                     "}\n";
