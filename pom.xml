@@ -331,6 +331,10 @@
             <version>${ratpack.version}</version>
             <exclusions>
                 <exclusion>
+                   <groupId>org.yaml</groupId>
+                   <artifactId>snakeyaml</artifactId>
+                </exclusion>
+                <exclusion>
                     <groupId>com.fasterxml.jackson.core</groupId>
                     <artifactId>jackson-databind</artifactId>
                 </exclusion>
