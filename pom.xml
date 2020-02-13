@@ -181,12 +181,12 @@
         </dependency>
         
         <!-- https://mvnrepository.com/artifact/org.yaml/snakeyaml -->
-        <dependency>
+       <!-- <dependency>
            <groupId>org.yaml</groupId>
            <artifactId>snakeyaml</artifactId>
            <version>1.25</version>
         </dependency>
-
+-->
         <dependency>
             <groupId>no.cantara</groupId>
             <artifactId>ratpack-guice-config</artifactId>
