@@ -49,7 +49,7 @@ public class GetHealthHandler implements Handler {
             return "{\n" +
                     "  \"Status\": \"OK\",\n" +
                     "  \"Version\": \"" + getVersion() + "\",\n" +
-                    "  \"DEFCON\": \"" + DEFCON + "\"\n" +
+                    "  \"DEFCON\": \"" + DEFCON + "\",\n" +
                     "  \"hasApplicationToken\": \"" + Boolean.toString(hasApplicationToken) + "\",\n" +
                     "  \"hasValidApplicationToken\": \"" + Boolean.toString(hasValidApplicationToken) + "\",\n" +
                     "  \"hasApplicationsMetadata\": \"" + Boolean.toString(hasApplicationsMetadata) + "\",\n" +
