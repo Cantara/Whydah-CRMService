@@ -16,8 +16,6 @@ import java.net.URL;
 import java.time.Instant;
 import java.util.Properties;
 
-import static ratpack.jackson.Jackson.json;
-
 @Singleton
 public class GetHealthHandler implements Handler {
     private static final Logger log = LoggerFactory.getLogger(GetHealthHandler.class);
@@ -35,7 +33,7 @@ public class GetHealthHandler implements Handler {
     @Override
     public void handle(Context ctx) throws Exception {
 
-        ctx.render(json(getHealthTextJson()));
+        ctx.render(getHealthTextJson());
     }
 
     public String getHealthTextJson() {
