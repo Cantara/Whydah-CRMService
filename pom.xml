@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.whydah.service</groupId>
     <artifactId>Whydah-CRMService</artifactId>
-    <version>2.5.57-SNAPSHOT</version>
+    <version>2.5.57</version>
     <name>Whydah-CRMService</name>
     <packaging>jar</packaging>
     <url>https://wiki.cantara.no/display/iam/Whydah-CRMService</url>
@@ -18,7 +18,7 @@
         <connection>scm:git:https://github.com/cantara/Whydah-CRMService.git</connection>
         <url>https://github.com/cantara/Whydah-CRMService</url>
         
-      <tag>HEAD</tag>
+      <tag>Whydah-CRMService-2.5.57</tag>
   </scm>
 
     <properties>
