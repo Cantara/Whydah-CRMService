@@ -1,12 +1,11 @@
 package net.whydah.crmservice.util;
 
-import javax.sql.DataSource;
-
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.FlywayException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.sql.DataSource;
 import java.util.Map;
 
 /**
@@ -20,16 +19,23 @@ public class DatabaseMigrationHelper {
     private Flyway flyway;
 
     public DatabaseMigrationHelper(DataSource dataSource, String location, Map<String, String> placeholders) {
-        flyway = new Flyway();
-        flyway.setDataSource(dataSource);
-        flyway.setLocations(location);
-        flyway.setPlaceholders(placeholders);
+        flyway = Flyway.configure()
+                //.validateOnMigrate(false)
+                //.baselineOnMigrate(true)
+                .placeholders(placeholders)
+                .locations(location)
+                .dataSource(dataSource).load();
+
+//        flyway = new Flyway();
+//        flyway.setDataSource(dataSource);
+//        flyway.setLocations(location);
+//        flyway.setPlaceholders(placeholders);
         //flyway.setBaselineOnMigrate(true);
     }
 
 
     public void upgradeDatabase() {
-        log.info("Upgrading database using migration files from {}", flyway.getLocations());
+        log.info("Upgrading database using migration files from {}", flyway.getConfiguration().getLocations());
         try {
             flyway.migrate();
         } catch (FlywayException e) {
