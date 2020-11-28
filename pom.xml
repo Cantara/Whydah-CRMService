@@ -6,28 +6,23 @@
     <name>Whydah-CRMService</name>
     <packaging>jar</packaging>
     <url>https://wiki.cantara.no/display/iam/Whydah-CRMService</url>
-
     <parent>
         <groupId>no.cantara.emi</groupId>
         <artifactId>parent</artifactId>
         <version>8</version>
     </parent>
-
-    <scm>
-        <developerConnection>scm:git:ssh://git@github.com/cantara/Whydah-CRMService.git</developerConnection>
-        <connection>scm:git:https://github.com/cantara/Whydah-CRMService.git</connection>
-        <url>https://github.com/cantara/Whydah-CRMService</url>
-        
-      <tag>HEAD</tag>
-  </scm>
-
     <properties>
         <service.name>Whydah-CRMService</service.name>
-        <whydah.sdk.version>2.6.6</whydah.sdk.version>
+        <whydah.sdk.version>2.6.10</whydah.sdk.version>
         <slf4j.version>1.7.30</slf4j.version>
         <ratpack.version>1.8.0</ratpack.version>
     </properties>
-
+    <scm>
+        <developerConnection>scm:git:ssh://git@github.com/cantara/Whydah-CRMService.git</developerConnection>
+        <connection>scm:git:https://github.com/cantara/Whydah-CRMService.git</connection>
+        <url>https://github.com/cantara/Whydah-CRMService</url>        
+       <tag>HEAD</tag>
+    </scm>
     <developers>
         <developer>
             <id>totto</id>
@@ -70,7 +65,6 @@
             <organizationUrl>https://www.capraconsulting.no/</organizationUrl>
         </developer>
     </developers>
-
 
     <dependencies>
         <dependency>
