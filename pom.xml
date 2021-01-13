@@ -118,7 +118,7 @@
 	<dependency>
 	    <groupId>io.netty</groupId>
 	    <artifactId>netty-all</artifactId>
-	    <version>4.1.55.Final</version>
+	    <version>4.1.56.Final</version>
 	</dependency>
 
         
@@ -522,8 +522,8 @@
                                 </excludes>
                             </artifactSet>
                             <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ComponentsXmlResourceTransformer" />
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ComponentsXmlResourceTransformer"/>
                             </transformers>
                         </configuration>
                     </execution>
