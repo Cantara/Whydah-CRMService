@@ -412,7 +412,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.2.20.jre7</version>
+            <version>42.2.21.jre7</version>
         </dependency>
         <dependency>
             <groupId>com.hazelcast</groupId>
