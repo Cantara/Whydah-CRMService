@@ -2,6 +2,7 @@ package net.whydah.crmservice.util;
 
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.FlywayException;
+import org.flywaydb.core.api.configuration.FluentConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,19 +19,16 @@ public class DatabaseMigrationHelper {
 
     private Flyway flyway;
 
-    public DatabaseMigrationHelper(DataSource dataSource, String location, Map<String, String> placeholders) {
-        flyway = Flyway.configure()
-                //.validateOnMigrate(false)
-                //.baselineOnMigrate(true)
+    public DatabaseMigrationHelper(DataSource dataSource, String location, Map<String, String> placeholders, boolean baselineOnMigrate, String baselineVersion) {
+        FluentConfiguration fluentConfiguration = Flyway.configure()
+                .baselineOnMigrate(baselineOnMigrate);
+        if (baselineOnMigrate) {
+            fluentConfiguration.baselineVersion(baselineVersion);
+        }
+        flyway = fluentConfiguration
                 .placeholders(placeholders)
                 .locations(location)
                 .dataSource(dataSource).load();
-
-//        flyway = new Flyway();
-//        flyway.setDataSource(dataSource);
-//        flyway.setLocations(location);
-//        flyway.setPlaceholders(placeholders);
-        //flyway.setBaselineOnMigrate(true);
     }
 
 
@@ -40,7 +38,7 @@ public class DatabaseMigrationHelper {
             flyway.migrate();
         } catch (FlywayException e) {
             log.error("Database migration failed", e);
-           // throw new RuntimeException("Database upgrade failed using " + dbUrl, e);
+            // throw new RuntimeException("Database upgrade failed using " + dbUrl, e);
         }
     }
 

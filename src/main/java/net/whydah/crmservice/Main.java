@@ -3,7 +3,11 @@ package net.whydah.crmservice;
 import com.codahale.metrics.MetricRegistry;
 import com.google.inject.Injector;
 import net.whydah.crmservice.configuration.HazelcastConfig;
-import net.whydah.crmservice.customer.*;
+import net.whydah.crmservice.customer.CreateCustomerHandler;
+import net.whydah.crmservice.customer.CustomerModule;
+import net.whydah.crmservice.customer.DeleteCustomerHandler;
+import net.whydah.crmservice.customer.GetCustomerHandler;
+import net.whydah.crmservice.customer.UpdateCustomerHandler;
 import net.whydah.crmservice.health.GetHealthHandler;
 import net.whydah.crmservice.health.HealthModule;
 import net.whydah.crmservice.postgresql.PostgresModule;
@@ -13,7 +17,11 @@ import net.whydah.crmservice.profilepicture.GetProfileImageHandler;
 import net.whydah.crmservice.profilepicture.UpdateProfileImageHandler;
 import net.whydah.crmservice.security.SecurityHandler;
 import net.whydah.crmservice.security.SecurityModule;
-import net.whydah.crmservice.util.*;
+import net.whydah.crmservice.util.DatabaseMigrationHelper;
+import net.whydah.crmservice.util.MailModule;
+import net.whydah.crmservice.util.ReporterModule;
+import net.whydah.crmservice.util.SecurityTokenServiceModule;
+import net.whydah.crmservice.util.SmsModule;
 import net.whydah.crmservice.verification.ActiveVerificationCache;
 import net.whydah.crmservice.verification.EmailVerificationHandler;
 import net.whydah.crmservice.verification.PhoneVerificationHandler;
@@ -92,12 +100,14 @@ public class Main {
         		 configuration.evaluateToInt("postgres.port"),
         		 configuration.evaluateToString("postgres.db"),
         		 configuration.evaluateToString("postgres.user"),
-        		 configuration.evaluateToString("postgres.password"));
+        		 configuration.evaluateToString("postgres.password"),
+                 configuration.evaluateToBoolean("flyway.baseline-on-migrate"),
+                 configuration.evaluateToString("flyway.baseline-version"));
 
 
 	}
 
-    public void migrateDb(String server, int port, String db, String user, String pwd) {
+    public void migrateDb(String server, int port, String db, String user, String pwd, boolean baselineOnMigrate, String baselineVersion) {
         PGSimpleDataSource dataSource = new PGSimpleDataSource();
         dataSource.setServerName(server);
         dataSource.setPortNumber(port);
@@ -109,7 +119,7 @@ public class Main {
         placeholders.put("username", user);
 
         DatabaseMigrationHelper migrationHelper = new DatabaseMigrationHelper(
-                dataSource, "db/migration/postgresql", placeholders);
+                dataSource, "db/migration/postgresql", placeholders, baselineOnMigrate, baselineVersion);
         migrationHelper.upgradeDatabase();
 
 
