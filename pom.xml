@@ -13,7 +13,7 @@
     </parent>
     <properties>
         <service.name>Whydah-CRMService</service.name>
-        <whydah.sdk.version>2.9.2</whydah.sdk.version>
+        <whydah.sdk.version>2.9.3</whydah.sdk.version>
         <slf4j.version>1.7.32</slf4j.version>
         <ratpack.version>1.8.2</ratpack.version>
     </properties>
@@ -100,15 +100,27 @@
                 <exclusion>
                     <groupId>org.springframework</groupId>
                     <artifactId>spring-beans</artifactId>
-
                 </exclusion>
                 <exclusion>
                     <groupId>org.springframework</groupId>
                     <artifactId>spring-aop</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.google.code.gson</groupId>
+                    <artifactId>gson</artifactId>
+                </exclusion>        
             </exclusions>
         </dependency>
         <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.9</version>
+        </dependency>
+	<dependency>
             <groupId>org.valuereporter</groupId>
             <artifactId>valuereporter-agent</artifactId>
             <version>1.8.1</version>
