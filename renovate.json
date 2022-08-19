@@ -1,6 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "local>Cantara/Cantara-Renovate-Config"
+    "local>cantara/Cantara-Renovate-Config"
   ]
 }
