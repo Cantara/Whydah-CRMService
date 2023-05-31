@@ -13,7 +13,7 @@
     </parent>
     <properties>
         <service.name>Whydah-CRMService</service.name>
-        <whydah.sdk.version>2.19.8</whydah.sdk.version>
+        <whydah.sdk.version>2.19.10</whydah.sdk.version>
         <slf4j.version>2.0.7</slf4j.version>
         <ratpack.version>1.8.2</ratpack.version>
     </properties>
