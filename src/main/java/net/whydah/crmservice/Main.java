@@ -216,9 +216,9 @@ public class Main {
 
     private static Handler requestCountMetricsHandler() {
         return ctx -> {
-            MetricRegistry metricRegistry = ctx.get(MetricRegistry.class);
-            metricRegistry.counter("request-count").inc();
-            ctx.next();
+            //MetricRegistry metricRegistry = ctx.get(MetricRegistry.class);
+            //metricRegistry.counter("request-count").inc();
+            //ctx.next();
         };
     }
 }
