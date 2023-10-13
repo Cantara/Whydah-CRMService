@@ -218,7 +218,7 @@ public class Main {
         return ctx -> {
             //MetricRegistry metricRegistry = ctx.get(MetricRegistry.class);
             //metricRegistry.counter("request-count").inc();
-            //ctx.next();
+            ctx.next();
         };
     }
 }
