@@ -137,12 +137,12 @@ public class Main {
                 .module(MailModule.class)
                 .module(ReporterModule.class)
                // .module(ActiveVerificationCacheModule.class)
-                .moduleConfig(DropwizardMetricsModule.class, new DropwizardMetricsConfig()
-                                .jmx(jmxConfig -> jmxConfig.enable(true))
-                                .jvmMetrics(true)
-                                .webSocket(websocketConfig -> {
-                                })
-                )
+//                .moduleConfig(DropwizardMetricsModule.class, new DropwizardMetricsConfig()
+//                                .jmx(jmxConfig -> jmxConfig.enable(true))
+//                                .jvmMetrics(true)
+//                                .webSocket(websocketConfig -> {
+//                                })
+//                )
                 .bind(ClientErrorHandler.class, DefaultDevelopmentErrorHandler.class)
                 .bind(ActiveVerificationCache.class)
                 .bindInstance(HazelcastConfig.class, serverConfig.get("/hazelcast", HazelcastConfig.class))

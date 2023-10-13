@@ -51,7 +51,7 @@ public class GetHealthHandler implements Handler {
                     "  \"Version\": \"" + getVersion() + "\",\n" +
                     "  \"DEFCON\": \"" + DEFCON + "\",\n" +
                     "  \"hasApplicationToken\": \"" + Boolean.toString(hasApplicationToken) + "\",\n" +
-                    "  \"hasValidApplicationToken\": \"" + Boolean.toString(hasValidApplicationToken) + "\",\n" +
+                   // "  \"hasValidApplicationToken\": \"" + Boolean.toString(hasValidApplicationToken) + "\",\n" +
                     "  \"hasApplicationsMetadata\": \"" + Boolean.toString(hasApplicationsMetadata) + "\",\n" +
                     "  \"now\": \"" + Instant.now() + "\",\n" +
                     "  \"running since\": \"" + WhydahUtil.getRunningSince() + "\"" +
