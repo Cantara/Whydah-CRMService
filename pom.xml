@@ -163,7 +163,7 @@
         <dependency>
             <groupId>no.cantara</groupId>
             <artifactId>ratpack-guice-config</artifactId>
-            <version>0.21</version>
+            <version>0.22</version>
             <exclusions>
                 <exclusion>
                    <groupId>org.yaml</groupId>
