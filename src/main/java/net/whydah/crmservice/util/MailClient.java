@@ -1,11 +1,9 @@
 package net.whydah.crmservice.util;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import net.whydah.sso.commands.extras.CommandSendScheduledMail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -43,7 +41,7 @@ public class MailClient {
 
     public void sendVerificationEmailLocally(String recipients, String verificationLink) {
 
-        String body = String.format(bodyTemplate, verificationLink);
+        String body = bodyTemplate.formatted(verificationLink);
 
         log.debug("Sending email to recipients={}, subject={}, body={}", recipients, subject, body);
 

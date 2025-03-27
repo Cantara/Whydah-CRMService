@@ -1,13 +1,8 @@
 package net.whydah.crmservice;
 
-import com.codahale.metrics.MetricRegistry;
 import com.google.inject.Injector;
 import net.whydah.crmservice.configuration.HazelcastConfig;
-import net.whydah.crmservice.customer.CreateCustomerHandler;
-import net.whydah.crmservice.customer.CustomerModule;
-import net.whydah.crmservice.customer.DeleteCustomerHandler;
-import net.whydah.crmservice.customer.GetCustomerHandler;
-import net.whydah.crmservice.customer.UpdateCustomerHandler;
+import net.whydah.crmservice.customer.*;
 import net.whydah.crmservice.health.GetHealthHandler;
 import net.whydah.crmservice.health.HealthModule;
 import net.whydah.crmservice.postgresql.PostgresModule;
@@ -17,11 +12,7 @@ import net.whydah.crmservice.profilepicture.GetProfileImageHandler;
 import net.whydah.crmservice.profilepicture.UpdateProfileImageHandler;
 import net.whydah.crmservice.security.SecurityHandler;
 import net.whydah.crmservice.security.SecurityModule;
-import net.whydah.crmservice.util.DatabaseMigrationHelper;
-import net.whydah.crmservice.util.MailModule;
-import net.whydah.crmservice.util.ReporterModule;
-import net.whydah.crmservice.util.SecurityTokenServiceModule;
-import net.whydah.crmservice.util.SmsModule;
+import net.whydah.crmservice.util.*;
 import net.whydah.crmservice.verification.ActiveVerificationCache;
 import net.whydah.crmservice.verification.EmailVerificationHandler;
 import net.whydah.crmservice.verification.PhoneVerificationHandler;
@@ -33,8 +24,6 @@ import org.constretto.model.Resource;
 import org.postgresql.ds.PGSimpleDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ratpack.dropwizard.metrics.DropwizardMetricsConfig;
-import ratpack.dropwizard.metrics.DropwizardMetricsModule;
 import ratpack.dropwizard.metrics.MetricsWebsocketBroadcastHandler;
 import ratpack.error.ClientErrorHandler;
 import ratpack.error.internal.DefaultDevelopmentErrorHandler;
@@ -49,7 +38,7 @@ import ratpack.server.RatpackServer;
 import ratpack.server.ServerConfig;
 import ratpack.server.ServerConfigBuilder;
 
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -210,7 +199,7 @@ public class Main {
     }
 
     private static Handler sendFileHandler(String path) {
-        return ctx -> ctx.getResponse().sendFile(Paths.get(Main.class.getClassLoader().getResource(path).toURI()));
+        return ctx -> ctx.getResponse().sendFile(Path.of(Main.class.getClassLoader().getResource(path).toURI()));
     }
 
 
