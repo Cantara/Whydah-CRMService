@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.whydah.service</groupId>
     <artifactId>Whydah-CRMService</artifactId>
@@ -25,8 +26,8 @@
     <scm>
         <developerConnection>scm:git:ssh://git@github.com/cantara/Whydah-CRMService.git</developerConnection>
         <connection>scm:git:https://github.com/cantara/Whydah-CRMService.git</connection>
-        <url>https://github.com/cantara/Whydah-CRMService</url>        
-       <tag>Whydah-CRMService-2.25.28</tag>
+        <url>https://github.com/cantara/Whydah-CRMService</url>
+        <tag>Whydah-CRMService-2.25.28</tag>
     </scm>
     <developers>
         <developer>
@@ -77,12 +78,12 @@
             <artifactId>Whydah-Java-SDK</artifactId>
             <version>${whydah.sdk.version}</version>
         </dependency>
-<dependency>
-    <groupId>javax.inject</groupId>
-    <artifactId>javax.inject</artifactId>
-    <version>1</version>
-</dependency>
-	    <dependency>
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
+        </dependency>
+        <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
             <version>9.22.3</version>
@@ -122,7 +123,7 @@
                 <exclusion>
                     <groupId>com.google.code.gson</groupId>
                     <artifactId>gson</artifactId>
-                </exclusion>        
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -130,16 +131,16 @@
             <artifactId>gson</artifactId>
             <version>2.13.1</version>
         </dependency>
-	<dependency>
+        <dependency>
             <groupId>org.valuereporter</groupId>
             <artifactId>valuereporter-agent</artifactId>
             <version>1.10.17</version>
         </dependency>
-	<dependency>
-	    <groupId>io.netty</groupId>
-	    <artifactId>netty-all</artifactId>
-	    <version>4.2.3.Final</version>
-	</dependency>      
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.2.3.Final</version>
+        </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jdk8</artifactId>
@@ -171,8 +172,8 @@
             <version>0.26</version>
             <exclusions>
                 <exclusion>
-                   <groupId>org.yaml</groupId>
-                   <artifactId>snakeyaml</artifactId>
+                    <groupId>org.yaml</groupId>
+                    <artifactId>snakeyaml</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>com.fasterxml.jackson.core</groupId>
@@ -222,8 +223,8 @@
             <version>${ratpack.version}</version>
             <exclusions>
                 <exclusion>
-                   <groupId>org.yaml</groupId>
-                   <artifactId>snakeyaml</artifactId>
+                    <groupId>org.yaml</groupId>
+                    <artifactId>snakeyaml</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>com.fasterxml.jackson.core</groupId>
@@ -273,8 +274,8 @@
             <version>${ratpack.version}</version>
             <exclusions>
                 <exclusion>
-                   <groupId>org.yaml</groupId>
-                   <artifactId>snakeyaml</artifactId>
+                    <groupId>org.yaml</groupId>
+                    <artifactId>snakeyaml</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>com.fasterxml.jackson.core</groupId>
@@ -324,8 +325,8 @@
             <version>${ratpack.version}</version>
             <exclusions>
                 <exclusion>
-                   <groupId>org.yaml</groupId>
-                   <artifactId>snakeyaml</artifactId>
+                    <groupId>org.yaml</groupId>
+                    <artifactId>snakeyaml</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>com.fasterxml.jackson.core</groupId>
@@ -526,9 +527,21 @@
                                     <exclude>junit:junit</exclude>
                                 </excludes>
                             </artifactSet>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
                             <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ComponentsXmlResourceTransformer" />
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ComponentsXmlResourceTransformer"/>
                             </transformers>
                         </configuration>
                     </execution>
@@ -611,7 +624,7 @@
                     </execution>
                 </executions>
             </plugin>
-             <plugin>
+            <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
                     <descriptors>
@@ -672,8 +685,8 @@
             -->
         </plugins>
     </build>
-	
-	
+
+
     <repositories>
         <!-- Needed for parent  -->
         <repository>
