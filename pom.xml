@@ -14,7 +14,7 @@
     <properties>
         <jdk.version>21</jdk.version>
         <service.name>Whydah-CRMService</service.name>
-        <whydah.sdk.version>3.0.2</whydah.sdk.version>
+        <whydah.sdk.version>3.0.3</whydah.sdk.version>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <maven.compiler.release>21</maven.compiler.release>
