@@ -1,0 +1,20 @@
+id: Whydah-CRMService
+name: Whydah CRM Service
+version: 2.30.11-SNAPSHOT
+description: |
+  CRM integration service for the Whydah platform. Provides customer and contact
+  management capabilities and integrates user identity data with CRM workflows.
+units:
+  - id: crm-api
+    name: CRM API
+    type: api
+    description: CRM REST API for customer and contact record operations.
+    path: src/main/java/net/whydah/service
+  - id: user-sync
+    name: User Sync
+    type: component
+    description: Synchronisation of user identity data between Whydah and CRM records.
+  - id: contact-management
+    name: Contact Management
+    type: component
+    description: Contact record lifecycle management including create, update, and lookup.
