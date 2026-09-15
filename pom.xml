@@ -71,6 +71,20 @@
         </developer>
     </developers>
 
+    <dependencyManagement>
+        <dependencies>
+            <!-- Align every Netty module (including ones pulled in by ratpack and other
+                 libraries) on one patched release; see the Netty advisories of 2026-09. -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-bom</artifactId>
+                <version>4.2.18.Final</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>net.whydah.sso</groupId>
@@ -138,7 +152,7 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
-            <version>4.2.11.Final</version>
+            <version>4.2.18.Final</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
@@ -168,7 +182,7 @@
         <dependency>
             <groupId>no.cantara</groupId>
             <artifactId>ratpack-guice-config</artifactId>
-            <version>0.35</version>
+            <version>0.36</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.yaml</groupId>
