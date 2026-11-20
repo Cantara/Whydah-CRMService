@@ -4,8 +4,6 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.whydah.crmservice.util.SecurityTokenServiceClient;
 import net.whydah.sso.util.WhydahUtil;
-import org.constretto.annotation.Configuration;
-import org.constretto.annotation.Configure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ratpack.handling.Context;
@@ -24,8 +22,7 @@ public class GetHealthHandler implements Handler {
 
 
     @Inject
-    @Configure
-    public GetHealthHandler(SecurityTokenServiceClient tokenServiceClient, @Configuration("applicationname") String applicationname) {
+    public GetHealthHandler(SecurityTokenServiceClient tokenServiceClient, String applicationname) {
         this.tokenServiceClient = tokenServiceClient;
         this.applicationInstanceName = applicationname;
     }
