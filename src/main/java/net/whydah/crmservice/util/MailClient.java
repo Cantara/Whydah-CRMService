@@ -5,9 +5,9 @@ import net.whydah.sso.commands.extras.CommandSendScheduledMail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import jakarta.mail.*;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 import java.net.URI;
 import java.util.Date;
 import java.util.HashMap;
@@ -55,7 +55,7 @@ public class MailClient {
         smtpProperties.put("mail.smtp.port", "465");
 
         Session session = Session.getInstance(smtpProperties,
-                new javax.mail.Authenticator() {
+                new jakarta.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
                         return new PasswordAuthentication(smtpUsername, smtpPassword);
                     }

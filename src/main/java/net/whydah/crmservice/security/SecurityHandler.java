@@ -8,12 +8,10 @@ import net.whydah.sso.user.types.UserToken;
 import net.whydah.sso.util.SSLTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 import ratpack.handling.Context;
 import ratpack.handling.Handler;
 
 
-@Service
 public class SecurityHandler implements Handler {
 
     private static final Logger log = LoggerFactory.getLogger(SecurityHandler.class);

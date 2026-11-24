@@ -7,7 +7,6 @@ import freemarker.cache.TemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
-import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;

@@ -18,9 +18,7 @@ import net.whydah.crmservice.verification.EmailVerificationHandler;
 import net.whydah.crmservice.verification.PhoneVerificationHandler;
 import no.cantara.ratpack.config.RatpackConfigs;
 import no.cantara.ratpack.config.RatpackGuiceConfigModule;
-import org.constretto.ConstrettoBuilder;
-import org.constretto.ConstrettoConfiguration;
-import org.constretto.model.Resource;
+import net.whydah.crmservice.util.PropertiesConfiguration;
 import org.postgresql.ds.PGSimpleDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,22 +74,18 @@ public class Main {
     }
 
     public void migrateDb() {
-    	 final ConstrettoConfiguration configuration = new ConstrettoBuilder()
-                 .createPropertiesStore()
-                 .addResource(Resource.create("classpath:" + DEFAULT_CONFIGURATION_RESOURCE_PATH))
-                 .addResource(Resource.create("file:./" + OVERRIDE_CONFIGURATION_FILE_PATH))
-                 .done()
-                 .getConfiguration();
+    	 final PropertiesConfiguration configuration = PropertiesConfiguration.load(
+                 DEFAULT_CONFIGURATION_RESOURCE_PATH, OVERRIDE_CONFIGURATION_FILE_PATH);
 
 
 
-         migrateDb(configuration.evaluateToString("postgres.server"),
-        		 configuration.evaluateToInt("postgres.port"),
-        		 configuration.evaluateToString("postgres.db"),
-        		 configuration.evaluateToString("postgres.user"),
-        		 configuration.evaluateToString("postgres.password"),
-                 configuration.evaluateToBoolean("flyway.baseline-on-migrate"),
-                 configuration.evaluateToString("flyway.baseline-version"));
+         migrateDb(configuration.getString("postgres.server"),
+        		 configuration.getInt("postgres.port"),
+        		 configuration.getString("postgres.db"),
+        		 configuration.getString("postgres.user"),
+        		 configuration.getString("postgres.password"),
+                 configuration.getBoolean("flyway.baseline-on-migrate"),
+                 configuration.getString("flyway.baseline-version"));
 
 
 	}
